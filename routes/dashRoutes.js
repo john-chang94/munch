@@ -44,15 +44,12 @@ router.get('/restaurants/:id', async (req, res) => {
     }
 })
 
-router.post('/restaurants', async (req, res) => {
-    // Check for validation before adding a restaurant
-    const { errors, isValid } = addRestaurantValidator(req.body);
-    if (!isValid) return res.status(400).json(errors);
-
+router.post('/restaurants', addRestaurantValidator, async (req, res) => {
     try {
         const { name, city, category, price_range } = req.body;
         const results = await pool.query(
-            `INSERT INTO restaurants (name, city, category, price_range) VALUES ($1, $2, $3, $4)`,
+            `INSERT INTO restaurants (name, city, category, price_range)
+            VALUES ($1, $2, $3, $4)`,
             [name, city, category, price_range]
         )
 

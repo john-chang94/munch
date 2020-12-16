@@ -9,9 +9,9 @@ const isEmpty = value => {
     )
 }
 
-exports.addRestaurantValidator = data => {
+exports.addRestaurantValidator = (req, res, next) => {
     let errors = {};
-    let { name, city, category, price_range } = data;
+    let { name, city, category, price_range } = req.body;
     name = !isEmpty(name) ? name : '';
     city = !isEmpty(city) ? city : '';
     category = !isEmpty(category) ? category : '';
@@ -22,8 +22,7 @@ exports.addRestaurantValidator = data => {
     if (validator.isEmpty(category)) errors.error = 'Category is required';
     if (validator.isEmpty(price_range)) errors.error = 'Price range is required';
 
-    return {
-        errors,
-        isValid: isEmpty(errors)
-    }
+    if (!isEmpty(errors)) return res.status(400).json(errors);
+
+    next();
 }
