@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const pool = require('../db');
+// const pool = require('../db');
+const client = require('../elephantsql');
 const { addRestaurantValidator } = require('../middlewares/validator');
 
 router.get('/restaurants', async (req, res) => {
     try {
-        const results = await pool.query(
+        const results = await client.query(
             `SELECT * FROM restaurants`
         )
 
@@ -25,7 +26,7 @@ router.get('/restaurants', async (req, res) => {
 router.get('/restaurants/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const results = await pool.query(
+        const results = await client.query(
             `SELECT * FROM restaurants WHERE restaurant_id = $1`,
             [id]
         )
@@ -47,7 +48,7 @@ router.get('/restaurants/:id', async (req, res) => {
 router.post('/restaurants', addRestaurantValidator, async (req, res) => {
     try {
         const { name, city, category, price_range } = req.body;
-        const results = await pool.query(
+        const results = await client.query(
             `INSERT INTO restaurants (name, city, category, price_range)
             VALUES ($1, $2, $3, $4)`,
             [name, city, category, price_range]
@@ -63,7 +64,7 @@ router.put('/restaurants/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { name, city, category, price_range } = req.body;
-        const results = await pool.query(
+        const results = await client.query(
             `UPDATE restaurants
                 SET name = $1,
                 city = $2,
@@ -85,7 +86,7 @@ router.put('/restaurants/:id', async (req, res) => {
 router.delete('/restaurants/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const results = await pool.query(
+        const results = await client.query(
             `DELETE FROM restaurants WHERE restaurant_id = $1`,
             [id]
         )
