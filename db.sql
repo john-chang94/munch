@@ -8,6 +8,24 @@ CREATE TABLE restaurants (
     price_range VARCHAR(1) NOT NULL
 );
 
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE reviews (
+    review_id SERIAL PRIMARY KEY,
+    restaurant_id INT NOT NULL,
+    user_id INT NOT NULL,
+    rating VARCHAR(1) NOT NULL,
+    details VARCHAR NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
 INSERT INTO restaurants (name, city, category, price_range)
 VALUES ('Dennys', 'Pomona', 'Diners', '2'),
 ('Burger King', 'Chino Hills', 'Fast Food', '1'),
@@ -28,3 +46,6 @@ VALUES ('Dennys', 'Pomona', 'Diners', '2'),
 ('Hacienda La Joya', 'Mission Viejo', 'Mexican', '1'),
 ('Taqeuria De Anda', 'Pomona', 'Mexican', '1'),
 ('Taco Bell', 'Gardena', 'Fast Food', '1');
+
+INSERT INTO reviews (rating, details, date, restaurant_id, user_id)
+VALUES ('4', 'Tempor ut velit aute laboris.', ''),
