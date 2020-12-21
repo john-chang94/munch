@@ -1,6 +1,7 @@
 const client = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
+const { registerUserValidator } = require('../middlewares/validator');
 
 module.exports = app => {
     app.get('/api/users', async (req, res) => {
@@ -19,7 +20,7 @@ module.exports = app => {
         }
     })
 
-    app.post('/api/users', async (req, res) => {
+    app.post('/api/users', registerUserValidator, async (req, res) => {
         try {
             let { name, email, password } = req.body;
 
