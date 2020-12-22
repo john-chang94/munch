@@ -48,6 +48,30 @@ module.exports = app => {
         }
     })
 
+    // Get all reviews from a user
+    app.get('/api/reviews/user/:user_id', async (req, res) => {
+        try {
+            const { user_id } = req.params;
+            const reviews = await client.query(
+                `SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date
+                    FROM reviews AS r
+                        JOIN restaurants AS re
+                        ON r.restaurant_id = re.restaurant_id
+                    WHERE r.user_id = $1`,
+                [user_id]
+            )
+            if (!reviews.rows.length) return res.status(404).send('No reviews found');
+
+            res.status(200).json({
+                success: true,
+                results: reviews.rows.length,
+                data: reviews.rows
+            })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
     app.put('/api/reviews/:review_id', addReviewValidator, async (req, res) => {
         try {
             const { review_id } = req.params;

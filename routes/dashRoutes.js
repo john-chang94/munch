@@ -13,11 +13,11 @@ const queryCheck = async (reqQuery) => {
     for (let i = 0; i < validQueries.length; i++) {
         // If req.query has any valid query params then do the following
         if (reqQuery.hasOwnProperty(validQueries[i])) {
-            // Append SQL command with query param with lowercase
+            // Append SQL command with query param in lowercase
             querystr.push(`lower(${validQueries[i]}) = $${num++}`);
             // Also include SQL command 'AND' for multiple query params
             querystr.push('AND');
-            // Add the value of the query param in the values array with lowercase
+            // Add the value of the query param in the values array in lowercase
             values.push(reqQuery[validQueries[i]].toLowerCase());
             isQuery = true;
         }
@@ -35,7 +35,6 @@ const queryCheck = async (reqQuery) => {
 }
 
 module.exports = app => {
-
     app.get('/api/restaurants', async (req, res) => {
         try {
             const restaurants = await queryCheck(req.query);
