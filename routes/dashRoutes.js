@@ -38,31 +38,31 @@ module.exports = app => {
 
     app.get('/api/restaurants', async (req, res) => {
         try {
-            const results = await queryCheck(req.query);
+            const restaurants = await queryCheck(req.query);
     
-            if (!results.rows.length) return res.status(404).send('No restaurants');
+            if (!restaurants.rows.length) return res.status(404).send('No restaurants found');
     
             res.status(200).json({
-                status: 'success',
-                results: results.rows.length,
-                data: results.rows
+                success: true,
+                results: restaurants.rows.length,
+                data: restaurants.rows
             })
         } catch (err) {
             res.status(500).send('Server error');
         }
     })
     
-    app.get('/api/restaurants/:id', async (req, res) => {
+    app.get('/api/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { id } = req.params;
-            const results = await client.query('SELECT * FROM restaurants WHERE restaurant_id = $1', [id])
+            const restaurant = await client.query('SELECT * FROM restaurants WHERE restaurant_id = $1', [id])
     
-            if (!results.rows.length) return res.status(404).send('No restaurant found');
+            if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
     
             res.status(200).json({
-                status: 'success',
-                results: results.rows.length,
-                data: results.rows[0]
+                success: true,
+                results: restaurant.rows.length,
+                data: restaurant.rows[0]
             })
         } catch (err) {
             res.status(500).send('Server error');
@@ -72,13 +72,13 @@ module.exports = app => {
     app.post('/api/restaurants', addRestaurantValidator, async (req, res) => {
         try {
             const { name, city, category, price_range } = req.body;
-            const results = await client.query(
+            const restaurant = await client.query(
                 `INSERT INTO restaurants (name, city, category, price_range)
                 VALUES ($1, $2, $3, $4)`,
                 [name, city, category, price_range]
             )
     
-            res.status(201).json({ status: 'success' })
+            res.status(201).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }
@@ -86,21 +86,21 @@ module.exports = app => {
     
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
-            const { id } = req.params;
+            const { restaurant_id } = req.params;
             const { name, city, category, price_range } = req.body;
-            const results = await client.query(
+            const restaurant = await client.query(
                 `UPDATE restaurants
                     SET name = $1,
                     city = $2,
                     category = $3
                     price_range = $4
                 WHERE restaurant_id = $5 RETURNING *`,
-                [name, city, category, price_range, id]
+                [name, city, category, price_range, restaurant_id]
             )
     
             res.status(200).json({
-                status: 'success',
-                data: results.rows[0]
+                success: true,
+                data: restaurant.rows[0]
             })
         } catch (err) {
             res.status(500).send('Server error');
@@ -110,9 +110,9 @@ module.exports = app => {
     app.delete('/api/restaurants/:id', async (req, res) => {
         try {
             const { id } = req.params;
-            const results = await client.query('DELETE FROM restaurants WHERE restaurant_id = $1', [id])
+            const restaurant = await client.query('DELETE FROM restaurants WHERE restaurant_id = $1', [id])
     
-            res.status(200).json({ status: 'success' })
+            res.status(200).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }

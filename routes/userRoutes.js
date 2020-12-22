@@ -6,14 +6,14 @@ const { registerUserValidator } = require('../middlewares/validator');
 module.exports = app => {
     app.get('/api/users', async (req, res) => {
         try {
-            const results = await client.query('SELECT * FROM users');
+            const users = await client.query('SELECT * FROM users');
 
-            if (!results.rows.length) res.status(404).send('No users');
+            if (!users.rows.length) res.status(404).send('No users');
 
             res.status(200).json({
-                status: 'success',
-                results: results.rows.length,
-                data: results.rows
+                success: true,
+                results: users.rows.length,
+                data: users.rows
             })
         } catch (err) {
             res.status(500).send('Server error');
@@ -48,8 +48,8 @@ module.exports = app => {
 
                         // Generate jwt token
                         const token = jwtGenerator(results.rows[0].user_id)
-                        res.status(200).json({
-                            status: 'success',
+                        res.status(201).json({
+                            success: true,
                             token
                         })
                     })
@@ -60,17 +60,17 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/users/:id', async (req, res) => {
+    app.get('/api/users/:user_id', async (req, res) => {
         try {
-            const { id } = req.params;
-            const results = await client.query('SELECT * FROM users WHERE user_id = $1', [id]);
+            const { user_id } = req.params;
+            const user = await client.query('SELECT * FROM users WHERE user_id = $1', [user_id]);
 
-            if (!results.rows.length) return res.status(404).send('No user found');
+            if (!user.rows.length) return res.status(404).send('No user found');
 
             res.status(200).json({
-                status: 'success',
-                results: results.rows.length,
-                data: results.rows[0]
+                success: true,
+                results: user.rows.length,
+                data: user.rows[0]
             })
         } catch (err) {
             res.status(500).send('Sever error');
