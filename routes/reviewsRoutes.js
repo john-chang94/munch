@@ -32,6 +32,7 @@ module.exports = app => {
         }
     })
 
+    // Get a specific review
     app.get('/api/reviews/:review_id', async (req, res) => {
         try {
             const { review_id } = req.params;
@@ -72,6 +73,7 @@ module.exports = app => {
         }
     })
 
+    // Update a review
     app.put('/api/reviews/:review_id', addReviewValidator, async (req, res) => {
         try {
             const { review_id } = req.params;
