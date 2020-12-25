@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
+import RestaurantCard from './RestaurantCard';
 
 class Home extends Component {
     state = {
@@ -37,11 +38,12 @@ class Home extends Component {
                     {
                         recommended ?
                             recommended.map((restaurant, i) => (
-                                <div className="card horizontal" key={i}>
-                                    <div className="card-content">
-                                        {restaurant.name}
-                                    </div>
-                                </div>
+                                <RestaurantCard key={i}
+                                    name={restaurant.name}
+                                    category={restaurant.category}
+                                    rating={3.4}
+                                    price_range={restaurant.price_range}
+                                />
                             ))
                         : null
                     }

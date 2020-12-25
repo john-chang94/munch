@@ -83,6 +83,13 @@
   margin-right: 50px;
 }
 
+.flex-vert-sa {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .result-item {
   border: solid 1px gray;
 }
