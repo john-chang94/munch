@@ -7,30 +7,46 @@ const queryCheck = async (reqQuery) => {
     let isQuery = false;
     let values = [];
     let num = 1;
-    let querystr = ['SELECT * FROM restaurants WHERE'];
+    // Join restaurants and reviews to get the ratings
+    let queryStr = [
+        `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+        AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+            FROM restaurants AS r
+            JOIN reviews AS rev
+            ON r.restaurant_id = rev.restaurant_id
+        WHERE`
+    ]
     const validQueries = ['name', 'city', 'category', 'price_range'];
 
     for (let i = 0; i < validQueries.length; i++) {
         // If req.query has any valid query params then do the following
         if (reqQuery.hasOwnProperty(validQueries[i])) {
             // Append SQL command with query param in lowercase
-            querystr.push(`lower(${validQueries[i]}) = $${num++}`);
+            queryStr.push(`lower(${validQueries[i]}) = $${num++}`);
             // Also include SQL command 'AND' for multiple query params
-            querystr.push('AND');
+            queryStr.push('AND');
             // Add the value of the query param in the values array in lowercase
             values.push(reqQuery[validQueries[i]].toLowerCase());
             isQuery = true;
         }
     }
-    // Remove the extra 'AND' at the end of the querystr array
-    querystr.pop()
-    // Join the querystr array to get one whole query string
-    let text = querystr.join(' ');
+    // Remove the extra 'AND' at the end of the array
+    // and add the final GROUP BY clause
+    queryStr.pop();
+    queryStr.push('GROUP BY r.restaurant_id');
+    // Join the queryStr array to get one whole query string
+    let ratingText = queryStr.join(' ');
+
     // Default query string if there are no query params
-    if (!isQuery) text = 'SELECT * FROM restaurants'
+    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+    AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+        FROM restaurants AS r
+        JOIN reviews AS rev
+        ON r.restaurant_id = rev.restaurant_id
+    GROUP BY r.restaurant_id`
 
     // Run query in pg
-    let results = await client.query(text, values);
+    let results = await client.query(ratingText, values);
     return results;
 }
 
@@ -53,8 +69,15 @@ module.exports = app => {
     
     app.get('/api/restaurants/:restaurant_id', async (req, res) => {
         try {
-            const { id } = req.params;
-            const restaurant = await client.query('SELECT * FROM restaurants WHERE restaurant_id = $1', [id])
+            const { restaurant_id } = req.params;
+            const restaurant = await client.query(
+                `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+                AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+                    FROM restaurants AS r
+                    JOIN reviews AS rev
+                    ON r.restaurant_id = rev.restaurant_id
+                WHERE r.restaurant_id = $1
+                GROUP BY r.restaurant_id`, [restaurant_id])
     
             if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
     

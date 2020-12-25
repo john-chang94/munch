@@ -1,13 +1,15 @@
-const RestaurantCard = ({ name, category, rating, price_range }) => {
+const RestaurantCard = ({ name, category, rating, total_ratings, price_range }) => {
     // Fill in stars by rating
     let stars = [];
     for (let i = 1; i <=5; i++) {
         if (i <= rating) {
+            // Add a whole star
             stars.push(<i className="fas fa-star"></i>)
-            // Add half star if i is a decimal and is equal to current loop index
+            // Add a half star if rating is a decimal and is equal to current loop index
         } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
             stars.push(<i className="fas fa-star-half-alt"></i>)
         } else {
+            // Add an empty star
             stars.push(<i className="far fa-star"></i>)
         }
     }
@@ -17,7 +19,7 @@ const RestaurantCard = ({ name, category, rating, price_range }) => {
             <div className="card-content">
                 <p>{name}</p>
                 <p>{category}</p>
-                <>{stars}</>
+                <>{stars} ({total_ratings})</>
                 <p>{'$'.repeat(parseInt(price_range))}</p>
             </div>
         </div>

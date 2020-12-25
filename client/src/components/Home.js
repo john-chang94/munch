@@ -41,7 +41,8 @@ class Home extends Component {
                                 <RestaurantCard key={i}
                                     name={restaurant.name}
                                     category={restaurant.category}
-                                    rating={3.4}
+                                    rating={restaurant.rating}
+                                    total_ratings={restaurant.total_ratings}
                                     price_range={restaurant.price_range}
                                 />
                             ))
