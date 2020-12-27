@@ -9,7 +9,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchRecommended();
+        this.props.fetchFeatured();
     }
 
     handleChange = e => {
@@ -20,24 +20,24 @@ class Home extends Component {
 
     render() {
         const { name } = this.state;
-        const { recommended } = this.props;
+        const { featured } = this.props;
         return (
             <div>
-                <form>
+                <form className="mt-5">
                     <div className="input-field">
                         <input type="text" placeholder="Search for restaurants..." name="name" value={name} onChange={this.handleChange} />
-                        <button>Search</button>
+                        <button className="btn">Search</button>
                     </div>
                 </form>
 
                 <div>
-                    <h4>Recommended</h4>
+                    <h4>Featured</h4>
                 </div>
 
                 <div>
                     {
-                        recommended ?
-                            recommended.map((restaurant, i) => (
+                        featured ?
+                            featured.map((restaurant, i) => (
                                 <RestaurantCard key={i}
                                     name={restaurant.name}
                                     category={restaurant.category}
@@ -56,7 +56,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
     return {
-        recommended: state.dash.recommended
+        featured: state.dash.featured
     }
 }
 

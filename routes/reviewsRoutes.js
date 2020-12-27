@@ -49,6 +49,28 @@ module.exports = app => {
         }
     })
 
+    // Get all reviews for a restaurant
+    app.get('/api/reviews/restaurant/:restaurant_id', async (req, res) => {
+        try {
+            const { restaurant_id } = req.params;
+            const reviews = await client.query(
+                `SELECT * FROM reviews
+                    WHERE restaurant_id = $1
+                    ORDER BY date DESC`,
+                [restaurant_id]
+            )
+            if (!reviews.rows.length) return res.status(404).send('No reviews found');
+
+            res.status(400).json({
+                success: true,
+                results: reviews.rows.length,
+                data: reviews.rows
+            })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
     // Get all reviews from a user
     app.get('/api/reviews/user/:user_id', async (req, res) => {
         try {

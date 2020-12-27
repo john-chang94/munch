@@ -5,9 +5,9 @@ export default (state = {}, action) => {
                 ...state,
                 user: action.payload
             }
-        case 'FETCH_RECOMMENDED':
+        case 'FETCH_FEATURED':
             return {
-                recommended: action.payload
+                featured: action.payload
             }
         default:
             return state;
