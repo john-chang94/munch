@@ -29,13 +29,15 @@ exports.addRestaurantValidator = (req, res, next) => {
 
 exports.registerUserValidator = (req, res, next) => {
     let errors = {};
-    let { name, email, password, confirmPassword } = req.body;
-    name = !isEmpty(name) ? name : '';
+    let { first_name, last_name, email, password, confirmPassword } = req.body;
+    first_name = !isEmpty(first_name) ? first_name : '';
+    last_name = !isEmpty(last_name) ? last_name : '';
     email = !isEmpty(email) ? email : '';
     password = !isEmpty(password) ? password : '';
     confirmPassword = !isEmpty(confirmPassword) ? confirmPassword : '';
 
-    if (validator.isEmpty(name)) errors.error = 'Name required';
+    if (validator.isEmpty(first_name)) errors.error = 'First name required';
+    if (validator.isEmpty(last_name)) errors.error = 'Last name required';
     if (validator.isEmpty(email)) errors.error = 'Email required';
     if (!validator.isEmail(email)) errors.error = 'Must be a valid email';
     if (validator.isEmpty(password)) errors.error = 'Password required';

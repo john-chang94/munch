@@ -15,7 +15,7 @@ export default (state = {}, action) => {
             }
         case 'SIGN_IN_ERROR':
             return {
-                state,
+                ...state,
                 error: action.err
             }
         default:

@@ -6,7 +6,7 @@ const { registerUserValidator } = require('../middlewares/validator');
 module.exports = app => {
     app.post('/auth/register', registerUserValidator, async (req, res) => {
         try {
-            let { name, email, password } = req.body;
+            let { first_name, last_name, email, password } = req.body;
 
             // Check if user exists
             const user = await client.query('SELECT * FROM users WHERE email = $1', [email])
@@ -23,9 +23,9 @@ module.exports = app => {
 
                         // Add new user into db
                         const results = await client.query(
-                            `INSERT INTO users (name, email, password)
-                            VALUES ($1, $2, $3) RETURNING *`,
-                            [name, email, password]
+                            `INSERT INTO users (first_name, last_name, email, password)
+                            VALUES ($1, $2, $3, $4) RETURNING *`,
+                            [first_name, last_name, email, password]
                         )
 
                         // Generate jwt token

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
 import RestaurantCard from './RestaurantCard';
@@ -38,15 +39,20 @@ class Home extends Component {
                     {
                         featured ?
                             featured.map((restaurant, i) => (
-                                <RestaurantCard key={i}
-                                    name={restaurant.name}
-                                    category={restaurant.category}
-                                    rating={restaurant.rating}
-                                    total_ratings={restaurant.total_ratings}
-                                    price_range={restaurant.price_range}
-                                />
+                                <div key={i}>
+                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black">
+                                        <RestaurantCard
+                                            name={restaurant.name}
+                                            category={restaurant.category}
+                                            rating={restaurant.rating}
+                                            total_ratings={restaurant.total_ratings}
+                                            price_range={restaurant.price_range}
+                                        />
+                                    </Link>
+                                </div>
+
                             ))
-                        : null
+                            : null
                     }
                 </div>
             </div>

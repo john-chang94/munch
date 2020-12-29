@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
+import Register from './components/Register';
+import RestaurantCard from './components/RestaurantCard';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/signin' component={SignIn} />
+          <Route path='/register' component={Register} />
+          <Route exact path='/restaurant/:restaurant_id' component={RestaurantCard} />
         </Switch>
       </div>
     </BrowserRouter>
