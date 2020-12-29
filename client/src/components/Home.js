@@ -42,6 +42,7 @@ class Home extends Component {
                                 <div key={i}>
                                     <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black">
                                         <RestaurantCard
+                                            key={i}
                                             name={restaurant.name}
                                             category={restaurant.category}
                                             rating={restaurant.rating}

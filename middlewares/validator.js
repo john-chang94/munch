@@ -17,10 +17,10 @@ exports.addRestaurantValidator = (req, res, next) => {
     category = !isEmpty(category) ? category : '';
     price_range = !isEmpty(price_range) ? price_range : '';
 
-    if (validator.isEmpty(name)) errors.error = 'Name required';
-    if (validator.isEmpty(city)) errors.error = 'City required';
-    if (validator.isEmpty(category)) errors.error = 'Category required';
-    if (validator.isEmpty(price_range)) errors.error = 'Price range required';
+    if (validator.isEmpty(name)) errors = 'Name required';
+    if (validator.isEmpty(city)) errors = 'City required';
+    if (validator.isEmpty(category)) errors = 'Category required';
+    if (validator.isEmpty(price_range)) errors = 'Price range required';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);
 
@@ -36,13 +36,13 @@ exports.registerUserValidator = (req, res, next) => {
     password = !isEmpty(password) ? password : '';
     confirmPassword = !isEmpty(confirmPassword) ? confirmPassword : '';
 
-    if (validator.isEmpty(first_name)) errors.error = 'First name required';
-    if (validator.isEmpty(last_name)) errors.error = 'Last name required';
-    if (validator.isEmpty(email)) errors.error = 'Email required';
-    if (!validator.isEmail(email)) errors.error = 'Must be a valid email';
-    if (validator.isEmpty(password)) errors.error = 'Password required';
-    if (!validator.isLength(password, { min: 8 })) errors.error = 'Password must be at least 8 characters';
-    if (!validator.equals(password, confirmPassword)) errors.error = 'Passwords do not match';
+    if (validator.isEmpty(first_name)) errors = 'First name required';
+    if (validator.isEmpty(last_name)) errors = 'Last name required';
+    if (validator.isEmpty(email)) errors = 'Email required';
+    if (!validator.isEmail(email)) errors = 'Must be a valid email';
+    if (validator.isEmpty(password)) errors = 'Password required';
+    if (!validator.isLength(password, { min: 8 })) errors = 'Password must be at least 8 characters';
+    if (!validator.equals(password, confirmPassword)) errors = 'Passwords do not match';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);
 
@@ -58,11 +58,11 @@ exports.addReviewValidator = (req, res, next) => {
     details = !isEmpty(details) ? details : '';
     date = !isEmpty(date) ? date : '';
 
-    if (validator.isEmpty(restaurant_id)) errors.error = 'Restaurant id required';
-    if (validator.isEmpty(user_id)) errors.error = 'User id required';
-    if (validator.isEmpty(rating)) errors.error = 'Rating required';
-    if (validator.isEmpty(details)) errors.error = 'Details are required';
-    if (validator.isEmpty(date)) errors.error = 'Date required';
+    if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
+    if (validator.isEmpty(user_id)) errors = 'User id required';
+    if (validator.isEmpty(rating)) errors = 'Rating required';
+    if (validator.isEmpty(details)) errors = 'Details are required';
+    if (validator.isEmpty(date)) errors = 'Date required';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);
 

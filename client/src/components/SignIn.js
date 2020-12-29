@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/authActions';
+import M from 'materialize-css';
 
 class SignIn extends Component {
     state = {
@@ -15,9 +16,17 @@ class SignIn extends Component {
         })
     }
 
-    handleSubmit = e => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        this.props.signIn(this.state);
+        await this.props.signIn(this.state);
+        
+        if (this.props.error) M.toast({ html: this.props.error, classes: "red darken-1" })
+        this.props.clear(); // Clear error in redux store
+
+        if (this.props.data.success) {
+            sessionStorage.setItem('token', this.props.data.token);
+            this.props.history.push('/');
+        }
     }
 
     render() {
@@ -48,4 +57,11 @@ class SignIn extends Component {
     }
 }
 
-export default connect(null, actions)(SignIn);
+const mapStateToProps = state => {
+    return {
+        error: state.auth.error,
+        data: state.auth.data
+    }
+}
+
+export default connect(mapStateToProps, actions)(SignIn);

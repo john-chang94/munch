@@ -16,20 +16,3 @@ export const fetchFeatured = () => {
         }
     }
 }
-
-export const fetchUser = user_id => {
-    return async (dispatch) => {
-        try {
-            const res = await axios.get('/api/user', user_id);
-            dispatch({
-                type: 'FETCH_USER',
-                payload: res.data.data
-            })
-        } catch (err) {
-            dispatch({
-                type: 'ERROR',
-                payload: err.response.data
-            })
-        }
-    }
-}

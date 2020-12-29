@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/authActions';
+import M from 'materialize-css';
 
 class Register extends Component {
     state = {
@@ -18,9 +19,10 @@ class Register extends Component {
         })
     }
 
-    handleSubmit = e => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        this.props.register(this.state);
+        await this.props.register(this.state);
+        if (this.props.error) M.toast({ html: this.props.error, classes: 'red darken-1' })
     }
 
     render() {
@@ -63,4 +65,10 @@ class Register extends Component {
     }
 }
 
-export default connect(null, actions)(Register);
+const mapStateToProps = state => {
+    return {
+        error: state.auth.error
+    }
+}
+
+export default connect(mapStateToProps, actions)(Register);
