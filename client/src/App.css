@@ -100,10 +100,6 @@ html, body, #root, #root>.container {
   width: 50%;
 }
 
-.black {
-  color: black;
-}
-
 .flex-center {
   display: flex;
   justify-content: center;

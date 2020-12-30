@@ -40,7 +40,7 @@ class Home extends Component {
                         featured ?
                             featured.map((restaurant, i) => (
                                 <div key={i}>
-                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black">
+                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
                                         <RestaurantCard
                                             key={i}
                                             name={restaurant.name}

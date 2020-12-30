@@ -25,9 +25,7 @@ class SignIn extends Component {
             this.props.clear(); // Clear error in redux store
         }
 
-        if (this.props.success) {
-            this.props.history.push('/');
-        }
+        if (this.props.success) this.props.history.push('/');
     }
 
     render() {

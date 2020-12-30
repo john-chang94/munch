@@ -12,7 +12,8 @@ export default (state = {}, action) => {
             }
         case 'REGISTER':
             return {
-                ...state
+                ...state,
+                success: action.payload.success
             }
         case 'SIGN_IN':
             return {

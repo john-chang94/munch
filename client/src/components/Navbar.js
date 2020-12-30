@@ -12,13 +12,13 @@ class Navbar extends Component {
         const { user } = this.props;
         return (
             <nav>
-                <div className="nav-wrapper">
+                <div className="nav-wrapper green darken-1">
                     <Link to='/' className="brand-logo center">Munch!</Link>
                     <ul className="right mr-2">
                         {
                             user
                                 ? [
-                                    <li key={1}>Hi, {user.first_name}</li>,
+                                    <li key={1} className="mr-1">Hi, {user.first_name}</li>,
                                     <li key={2} onClick={this.handleClick}><Link to='/'>Sign Out</Link></li>
                                 ]
                                 : [

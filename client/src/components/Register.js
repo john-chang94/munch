@@ -22,7 +22,16 @@ class Register extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         await this.props.register(this.state);
-        if (this.props.error) M.toast({ html: this.props.error, classes: 'red darken-1' })
+
+        if (this.props.error) {
+            M.toast({ html: this.props.error, classes: 'red darken-1' })
+            this.props.clear();
+        }
+
+        if (this.props.success) {
+            M.toast({ html: 'Sign up success! You can now sign in.', displayLength: 6000, classes: 'teal darken-1' })
+            this.props.history.push('/signin');
+        }
     }
 
     render() {
@@ -67,7 +76,8 @@ class Register extends Component {
 
 const mapStateToProps = state => {
     return {
-        error: state.auth.error
+        error: state.auth.error,
+        success: state.auth.success
     }
 }
 
