@@ -29,7 +29,7 @@ class Register extends Component {
         }
 
         if (this.props.success) {
-            M.toast({ html: 'Sign up success! You can now sign in.', displayLength: 6000, classes: 'teal darken-1' })
+            M.toast({ html: 'Success! You can now sign in.', displayLength: 6000, classes: 'teal darken-1' })
             this.props.history.push('/signin');
         }
     }

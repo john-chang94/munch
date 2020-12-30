@@ -8,7 +8,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import Register from './components/Register';
-import RestaurantCard from './components/RestaurantCard';
+import Restaurant from './components/Restaurant';
 
 class App extends Component {
   componentDidMount() {
@@ -27,7 +27,7 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route path='/signin' component={SignIn} />
             <Route path='/register' component={Register} />
-            <Route exact path='/restaurant/:restaurant_id' component={RestaurantCard} />
+            <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
           </Switch>
         </div>
       </BrowserRouter>

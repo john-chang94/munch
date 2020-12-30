@@ -1,13 +1,17 @@
 export default (state = {}, action) => {
     switch (action.type) {
-        case 'FETCH_USER':
+        case 'ERROR':
             return {
                 ...state,
-                user: action.payload
+                error: action.payload
             }
         case 'FETCH_FEATURED':
             return {
                 featured: action.payload
+            }
+        case 'FETCH_RESTAURANT':
+            return {
+                restaurant: action.payload
             }
         default:
             return state;

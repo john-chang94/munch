@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
-import RestaurantCard from './RestaurantCard';
+import { renderStars } from './starsHelper';
 
 class Home extends Component {
     state = {
@@ -15,7 +15,7 @@ class Home extends Component {
 
     handleChange = e => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.id]: e.target.value
         })
     }
 
@@ -26,7 +26,7 @@ class Home extends Component {
             <div>
                 <form className="mt-5">
                     <div className="input-field">
-                        <input type="text" placeholder="Search for restaurants..." name="name" value={name} onChange={this.handleChange} />
+                        <input type="text" placeholder="Search for restaurants..." id="name" value={name} onChange={this.handleChange} />
                         <button className="btn">Search</button>
                     </div>
                 </form>
@@ -37,23 +37,21 @@ class Home extends Component {
 
                 <div>
                     {
-                        featured ?
-                            featured.map((restaurant, i) => (
-                                <div key={i}>
-                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                        <RestaurantCard
-                                            key={i}
-                                            name={restaurant.name}
-                                            category={restaurant.category}
-                                            rating={restaurant.rating}
-                                            total_ratings={restaurant.total_ratings}
-                                            price_range={restaurant.price_range}
-                                        />
-                                    </Link>
-                                </div>
-
-                            ))
-                            : null
+                        featured &&
+                        featured.map((restaurant) => (
+                            <div key={restaurant.restaurant_id}>
+                                <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                    <div className="card horizontal">
+                                        <div className="card-content">
+                                            <p>{restaurant.name}</p>
+                                            <p>{restaurant.category}</p>
+                                            <p>{renderStars(restaurant.rating)} ({restaurant.total_ratings})</p>
+                                            <p>{'$'.repeat(parseInt(restaurant.price_range))}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))
                     }
                 </div>
             </div>

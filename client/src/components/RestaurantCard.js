@@ -19,7 +19,7 @@ const RestaurantCard = ({ name, category, rating, total_ratings, price_range }) 
             <div className="card-content">
                 <p>{name}</p>
                 <p>{category}</p>
-                <>{stars} ({total_ratings})</>
+                <p>{stars} ({total_ratings})</p>
                 <p>{'$'.repeat(parseInt(price_range))}</p>
             </div>
         </div>
