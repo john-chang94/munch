@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from './actions/userActions';
+import * as actions from './actions/authActions';
 
 import Navbar from './components/Navbar';
 import Home from './components/Home';

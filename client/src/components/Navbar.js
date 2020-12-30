@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as actions from '../actions/authActions';
 
 class Navbar extends Component {
+    handleClick = () => {
+        this.props.signOut();
+    }
+
     render() {
         const { user } = this.props;
         return (
@@ -13,12 +18,12 @@ class Navbar extends Component {
                         {
                             user
                                 ? [
-                                    <li>Hi, {user.first_name}</li>,
-                                    <li><Link to='/'>Sign Out</Link></li>
+                                    <li key={1}>Hi, {user.first_name}</li>,
+                                    <li key={2} onClick={this.handleClick}><Link to='/'>Sign Out</Link></li>
                                 ]
                                 : [
-                                    <li><Link to='/signin'>Sign In</Link></li>,
-                                    <li><Link to='/register'>Register</Link></li>
+                                    <li key={1}><Link to='/signin'>Sign In</Link></li>,
+                                    <li key={2}><Link to='/register'>Register</Link></li>
                                 ]
                         }
                     </ul>
@@ -30,8 +35,8 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.user.user
+        user: state.auth.user
     }
 }
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps, actions)(Navbar);

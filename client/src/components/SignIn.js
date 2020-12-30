@@ -20,11 +20,12 @@ class SignIn extends Component {
         e.preventDefault();
         await this.props.signIn(this.state);
         
-        if (this.props.error) M.toast({ html: this.props.error, classes: "red darken-1" })
-        this.props.clear(); // Clear error in redux store
+        if (this.props.error) {
+            M.toast({ html: this.props.error, classes: "red darken-1" })
+            this.props.clear(); // Clear error in redux store
+        }
 
-        if (this.props.data.success) {
-            sessionStorage.setItem('token', this.props.data.token);
+        if (this.props.success) {
             this.props.history.push('/');
         }
     }
@@ -60,7 +61,7 @@ class SignIn extends Component {
 const mapStateToProps = state => {
     return {
         error: state.auth.error,
-        data: state.auth.data
+        success: state.auth.success
     }
 }
 

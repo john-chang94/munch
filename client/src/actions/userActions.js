@@ -11,7 +11,6 @@ export const fetchUser = () => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/verify/user`)
-            console.log(res.data)
             dispatch({
                 type: 'FETCH_USER',
                 payload: res.data

@@ -10,15 +10,26 @@ export default (state = {}, action) => {
                 ...state,
                 error: null
             }
-        case 'REGISTER_SUCCESS':
+        case 'REGISTER':
             return {
                 ...state
             }
-        case 'SIGN_IN_SUCCESS':
+        case 'SIGN_IN':
             return {
                 ...state,
-                data: action.payload,
+                success: action.payload.success,
                 user: action.payload.user
+            }
+        case 'SIGN_OUT':
+            return {
+                ...state,
+                token: null,
+                user: null
+            }
+        case 'FETCH_USER':
+            return {
+                ...state,
+                user: action.payload
             }
         default:
             return state;

@@ -5,11 +5,6 @@ export default (state = {}, action) => {
                 ...state,
                 error: action.payload
             }
-        case 'FETCH_USER':
-            return {
-                ...state,
-                user: action.payload
-            }
         default:
             return state;
     }

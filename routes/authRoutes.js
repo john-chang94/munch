@@ -66,7 +66,7 @@ module.exports = app => {
     })
 
     // Return user info for init page load
-    app.get('/verify/user', authorizeToken, async (req, res) => {
+    app.get('/auth/verify', authorizeToken, async (req, res) => {
         try {
             // req.id comes from authorizeToken middleware
             const user = await client.query('SELECT * FROM users WHERE user_id = $1', [req.id]);
