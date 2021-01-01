@@ -26,7 +26,10 @@ module.exports = app => {
                 [restaurant_id, user_id, rating, details, date]
             )
 
-            res.status(201).json({ success: true })
+            res.status(201).json({
+                success: true,
+                review
+            })
         } catch (err) {
             res.status(500).send('Server error');
         }

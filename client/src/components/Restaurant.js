@@ -37,13 +37,13 @@ class Restaurant extends Component {
                 }
 
                 <div className="row mt-1">
-                    <div className="col l4 m6 s10 push-s1 mt-2">
+                    <div className="col l4 m6 s10 push-s1 mt-1">
                         <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
                     </div>
-                    <div className="col l4 m6 s10 push-s1 mt-2">
+                    <div className="col l4 m6 s10 push-s1 mt-1">
                         <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
                     </div>
-                    <div className="col l4 m6 s10 push-s1 mt-2">
+                    <div className="col l4 m6 s10 push-s1 mt-1">
                         <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
                     </div>
                 </div>

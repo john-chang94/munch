@@ -5,15 +5,10 @@ export default (state = {}, action) => {
                 ...state,
                 error: action.payload
             }
-        case 'FETCH_FEATURED':
+        case 'ADD_REVIEW':
             return {
                 ...state,
-                featured: action.payload
-            }
-        case 'FETCH_RESTAURANT':
-            return {
-                ...state,
-                restaurant: action.payload
+                review: action.payload
             }
         default:
             return state;

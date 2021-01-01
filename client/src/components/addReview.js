@@ -74,8 +74,15 @@ class AddReview extends Component {
         });
     }
 
+    handleSubmit = () => {
+        const { rating, details, url } = this.state;
+        const { user_id } = this.props.user;
+        const { restaurant_id } = this.props.match.params;
+        // create three separate functions
+    }
+
     render() {
-        const { rating, details, file, url, stars } = this.state;
+        const { details, file, url, stars } = this.state;
         return (
             <div>
                 <p>Leave a review</p>
@@ -90,15 +97,21 @@ class AddReview extends Component {
                         </div>
                         <div>
                             <p>Add a photo</p>
-                            <input type="file" onChange={this.handleImage} value={file} />
+                            <input type="file" onChange={this.handleImage} />
                             <button disabled={!file}>Upload to firebase</button>
                         </div>
                     </form>
-                    <img src={url} alt="" />
+                    <img src={url} className="w-100" alt="" />
                 </div>
             </div>
         );
     }
 }
 
-export default connect(null, actions)(AddReview);
+const mapStateToProps = state => {
+    return {
+        user: state.auth.user
+    }
+}
+
+export default connect(mapStateToProps, actions)(AddReview);
