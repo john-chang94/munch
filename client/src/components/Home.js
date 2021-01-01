@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
-import { renderStars } from './starsHelper';
+import RestaurantCard from './RestaurantCard';
 
 class Home extends Component {
     state = {
@@ -41,14 +41,13 @@ class Home extends Component {
                         featured.map((restaurant) => (
                             <div key={restaurant.restaurant_id}>
                                 <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                    <div className="card horizontal">
-                                        <div className="card-content">
-                                            <p>{restaurant.name}</p>
-                                            <p>{restaurant.category}</p>
-                                            <p>{renderStars(restaurant.rating)} ({restaurant.total_ratings})</p>
-                                            <p>{'$'.repeat(parseInt(restaurant.price_range))}</p>
-                                        </div>
-                                    </div>
+                                    <RestaurantCard
+                                        name={restaurant.name}
+                                        category={restaurant.category}
+                                        rating={restaurant.rating}
+                                        total_ratings={restaurant.total_ratings}
+                                        price_range={restaurant.price_range}
+                                    />
                                 </Link>
                             </div>
                         ))

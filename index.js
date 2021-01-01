@@ -8,7 +8,7 @@ app.use(express.json());
 
 require('./routes/dashRoutes')(app);
 require('./routes/userRoutes')(app);
-require('./routes/reviewsRoutes')(app);
+require('./routes/reviewRoutes')(app);
 require('./routes/authRoutes')(app);
 
 app.get('*', (req, res) => {

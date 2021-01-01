@@ -130,4 +130,19 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
+
+    app.post('/api/review_photos', async (req, res) => {
+        try {
+            const { restaurant_id, user_id, review_id, url } = req.body;
+            const photo = await client.query(
+                `INSERT INTO review_photos (restaurant_id, user_id, review_id, url)
+                VALUES ($1, $2, $3, $4)`,
+                [restaurant_id, user_id, review_id, url]
+            )
+
+            res.status(201).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
 }
