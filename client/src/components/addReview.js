@@ -1,13 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
+import { storage } from '../config/fb';
 
 class AddReview extends Component {
     state = {
         rating: '',
         details: '',
         file: '',
-        url: ''
+        url: '',
+        stars: []
+    }
+
+    componentDidMount() {
+        // Initial render emtpy stars for leaving a review
+        let stars = [];
+        for (let i = 0; i < 5; i++) {
+            stars.push(
+                <i className="far fa-star yellow-text text-darken-2"
+                    key={i}
+                    onClick={() => this.handleRating(i)}>
+                </i>
+            )
+        }
+        this.setState({ stars })
+    }
+
+    handleRating = (starIndex) => {
+        // Materialize classes for filled and empty stars
+        const filled = 'fas fa-star yellow-text text-darken-2';
+        const empty = 'far fa-star yellow-text text-darken-2';
+        let stars = [];
+
+        for (let i = 0; i < 5; i++) {
+            // If the selected star index is >= current loop index,
+            // add a filled star, otherwise add an empty star
+            stars.push(<i className={starIndex >= i ? filled : empty} key={i} onClick={() => this.handleRating(i)}></i>)
+        }
+        this.setState({
+            rating: starIndex + 1, // Rating must be from 1 to 5
+            stars
+        })
+    }
+
+    handleChange = e => {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
     }
 
     handleImage = e => {
@@ -36,15 +75,26 @@ class AddReview extends Component {
     }
 
     render() {
+        const { rating, details, file, url, stars } = this.state;
         return (
             <div>
-                <p>FIREBASE UPLOAD TEST</p>
+                <p>Leave a review</p>
+                <div>
+                    <p>{stars}</p>
+                </div>
                 <div>
                     <form onSubmit={this.handleUpload}>
-                        <input type="file" onChange={this.handleImage} />
-                        <button disabled={!this.state.file}>Upload to firebase</button>
+                        <div className="input-field">
+                            <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
+                            <label htmlFor="details">Details</label>
+                        </div>
+                        <div>
+                            <p>Add a photo</p>
+                            <input type="file" onChange={this.handleImage} value={file} />
+                            <button disabled={!file}>Upload to firebase</button>
+                        </div>
                     </form>
-                    <img src={this.state.url} alt="" />
+                    <img src={url} alt="" />
                 </div>
             </div>
         );

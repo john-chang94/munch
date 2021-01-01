@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
+import AddReview from './AddReview';
 import { renderStars } from './starsHelper';
-import { storage } from '../config/fb';
+import M from 'materialize-css';
+import { Link } from 'react-router-dom';
 
 class Restaurant extends Component {
     state = {
@@ -11,8 +13,12 @@ class Restaurant extends Component {
 
     async componentDidMount() {
         await this.props.fetchRestaurant(this.props.match.params.restaurant_id);
+        // Render rating with stars
         let stars = renderStars(this.props.restaurant.rating);
         this.setState({ stars })
+        
+        // Initialize media lightbox
+        M.Materialbox.init(document.querySelectorAll('.materialboxed'))
     }
 
     render() {
@@ -23,12 +29,32 @@ class Restaurant extends Component {
                 {
                     restaurant &&
                     <div>
-                        <p>{restaurant.name}</p>
-                        <p>{restaurant.category}</p>
+                        <p className="heading">{restaurant.name}</p>
+                        <p className="cat-heading">{restaurant.category}</p>
                         <p>{stars} ({restaurant.total_ratings})</p>
-                        <p>{'$'.repeat(parseInt(restaurant.price_range))}</p>
+                        <p>Price range: {'$'.repeat(parseInt(restaurant.price_range))}</p>
                     </div>
                 }
+
+                <div className="row mt-1">
+                    <div className="col l4 m6 s10 push-s1 mt-2">
+                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
+                    </div>
+                    <div className="col l4 m6 s10 push-s1 mt-2">
+                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
+                    </div>
+                    <div className="col l4 m6 s10 push-s1 mt-2">
+                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
+                    </div>
+                </div>
+
+                <div className="center">
+                    <Link className="black-text text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>View All Photos</Link>
+                </div>
+                
+                <hr className="mt-4 mb-3" />
+
+                <AddReview />
             </div>
         );
     }
