@@ -27,16 +27,16 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE review_photos (
-    review_photos_id SERIAL PRIMARY KEY,
+CREATE TABLE review_images (
+    review_images_id SERIAL PRIMARY KEY,
     restaurant_id INT NOT NULL,
     user_id INT NOT NULL,
     review_id INT NOT NULL,
-    url VARCHAR(255) NOT NULL,
+    url VARCHAR(500) NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (review_id) REFERENCES reviews(review_id)
-)
+);
 
 INSERT INTO restaurants (name, city, category, price_range)
 VALUES ('Dennys', 'Pomona', 'Diners', '2'),

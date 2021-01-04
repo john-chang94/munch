@@ -8,7 +8,7 @@ export default (state = {}, action) => {
         case 'ADD_REVIEW':
             return {
                 ...state,
-                review: action.payload
+                review: action.payload.review
             }
         default:
             return state;

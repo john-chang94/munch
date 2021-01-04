@@ -22,13 +22,13 @@ module.exports = app => {
             const { restaurant_id, user_id, rating, details, date } = req.body;
             const review = await client.query(
                 `INSERT INTO reviews (restaurant_id, user_id, rating, details, date)
-                VALUES ($1, $2, $3, $4, $5)`,
+                VALUES ($1, $2, $3, $4, $5) returning *`,
                 [restaurant_id, user_id, rating, details, date]
             )
 
             res.status(201).json({
                 success: true,
-                review
+                review: review.rows[0]
             })
         } catch (err) {
             res.status(500).send('Server error');
@@ -134,11 +134,11 @@ module.exports = app => {
         }
     })
 
-    app.post('/api/review_photos', async (req, res) => {
+    app.post('/api/review_images', async (req, res) => {
         try {
             const { restaurant_id, user_id, review_id, url } = req.body;
             const photo = await client.query(
-                `INSERT INTO review_photos (restaurant_id, user_id, review_id, url)
+                `INSERT INTO review_images (restaurant_id, user_id, review_id, url)
                 VALUES ($1, $2, $3, $4)`,
                 [restaurant_id, user_id, review_id, url]
             )
