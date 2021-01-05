@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+export const clear = () => {
+    return dispatch => {
+        dispatch({ type: 'CLEAR_ERROR' })
+    }
+}
+
 export const fetchFeatured = () => {
     return async (dispatch) => {
         try {

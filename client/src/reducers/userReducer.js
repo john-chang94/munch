@@ -5,6 +5,11 @@ export default (state = {}, action) => {
                 ...state,
                 error: action.payload
             }
+        case 'CLEAR_ERROR':
+            return {
+                ...state,
+                error: null
+            }
         default:
             return state;
     }

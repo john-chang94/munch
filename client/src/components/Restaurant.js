@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/dashActions';
-import AddReview from './AddReview';
-import { renderStars } from './starsHelper';
-import M from 'materialize-css';
 import { Link } from 'react-router-dom';
+import M from 'materialize-css';
+
+import { renderStars } from './starsHelper';
+import AddReview from './AddReview';
+import Reviews from './Reviews';
 
 class Restaurant extends Component {
     state = {
@@ -55,6 +57,10 @@ class Restaurant extends Component {
                 <hr className="mt-4 mb-3" />
 
                 <AddReview />
+
+                <hr className="mt-3 mb-3" />
+
+                {/* <Reviews restaurant_id={this.props.match.params.restaurant_id} /> */}
             </div>
         );
     }

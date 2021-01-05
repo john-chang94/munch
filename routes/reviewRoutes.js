@@ -64,7 +64,7 @@ module.exports = app => {
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews found');
 
-            res.status(400).json({
+            res.status(200).json({
                 success: true,
                 results: reviews.rows.length,
                 data: reviews.rows

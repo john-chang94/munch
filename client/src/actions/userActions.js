@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+export const clear = () => {
+    return dispatch => {
+        dispatch({ type: 'CLEAR_ERROR' })
+    }
+}
+
 const token = sessionStorage.getItem('token');
     if (token) {
       // Set global headers for axios, need to set in other parents components

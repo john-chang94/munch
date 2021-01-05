@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions/reviewActions';
 import { storage } from '../config/fb';
@@ -16,10 +16,14 @@ class AddReview extends Component {
 
     componentDidMount() {
         // Initial render emtpy stars for leaving a review
+        this.renderEmptyStars();
+    }
+
+    renderEmptyStars = () => {
         let stars = [];
         for (let i = 0; i < 5; i++) {
             stars.push(
-                <i className="far fa-star yellow-text text-darken-2"
+                <i className="far fa-star yellow-text text-darken-2 pointer"
                     key={i}
                     onClick={() => this.handleRating(i)}>
                 </i>
@@ -28,16 +32,23 @@ class AddReview extends Component {
         this.setState({ stars })
     }
 
-    handleRating = (starIndex) => {
-        // Materialize classes for filled and empty stars
-        const filled = 'fas fa-star yellow-text text-darken-2';
-        const empty = 'far fa-star yellow-text text-darken-2';
+    handleRating = starIndex => {
+        // Font Awesome & Materialize classes for filled and empty stars
+        const filled = 'fas fa-star yellow-text text-darken-2 pointer';
+        const empty = 'far fa-star yellow-text text-darken-2 pointer';
         let stars = [];
 
         for (let i = 0; i < 5; i++) {
             // If the selected star index is >= current loop index,
             // add a filled star, otherwise add an empty star
-            stars.push(<i className={starIndex >= i ? filled : empty} key={i} onClick={() => this.handleRating(i)}></i>)
+            stars.push(
+                <i className={starIndex >= i
+                    ? filled
+                    : empty}
+                    key={i}
+                    onClick={() => this.handleRating(i)}>
+                </i>
+            )
         }
         this.setState({
             rating: starIndex + 1, // Rating must be from 1 to 5
@@ -61,60 +72,67 @@ class AddReview extends Component {
         e.preventDefault();
         const { rating, details, file } = this.state;
         const { user_id } = this.props.user;
-        const restaurant_id = parseInt(this.props.match.params.restaurant_id);
+        const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
         const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
 
         // Add review to db
         await this.props.addReview(body);
-        
-        // Reference images folder in firebase storage
-        const uploadTask = storage.ref(`/images/${file.name}`).put(file);
-        uploadTask.on('state_changed', console.log, console.error, () => {
-            storage
-                .ref('images') // Images folder in firebase storage
-                .child(file.name) // Child is the level inside images directory
-                .getDownloadURL() // Fetch image URL from firebase
-                .then((url) => {
-                    this.setState({
-                        file: null,
-                        url
-                    })
-                    const imageBody = {
-                        restaurant_id,
-                        user_id,
-                        review_id: this.props.review.review_id,
-                        url
-                    }
-                    // Add iamge to db with required foreign keys
-                    this.props.addReviewImage(imageBody);
-                });
-        });
+
+        if (file) {
+            // Reference images folder in firebase storage
+            const uploadTask = storage.ref(`/images/${file.name}`).put(file);
+            uploadTask.on('state_changed', console.log, console.error, () => {
+                storage
+                    .ref('images') // Images folder in firebase storage
+                    .child(file.name) // Child is the level inside images directory
+                    .getDownloadURL() // Fetch image URL from firebase
+                    .then((url) => {
+                        const imageBody = {
+                            restaurant_id,
+                            user_id,
+                            review_id: this.props.review.review_id,
+                            url
+                        }
+                        // Add iamge to db with required foreign keys
+                        this.props.addReviewImage(imageBody);
+                    });
+            });
+        }
+    }
+
+    renderSignInReview = () => {
+        return (
+            <p><Link to='/signin'>Sign in</Link> to leave a review.</p>
+        )
     }
 
     render() {
-        const { details, url, stars } = this.state;
+        const { details, stars } = this.state;
+        const { error } = this.props;
+        if (!this.props.user) return this.renderSignInReview();
+        if (error) setTimeout(() => {
+            this.props.clear();
+        }, 4000);
         return (
-            <div>
+            <div className="bg-light-gray pt-2 pb-3 pl-2 pr-2">
                 <p>Leave a review</p>
                 <div>
                     <p>{stars}</p>
                 </div>
-                <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="input-field">
-                            <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
-                            <label htmlFor="details">Details</label>
-                        </div>
-                        <div>
-                            <p>Add a photo</p>
-                            <input type="file" onChange={this.handleImage} />
-                        </div>
-                        <div>
-                            <button className="btn">Submit</button>
-                        </div>
-                    </form>
-                    <img src={url} className="w-100" alt="" />
-                </div>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="input-field">
+                        <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
+                        <label htmlFor="details">Details</label>
+                    </div>
+                    <div>
+                        <p>Add a photo (optional)</p>
+                        <input type="file" onChange={this.handleImage} />
+                    </div>
+                    <div className="mt-1">
+                        <button className="btn">Submit</button>
+                    </div>
+                    <p className="red-text mt-1">{error}</p>
+                </form>
             </div>
         );
     }
@@ -123,7 +141,8 @@ class AddReview extends Component {
 const mapStateToProps = state => {
     return {
         user: state.auth.user,
-        review: state.review.review
+        review: state.review.review,
+        error: state.review.error
     }
 }
 
