@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from './actions/authActions';
+import * as actions from './actions';
 
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import Register from './components/Register';
 import Restaurant from './components/Restaurant';
+import Footer from './components/Footer';
 
 class App extends Component {
   componentDidMount() {
@@ -29,6 +30,7 @@ class App extends Component {
             <Route path='/register' component={Register} />
             <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
           </Switch>
+          <Footer />
         </div>
       </BrowserRouter>
     );

@@ -1,4 +1,4 @@
-CREATE DATABASE yelpclone;
+CREATE DATABASE munch;
 
 CREATE TABLE restaurants (
     restaurant_id SERIAL PRIMARY KEY,

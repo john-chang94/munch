@@ -137,16 +137,33 @@ module.exports = app => {
         }
     })
 
+    // Add an image url
     app.post('/api/review_images', async (req, res) => {
         try {
             const { restaurant_id, user_id, review_id, url } = req.body;
-            const photo = await client.query(
+            const image = await client.query(
                 `INSERT INTO review_images (restaurant_id, user_id, review_id, url)
                 VALUES ($1, $2, $3, $4)`,
                 [restaurant_id, user_id, review_id, url]
             )
 
             res.status(201).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.get('/api/review_images/restaurants/:restaurant_id', async (req, res) => {
+        try {
+            const { restaurant_id } = req.params;
+            const images = await client.query('SELECT * FROM review_images WHERE restaurant_id = $1', [restaurant_id]);
+            if (!images.rows.length) return res.status(404).send('No images found');
+            
+            res.status(200).json({
+                success: true,
+                results: images.rows.length,
+                data: images.rows
+            })
         } catch (err) {
             res.status(500).send('Server error');
         }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../actions/reviewActions';
+import * as actions from '../actions';
 import { storage } from '../config/fb';
 import moment from 'moment';
 import M from 'materialize-css';
@@ -118,7 +118,7 @@ class AddReview extends Component {
         const { details, stars } = this.state;
         if (!this.props.user) return this.renderSignInReview();
         return (
-            <div className="bg-light-gray pt-2 pb-3 pl-2 pr-2">
+            <div className="bg-x-light-gray pt-2 pb-3 pl-2 pr-2">
                 <p>Leave a review</p>
                 <div>
                     <p>{stars}</p>

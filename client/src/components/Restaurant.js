@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions/dashActions';
+import * as actions from '../actions';
 import { Link } from 'react-router-dom';
 import M from 'materialize-css';
 
@@ -14,7 +14,11 @@ class Restaurant extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchRestaurant(this.props.match.params.restaurant_id);
+        const restaurant_id = this.props.match.params.restaurant_id;
+
+        await this.props.fetchRestaurant(restaurant_id);
+        this.props.fetchImagesForRestaurant(restaurant_id);
+        
         // Render rating with stars
         let stars = renderStars(this.props.restaurant.rating);
         this.setState({ stars })
@@ -26,6 +30,7 @@ class Restaurant extends Component {
     render() {
         const { restaurant } = this.props;
         const { stars } = this.state;
+        console.log(this.props.data)
         return (
             <div>
                 {
@@ -51,7 +56,7 @@ class Restaurant extends Component {
                 </div>
 
                 <div className="center">
-                    <Link className="black-text text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>View All Photos</Link>
+                    <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>View All Photos</Link>
                 </div>
                 
                 <hr className="mt-4 mb-3" />
@@ -68,7 +73,8 @@ class Restaurant extends Component {
 
 const mapStateToProps = state => {
     return {
-        restaurant: state.dash.restaurant
+        restaurant: state.dash.restaurant,
+        data: state.review.data
     }
 }
 

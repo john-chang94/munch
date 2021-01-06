@@ -20,6 +20,11 @@ export default (state = {}, action) => {
                 ...state,
                 reviews: action.payload.data
             }
+        case 'FETCH_IMAGES_FOR_RESTAURANT':
+            return {
+                ...state,
+                data: action.payload.data
+            }
         default:
             return state;
     }

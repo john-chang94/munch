@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions/reviewActions';
+import * as actions from '../actions';
 import moment from 'moment';
 
 class Reviews extends Component {
@@ -33,10 +33,11 @@ class Reviews extends Component {
         const { error, reviews } = this.props;
         return (
             <div>
+                <h5>Reviews</h5>
                 {
                     reviews
                         ? reviews.map((review, i) => (
-                            <div className="bg-light-gray mt-2 mb-2 pl-2 pr-2 pt-2 pb-2" key={i}>
+                            <div className="bg-x-light-gray mt-2 pl-2 pr-2 pt-2 pb-2" key={i}>
                                 <p>{this.renderRatingStars(review.rating)}</p>
                                 <p>{review.details}</p>
                                 <div className="mt-1">
