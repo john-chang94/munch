@@ -61,7 +61,7 @@ exports.addReviewValidator = (req, res, next) => {
     if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
     if (validator.isEmpty(user_id)) errors = 'User id required';
     if (validator.isEmpty(rating)) errors = 'Rating required';
-    if (validator.isEmpty(details)) errors = 'Details are required';
+    if (validator.isEmpty(details)) errors = 'Details required';
     if (validator.isEmpty(date)) errors = 'Date required';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);

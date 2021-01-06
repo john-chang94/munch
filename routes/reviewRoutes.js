@@ -52,14 +52,17 @@ module.exports = app => {
         }
     })
 
-    // Get all reviews for a restaurant
+    // Get all reviews for a restaurant with user info
     app.get('/api/reviews/restaurant/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
             const reviews = await client.query(
-                `SELECT * FROM reviews
+                `SELECT r.rating, r.details, r.date, u.user_id, u.first_name, u.last_name
+                    FROM reviews AS r
+                        JOIN users AS u
+                        ON r.user_id = u.user_id
                     WHERE restaurant_id = $1
-                    ORDER BY date DESC`,
+                    ORDER BY r.date DESC`,
                 [restaurant_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews found');

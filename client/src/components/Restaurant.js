@@ -60,7 +60,7 @@ class Restaurant extends Component {
 
                 <hr className="mt-3 mb-3" />
 
-                {/* <Reviews restaurant_id={this.props.match.params.restaurant_id} /> */}
+                <Reviews restaurant_id={this.props.match.params.restaurant_id} />
             </div>
         );
     }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions/reviewActions';
 import { storage } from '../config/fb';
 import moment from 'moment';
+import M from 'materialize-css';
 
 class AddReview extends Component {
     state = {
@@ -15,7 +16,7 @@ class AddReview extends Component {
     }
 
     componentDidMount() {
-        // Initial render emtpy stars for leaving a review
+        // Initial render empty stars for leaving a review
         this.renderEmptyStars();
     }
 
@@ -50,6 +51,7 @@ class AddReview extends Component {
                 </i>
             )
         }
+
         this.setState({
             rating: starIndex + 1, // Rating must be from 1 to 5
             stars
@@ -78,6 +80,12 @@ class AddReview extends Component {
         // Add review to db
         await this.props.addReview(body);
 
+        if (this.props.error) {
+            M.toast({ html: this.props.error, classes: "red darken-1" })
+            this.props.clear(); // Clear error in redux store
+        }
+
+        // Add image to firebase
         if (file) {
             // Reference images folder in firebase storage
             const uploadTask = storage.ref(`/images/${file.name}`).put(file);
@@ -93,7 +101,7 @@ class AddReview extends Component {
                             review_id: this.props.review.review_id,
                             url
                         }
-                        // Add iamge to db with required foreign keys
+                        // Add image url to db with required foreign keys
                         this.props.addReviewImage(imageBody);
                     });
             });
@@ -108,11 +116,7 @@ class AddReview extends Component {
 
     render() {
         const { details, stars } = this.state;
-        const { error } = this.props;
         if (!this.props.user) return this.renderSignInReview();
-        if (error) setTimeout(() => {
-            this.props.clear();
-        }, 4000);
         return (
             <div className="bg-light-gray pt-2 pb-3 pl-2 pr-2">
                 <p>Leave a review</p>
@@ -131,7 +135,6 @@ class AddReview extends Component {
                     <div className="mt-1">
                         <button className="btn">Submit</button>
                     </div>
-                    <p className="red-text mt-1">{error}</p>
                 </form>
             </div>
         );

@@ -201,6 +201,18 @@ html, body, #root, #root>.container {
   font-style: italic;
 }
 
+.text-i {
+  font-style: italic;
+}
+
+.text-b {
+  font-weight: bold;
+}
+
+.text-u {
+  text-decoration: underline;
+}
+
 .text-expand {
   background-color: rgb(238, 238, 238);
   padding: 5px 30px;
