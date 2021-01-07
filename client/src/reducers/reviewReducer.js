@@ -23,7 +23,7 @@ export default (state = {}, action) => {
         case 'FETCH_IMAGES_FOR_RESTAURANT':
             return {
                 ...state,
-                data: action.payload.data
+                images: action.payload.data
             }
         default:
             return state;

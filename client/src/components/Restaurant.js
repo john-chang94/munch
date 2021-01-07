@@ -16,8 +16,8 @@ class Restaurant extends Component {
     async componentDidMount() {
         const restaurant_id = this.props.match.params.restaurant_id;
 
-        await this.props.fetchRestaurant(restaurant_id);
         this.props.fetchImagesForRestaurant(restaurant_id);
+        await this.props.fetchRestaurant(restaurant_id);
         
         // Render rating with stars
         let stars = renderStars(this.props.restaurant.rating);
@@ -28,9 +28,8 @@ class Restaurant extends Component {
     }
 
     render() {
-        const { restaurant } = this.props;
+        const { restaurant, images } = this.props;
         const { stars } = this.state;
-        console.log(this.props.data)
         return (
             <div>
                 {
@@ -43,20 +42,20 @@ class Restaurant extends Component {
                     </div>
                 }
 
-                <div className="row mt-1">
-                    <div className="col l4 m6 s10 push-s1 mt-1">
-                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
-                    </div>
-                    <div className="col l4 m6 s10 push-s1 mt-1">
-                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
-                    </div>
-                    <div className="col l4 m6 s10 push-s1 mt-1">
-                        <img className="materialboxed w-100" src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457" alt="" />
-                    </div>
+                <div className="row mt-1 flex align-center">
+                    {
+                        images && images.slice(0,3).map((image, i) => (
+                            <div className="col l4 m6 s10 push-s1 mt-1" key={i}>
+                                <img className="materialboxed w-100" src={image.url} alt=""/>
+                            </div>
+                        ))
+                    }
                 </div>
 
                 <div className="center">
-                    <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>View All Photos</Link>
+                    <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
+                        View All Photos
+                    </Link>
                 </div>
                 
                 <hr className="mt-4 mb-3" />
@@ -74,7 +73,7 @@ class Restaurant extends Component {
 const mapStateToProps = state => {
     return {
         restaurant: state.dash.restaurant,
-        data: state.review.data
+        images: state.review.images
     }
 }
 

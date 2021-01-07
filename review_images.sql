@@ -38,3 +38,53 @@ insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (1, 3,
 insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (13, 2, 62, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsoup.jpg?alt=media&token=21f44e08-0631-4cad-bfae-77f9f01e6586');
 insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 3, 7, 'https://console.firebase.google.com/u/0/project/munch-41699/storage/munch-41699.appspot.com/files~2Fimages');
 insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (12, 2, 30, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpizza.jpg?alt=media&token=e497d49f-6d47-44c9-accc-25416357a0f6');
+
+
+
+
+
+
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (15, 4, 67, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsweet-and-sour-pork.jpg?alt=media&token=91e81fb3-e84e-4550-b21f-4ab2dd152c99');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (5, 2, 27, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsweet-and-sour-pork.jpg?alt=media&token=91e81fb3-e84e-4550-b21f-4ab2dd152c99');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (8, 5, 73, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsushi-combo.jpg?alt=media&token=30d053da-3558-47f8-b47f-77a5df5a2c8f');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (7, 5, 81, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsoup.jpg?alt=media&token=21f44e08-0631-4cad-bfae-77f9f01e6586');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (15, 2, 64, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsalmon.jpg?alt=media&token=0583f665-c658-47b7-82ae-c48cbff9d138');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (16, 4, 26, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpumpkin-soup.jpg?alt=media&token=4e42c7d5-efd7-4cfa-9202-426aee9cbd02');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (1, 3, 25, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpizza.jpg?alt=media&token=e497d49f-6d47-44c9-accc-25416357a0f6');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 5, 11, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpasta.jpg?alt=media&token=2b3d2ee6-86e1-4ecc-a0d8-bae1fee438e6');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (16, 3, 98, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpancakes.jpg?alt=media&token=a8a3e032-0f7c-4362-b8a7-e5a448001288');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (10, 4, 38, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fnoodles.jpg?alt=media&token=35b089ed-19db-4613-9740-fe565cad1d51');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (10, 5, 56, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fmacarons.jpg?alt=media&token=1c41506e-17fb-4565-90e6-06ef5d7b59d5');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (9, 3, 33, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fgrilled-pineapple-pork-burrito.jpg?alt=media&token=b056df3d-4e46-4c50-9b01-4aa2c63e0a80');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (12, 4, 51, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 3, 7, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcheese.jpg?alt=media&token=ef1a9c6e-a3c9-40be-9008-ef5eabfae586');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (3, 3, 88, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcake-cappuccino.jpg?alt=media&token=c5aa070b-63e3-4eb5-b158-94a3b1b71c12');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (16, 3, 23, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fburger-fries.jpg?alt=media&token=66b137b1-14dc-41e0-8ca4-fff40eb5d478');
+
+
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (17, 2, 4, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsweet-and-sour-pork.jpg?alt=media&token=91e81fb3-e84e-4550-b21f-4ab2dd152c99');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (10, 3, 79, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fburger-fries.jpg?alt=media&token=66b137b1-14dc-41e0-8ca4-fff40eb5d478');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (9, 3, 33, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsushi-combo.jpg?alt=media&token=30d053da-3558-47f8-b47f-77a5df5a2c8f');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (3, 5, 71, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsoup.jpg?alt=media&token=21f44e08-0631-4cad-bfae-77f9f01e6586');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (1, 5, 61, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsalmon.jpg?alt=media&token=0583f665-c658-47b7-82ae-c48cbff9d138');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (7, 5, 20, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpumpkin-soup.jpg?alt=media&token=4e42c7d5-efd7-4cfa-9202-426aee9cbd02');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (16, 4, 42, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpizza.jpg?alt=media&token=e497d49f-6d47-44c9-accc-25416357a0f6');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (3, 3, 88, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpasta.jpg?alt=media&token=2b3d2ee6-86e1-4ecc-a0d8-bae1fee438e6');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (11, 5, 46, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpancakes.jpg?alt=media&token=a8a3e032-0f7c-4362-b8a7-e5a448001288');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (14, 4, 65, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fnoodles.jpg?alt=media&token=35b089ed-19db-4613-9740-fe565cad1d51');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (18, 3, 47, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fmacarons.jpg?alt=media&token=1c41506e-17fb-4565-90e6-06ef5d7b59d5');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (3, 3, 92, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fgrilled-pineapple-pork-burrito.jpg?alt=media&token=b056df3d-4e46-4c50-9b01-4aa2c63e0a80');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (16, 4, 68, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (17, 4, 32, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcheese.jpg?alt=media&token=ef1a9c6e-a3c9-40be-9008-ef5eabfae586');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (15, 2, 64, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcake-cappuccino.jpg?alt=media&token=c5aa070b-63e3-4eb5-b158-94a3b1b71c12');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (6, 2, 87, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsweet-and-sour-pork.jpg?alt=media&token=91e81fb3-e84e-4550-b21f-4ab2dd152c99');
+
+
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (11, 2, 31, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fsweet-and-sour-pork.jpg?alt=media&token=91e81fb3-e84e-4550-b21f-4ab2dd152c99');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 5, 11, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fburger-fries.jpg?alt=media&token=66b137b1-14dc-41e0-8ca4-fff40eb5d478');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (5, 2, 86, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fmacarons.jpg?alt=media&token=1c41506e-17fb-4565-90e6-06ef5d7b59d5');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 3, 90, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fgrilled-pineapple-pork-burrito.jpg?alt=media&token=b056df3d-4e46-4c50-9b01-4aa2c63e0a80');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (1, 3, 25, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpancakes.jpg?alt=media&token=a8a3e032-0f7c-4362-b8a7-e5a448001288');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (13, 2, 62, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcurry.jpg?alt=media&token=23f7ab2f-dc17-4583-b2db-f8dd65b04457');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (2, 3, 7, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fpumpkin-soup.jpg?alt=media&token=4e42c7d5-efd7-4cfa-9202-426aee9cbd02');
+insert into REVIEW_IMAGES (restaurant_id, user_id, review_id, url) values (12, 2, 30, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fnoodles.jpg?alt=media&token=35b089ed-19db-4613-9740-fe565cad1d51');

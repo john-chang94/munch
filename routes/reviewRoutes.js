@@ -153,6 +153,7 @@ module.exports = app => {
         }
     })
 
+    // Get images for a restaurant
     app.get('/api/review_images/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
