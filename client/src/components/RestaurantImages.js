@@ -15,7 +15,7 @@ class RestaurantImages extends Component {
             <div className="flex align-center y-start wrap-around">
                 {
                     images && images.map((image, i) => (
-                        <div key={i} className="mt-2 ml-1 w-23">
+                        <div key={i} className="mt-2 w-23" style={{ marginLeft: '20px' }}>
                             <img className="materialboxed w-100" src={image.url} />
                         </div>
                     ))

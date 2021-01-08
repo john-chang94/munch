@@ -44,9 +44,9 @@ class Restaurant extends Component {
 
                 <div className="row mt-1 flex align-center">
                     {
-                        images && images.slice(0,3).map((image, i) => (
+                        images && images.slice(0,4).map((image, i) => (
                             <div className="col l4 m6 s10 push-s1 mt-1" key={i}>
-                                <img className="materialboxed w-100" src={image.url} alt=""/>
+                                <img className="materialboxed h-max" src={image.url} alt=""/>
                             </div>
                         ))
                     }

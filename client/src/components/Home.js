@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import RestaurantCard from './RestaurantCard';
@@ -19,12 +19,27 @@ class Home extends Component {
         })
     }
 
+    handleSearch = e => {
+        e.preventDefault();
+        const { name } = this.state;
+
+        if (name) {
+            this.props.history.push(`/restaurants?name=${name}`);
+        } else {
+            this.props.history.push('/restaurants');
+        }
+        
+        this.props.searchRestaurant(this.props.history.location.search);
+        // LEFT HERE
+    }
+
     render() {
         const { name } = this.state;
         const { featured } = this.props;
+        console.log(this.props)
         return (
             <div>
-                <form className="mt-5">
+                <form className="mt-5" onSubmit={this.handleSearch}>
                     <div className="input-field">
                         <input type="text" placeholder="Search for restaurants..." id="name" value={name} onChange={this.handleChange} />
                         <button className="btn">Search</button>

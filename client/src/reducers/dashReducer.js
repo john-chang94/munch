@@ -20,6 +20,11 @@ export default (state = {}, action) => {
                 ...state,
                 restaurant: action.payload
             }
+        case 'SEARCH_RESTAURANT':
+            return {
+                ...state,
+                restaurant: action.payload.data
+            }
         default:
             return state;
     }

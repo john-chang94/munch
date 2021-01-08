@@ -94,7 +94,7 @@ class AddReview extends Component {
                     .ref('images') // Images folder in firebase storage
                     .child(file.name) // Child is the level inside images directory
                     .getDownloadURL() // Fetch image URL from firebase
-                    .then((url) => {
+                    .then(async (url) => {
                         const imageBody = {
                             restaurant_id,
                             user_id,
@@ -102,7 +102,13 @@ class AddReview extends Component {
                             url
                         }
                         // Add image url to db with required foreign keys
-                        this.props.addReviewImage(imageBody);
+                        await this.props.addReviewImage(imageBody);
+                        // Show success message and clear form
+                        M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
+                        this.setState({ details: '' })
+                        this.renderEmptyStars();
+                        // Refresh review list
+                        this.props.fetchReviewsForRestaurant();
                     });
             });
         }

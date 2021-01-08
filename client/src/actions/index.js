@@ -138,6 +138,24 @@ export const fetchImagesForRestaurant = restaurant_id => {
     }
 }
 
+export const searchRestaurant = params => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants${params}`);
+            console.log(res.data)
+            dispatch({
+                type: 'SEARCH_RESTAURANT',
+                payload: res.data
+            })
+        } catch (err) {
+            dispatch({
+                type: 'ERROR',
+                payload: err.response.data
+            })
+        }
+    }
+}
+
 /////////////////////////////
 ////// REVIEWS ACTIONS //////
 /////////////////////////////

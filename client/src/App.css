@@ -196,6 +196,10 @@ html, body, #root, #root>.container {
   height: 50%;
 }
 
+.h-max {
+  max-width: 100%;
+}
+
 .w-100 {
   width: 100%;
 }
