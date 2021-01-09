@@ -40,7 +40,7 @@ CREATE TABLE review_images (
 
 CREATE TABLE suggestions (
     suggestions_id SERIAL PRIMARY KEY,
-    phrase VARCHAR(255) NOT NULL,
+    param VARCHAR(255) NOT NULL,
     query VARCHAR(50) NOT NULL
 );
 
@@ -65,7 +65,7 @@ VALUES ('Dennys', 'Pomona', 'Diners', '2'),
 ('Taqeuria De Anda', 'Pomona', 'Mexican', '1'),
 ('Taco Bell', 'Gardena', 'Fast Food', '1');
 
-INSERT INTO suggestions (phrase, query)
+INSERT INTO suggestions (param, query)
 VALUES ('Dennys', 'name'),
 ('Burger King', 'name'),
 ('Yard House', 'name'),

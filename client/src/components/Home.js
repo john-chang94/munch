@@ -7,8 +7,9 @@ import RestaurantCard from './RestaurantCard';
 class Home extends Component {
     state = {
         search: '',
+        searchHold: '',
         query: '',
-        items: []
+        suggestions: []
     }
 
     componentDidMount() {
@@ -20,49 +21,75 @@ class Home extends Component {
         const { id, value } = e.target;
 
         if (value) {
-            let items = this.props.suggestions.filter(data => {
-                return data.phrase.toLowerCase().startsWith(value.toLowerCase());
+            let suggestions = this.props.suggestions.filter(data => {
+                return data.param.toLowerCase().startsWith(value.toLowerCase());
             })
-            console.log(items)
+            console.log(suggestions)
+
             this.setState({
                 [id]: value,
-                items
+                searchHold: value,
+                suggestions
             })
         } else {
             this.setState({
                 search: '',
-                items: []
+                suggestions: []
             })
         }
 
     }
 
-    handleSearch = e => {
-        e.preventDefault();
-        const { search, query } = this.state;
+    // handleSearch = e => {
+    //     e.preventDefault();
+    //     const { search, query } = this.state;
 
-        if (search) {
-            this.props.history.push(`/search?${query}=${search}`);
-        } else {
-            this.props.history.push('/');
-        }
+    //     if (search) {
+    //         this.props.history.push(`/search?${query}=${search}`);
+    //     } else {
+    //         this.props.history.push('/');
+    //     }
 
-        this.props.searchRestaurant(this.props.history.location.search);
+    //     this.props.searchRestaurant(this.props.history.location.search);
+    // }
+
+    setSearchValue = (hovered, suggestion) => {
+        const {searchHold } = this.state;
+
+        // Set value of suggestion in search box when mouse is hovered over selection
+        if (hovered) this.setState({ search: suggestion.param })
+        // Set original value in search box that the user was typing when mouse leaves
+        else this.setState({ search: searchHold })
+    }
+
+    handleClick = (suggestion) => {
+        this.props.history.push(`/search?${suggestion.query}=${suggestion.param}`);
+        this.props.searchRestaurant(this.props.history.location.search);;
     }
 
     render() {
-        const { search, items } = this.state;
+        const { search, suggestions } = this.state;
         const { featured } = this.props;
-        console.log(this.props.history.location)
         return (
             <div>
                 <form className="mt-5" onSubmit={this.handleSearch}>
                     <div className="input-field" id="search-area">
-                        <input type="text" placeholder="Search for restaurants..." id="search" value={search} onChange={this.handleChange} />
+                        <input
+                            type="text"
+                            placeholder="Search for restaurants..."
+                            id="search"
+                            value={search}
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                        />
                         <ul>
                             {
-                                items && items.map((item, i) => (
-                                    <li key={i}>{item.phrase}</li>
+                                suggestions && suggestions.map((suggestion, i) => (
+                                    <li key={i}
+                                        onClick={this.handleClick.bind(this, suggestion)}
+                                        onMouseEnter={this.setSearchValue.bind(this, true, suggestion)}
+                                        onMouseLeave={this.setSearchValue.bind(this, false, suggestion)}
+                                    >{suggestion.param}</li>
                                 ))
                             }
                         </ul>

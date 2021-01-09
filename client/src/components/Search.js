@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 
 class Search extends Component {
     state = { 
-        name: ''
+        search: '',
+        searchHold: '',
+        query: '',
+        suggestions: []
      }
 
     render() { 
         return ( 
-            <div>
+            <div className="full">
                 here
             </div>
          );

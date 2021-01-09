@@ -24,13 +24,13 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="container">
+        <div className="container flex justify-sb">
           <Navbar />
           <Switch>
             <Route exact path='/' component={Home} />
             <Route path='/signin' component={SignIn} />
             <Route path='/register' component={Register} />
-            <Route path='/search?' componetn={Search} />
+            <Route path='/search' component={Search} />
             <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
             <Route exact path='/restaurants/:restaurant_id/photos' component={RestaurantImages} />
           </Switch>
