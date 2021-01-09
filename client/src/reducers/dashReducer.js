@@ -25,6 +25,11 @@ export default (state = {}, action) => {
                 ...state,
                 restaurant: action.payload.data
             }
+        case 'FETCH_SUGGESTIONS':
+            return {
+                ...state,
+                suggestions: action.payload
+            }
         default:
             return state;
     }

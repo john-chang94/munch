@@ -139,6 +139,17 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
+
+    app.get('/api/suggestions', async (req, res) => {
+        try {
+            const suggestions = await client.query('SELECT * FROM suggestions');
+            if (!suggestions.rows.length) return res.status(404).send('No suggestions');
+
+            res.status(200).json(suggestions.rows);
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
 }
 
 

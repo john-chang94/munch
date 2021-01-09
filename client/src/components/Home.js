@@ -1,48 +1,72 @@
 import React, { Component } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import RestaurantCard from './RestaurantCard';
 
 class Home extends Component {
     state = {
-        name: ''
+        search: '',
+        query: '',
+        items: []
     }
 
     componentDidMount() {
         this.props.fetchFeatured();
+        this.props.fetchSuggestions();
     }
 
     handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        const { id, value } = e.target;
+
+        if (value) {
+            let items = this.props.suggestions.filter(data => {
+                return data.phrase.toLowerCase().startsWith(value.toLowerCase());
+            })
+            console.log(items)
+            this.setState({
+                [id]: value,
+                items
+            })
+        } else {
+            this.setState({
+                search: '',
+                items: []
+            })
+        }
+
     }
 
     handleSearch = e => {
         e.preventDefault();
-        const { name } = this.state;
+        const { search, query } = this.state;
 
-        if (name) {
-            this.props.history.push(`/restaurants?name=${name}`);
+        if (search) {
+            this.props.history.push(`/search?${query}=${search}`);
         } else {
-            this.props.history.push('/restaurants');
+            this.props.history.push('/');
         }
-        
+
         this.props.searchRestaurant(this.props.history.location.search);
-        // LEFT HERE
     }
 
     render() {
-        const { name } = this.state;
+        const { search, items } = this.state;
         const { featured } = this.props;
-        console.log(this.props)
+        console.log(this.props.history.location)
         return (
             <div>
                 <form className="mt-5" onSubmit={this.handleSearch}>
-                    <div className="input-field">
-                        <input type="text" placeholder="Search for restaurants..." id="name" value={name} onChange={this.handleChange} />
-                        <button className="btn">Search</button>
+                    <div className="input-field" id="search-area">
+                        <input type="text" placeholder="Search for restaurants..." id="search" value={search} onChange={this.handleChange} />
+                        <ul>
+                            {
+                                items && items.map((item, i) => (
+                                    <li key={i}>{item.phrase}</li>
+                                ))
+                            }
+                        </ul>
+                        <button className="btn mt-sm">Search</button>
                     </div>
                 </form>
 
@@ -75,7 +99,8 @@ class Home extends Component {
 
 const mapStateToProps = state => {
     return {
-        featured: state.dash.featured
+        featured: state.dash.featured,
+        suggestions: state.dash.suggestions
     }
 }
 

@@ -11,6 +11,7 @@ import Register from './components/Register';
 import Restaurant from './components/Restaurant';
 import Footer from './components/Footer';
 import RestaurantImages from './components/RestaurantImages';
+import Search from './components/Search';
 
 class App extends Component {
   componentDidMount() {
@@ -29,6 +30,7 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route path='/signin' component={SignIn} />
             <Route path='/register' component={Register} />
+            <Route path='/search?' componetn={Search} />
             <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
             <Route exact path='/restaurants/:restaurant_id/photos' component={RestaurantImages} />
           </Switch>

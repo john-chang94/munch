@@ -292,6 +292,29 @@ html, body, #root, #root>.container {
   flex-wrap: wrap;
 }
 
-.result-item {
-  border: solid 1px gray;
+#search {
+  margin: 0;
+}
+
+#search-area {
+  position: relative;
+}
+
+#search-area ul {
+  border: solid 1px lightgray;
+  border-radius: 3px;
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+}
+
+#search-area ul li {
+  list-style: none;
+  background-color: white;
+  padding: 8px 12px;
+}
+
+#search-area ul li:hover {
+  background-color: rgb(233, 233, 233);
 }

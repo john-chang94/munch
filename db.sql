@@ -38,6 +38,12 @@ CREATE TABLE review_images (
     FOREIGN KEY (review_id) REFERENCES reviews(review_id)
 );
 
+CREATE TABLE suggestions (
+    suggestions_id SERIAL PRIMARY KEY,
+    phrase VARCHAR(255) NOT NULL,
+    query VARCHAR(50) NOT NULL
+);
+
 INSERT INTO restaurants (name, city, category, price_range)
 VALUES ('Dennys', 'Pomona', 'Diners', '2'),
 ('Burger King', 'Chino Hills', 'Fast Food', '1'),
@@ -58,3 +64,35 @@ VALUES ('Dennys', 'Pomona', 'Diners', '2'),
 ('Hacienda La Joya', 'Mission Viejo', 'Mexican', '1'),
 ('Taqeuria De Anda', 'Pomona', 'Mexican', '1'),
 ('Taco Bell', 'Gardena', 'Fast Food', '1');
+
+INSERT INTO suggestions (phrase, query)
+VALUES ('Dennys', 'name'),
+('Burger King', 'name'),
+('Yard House', 'name'),
+('Pick Up Stix', 'name'),
+('Waba Grill', 'name'),
+('Pho Ha', 'name'),
+('Cheesecake Factory', 'name'),
+('Summit House', 'name'),
+('Subway', 'name'),
+('Thaitwist', 'name'),
+('Noodology', 'name'),
+('Coco Palm Restaurant', 'name'),
+('Rolling Spicy Kimchi', 'name'),
+('Eureka!', 'name'),
+('Black Bear Diner', 'name'),
+('Taiko', 'name'),
+('Hacienda La Joya', 'name'),
+('Taqueria De Anda', 'name'),
+('Diners', 'category'),
+('Fast Food', 'category'),
+('American', 'category'),
+('Chinese', 'category'),
+('Vietnamese', 'category'),
+('Steakhouses', 'category'),
+('Sandwiches', 'category'),
+('Thai', 'category'),
+('Cuban', 'category'),
+('Korean', 'category'),
+('Japanese', 'category'),
+('Mexican', 'category');
