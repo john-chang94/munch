@@ -39,18 +39,15 @@ class Home extends Component {
         }
     }
 
-    // handleSearch = e => {
-    //     e.preventDefault();
-    //     const { search, query } = this.state;
+    handleSubmit = e => {
+        e.preventDefault();
+        const { search } = this.state;
+        // Set search in LS for use in Search component on page refresh
+        localStorage.setItem('search', search);
 
-    //     if (search) {
-    //         this.props.history.push(`/search?${query}=${search}`);
-    //     } else {
-    //         this.props.history.push('/');
-    //     }
-
-    //     this.props.search(this.props.history.location.search);
-    // }
+        this.props.history.push(`/search?find=${search}`);
+        this.props.search(this.props.history.location.search);
+    }
 
     setSearchValue = (isHovered, suggestion) => {
         const { userSearch } = this.state;
@@ -63,12 +60,11 @@ class Home extends Component {
 
     handleClick = suggestion => {
         const { search } = this.state;
-
-        this.props.history.push(`/search?${suggestion.query}=${suggestion.param}`);
-        this.props.search(this.props.history.location.search);
-        // Set path and search in LS for use in Search component on page refresh
-        localStorage.setItem('path', this.props.history.location.search);
+        // Set search in LS for use in Search component on page refresh
         localStorage.setItem('search', search);
+
+        this.props.history.push(`/search?find=${suggestion.param}`);
+        this.props.search(this.props.history.location.search);
     }
 
     render() {
@@ -76,7 +72,7 @@ class Home extends Component {
         const { featured } = this.props;
         return (
             <div>
-                <form className="mt-5" onSubmit={this.handleSearch}>
+                <form className="mt-5" onSubmit={this.handleSubmit}>
                     <div className="input-field" id="search-area">
                         <input
                             type="text"

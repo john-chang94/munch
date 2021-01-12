@@ -16,23 +16,27 @@ const queryCheck = async (reqQuery) => {
             ON r.restaurant_id = rev.restaurant_id
         WHERE`
     ]
-    const validQueries = ['name', 'city', 'category', 'price_range'];
+    const validQueries = ['city', 'category', 'price_range'];
 
+    // Main search text input can be name or category
+    if (reqQuery.hasOwnProperty('find')) {
+        queryStr.push(`lower(name) LIKE $${num++} OR lower(category) LIKE $${num++}`);
+        values.push(`${reqQuery['find'].toLowerCase()}%`);
+        values.push(`${reqQuery['find'].toLowerCase()}%`);
+        isQuery = true;
+    }
+
+    // Additional queries will be appended here
     for (let i = 0; i < validQueries.length; i++) {
-        // If req.query has any valid query params then do the following
         if (reqQuery.hasOwnProperty(validQueries[i])) {
             // Append SQL command with query param in lowercase
-            queryStr.push(`lower(${validQueries[i]}) = $${num++}`);
-            // Also include SQL command 'AND' for multiple query params
-            queryStr.push('AND');
+            queryStr.push(`AND lower(${validQueries[i]}) = $${num++}`);
             // Add the value of the query param in the values array in lowercase
             values.push(reqQuery[validQueries[i]].toLowerCase());
             isQuery = true;
         }
     }
-    // Remove the extra 'AND' at the end of the array
-    // and add the final GROUP BY clause
-    queryStr.pop();
+    // Add the final GROUP BY clause
     queryStr.push('GROUP BY r.restaurant_id');
     // Join the queryStr array to get one whole query string
     let ratingText = queryStr.join(' ');
@@ -54,9 +58,9 @@ module.exports = app => {
     app.get('/api/restaurants', async (req, res) => {
         try {
             const restaurants = await queryCheck(req.query);
-    
+
             if (!restaurants.rows.length) return res.status(404).send('No restaurants found');
-    
+
             res.status(200).json({
                 success: true,
                 results: restaurants.rows.length,
@@ -66,7 +70,7 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
-    
+
     app.get('/api/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
@@ -78,9 +82,9 @@ module.exports = app => {
                     ON r.restaurant_id = rev.restaurant_id
                 WHERE r.restaurant_id = $1
                 GROUP BY r.restaurant_id`, [restaurant_id])
-    
+
             if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
-    
+
             res.status(200).json({
                 success: true,
                 results: restaurant.rows.length,
@@ -90,7 +94,7 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
-    
+
     app.post('/api/restaurants', addRestaurantValidator, async (req, res) => {
         try {
             const { name, city, category, price_range } = req.body;
@@ -99,13 +103,13 @@ module.exports = app => {
                 VALUES ($1, $2, $3, $4)`,
                 [name, city, category, price_range]
             )
-    
+
             res.status(201).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }
     })
-    
+
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
@@ -119,7 +123,7 @@ module.exports = app => {
                 WHERE restaurant_id = $5 RETURNING *`,
                 [name, city, category, price_range, restaurant_id]
             )
-    
+
             res.status(200).json({
                 success: true,
                 data: restaurant.rows[0]
@@ -128,12 +132,12 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
-    
+
     app.delete('/api/restaurants/:id', async (req, res) => {
         try {
             const { id } = req.params;
             const restaurant = await client.query('DELETE FROM restaurants WHERE restaurant_id = $1', [id])
-    
+
             res.status(200).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
