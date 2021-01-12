@@ -20,10 +20,10 @@ export default (state = {}, action) => {
                 ...state,
                 restaurant: action.payload
             }
-        case 'SEARCH_RESTAURANT':
+        case 'SEARCH':
             return {
                 ...state,
-                restaurant: action.payload.data
+                results: action.payload.data
             }
         case 'FETCH_SUGGESTIONS':
             return {

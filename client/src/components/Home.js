@@ -7,7 +7,7 @@ import RestaurantCard from './RestaurantCard';
 class Home extends Component {
     state = {
         search: '',
-        searchHold: '',
+        userSearch: '',
         query: '',
         suggestions: []
     }
@@ -21,23 +21,22 @@ class Home extends Component {
         const { id, value } = e.target;
 
         if (value) {
+            // If user is typing, filter through suggestions with user input value
             let suggestions = this.props.suggestions.filter(data => {
                 return data.param.toLowerCase().startsWith(value.toLowerCase());
             })
-            console.log(suggestions)
-
             this.setState({
                 [id]: value,
-                searchHold: value,
+                userSearch: value, // Temp save user input for setSearchValue
                 suggestions
             })
         } else {
+            // If user is not typing, remove suggestions list
             this.setState({
                 search: '',
                 suggestions: []
             })
         }
-
     }
 
     // handleSearch = e => {
@@ -50,21 +49,26 @@ class Home extends Component {
     //         this.props.history.push('/');
     //     }
 
-    //     this.props.searchRestaurant(this.props.history.location.search);
+    //     this.props.search(this.props.history.location.search);
     // }
 
-    setSearchValue = (hovered, suggestion) => {
-        const {searchHold } = this.state;
+    setSearchValue = (isHovered, suggestion) => {
+        const { userSearch } = this.state;
 
-        // Set value of suggestion in search box when mouse is hovered over selection
-        if (hovered) this.setState({ search: suggestion.param })
-        // Set original value in search box that the user was typing when mouse leaves
-        else this.setState({ search: searchHold })
+        // Set value of suggestion in search box when isHovered is true
+        if (isHovered) this.setState({ search: suggestion.param })
+        // Set original value in search box that the user was typing when isHovered is false
+        else this.setState({ search: userSearch })
     }
 
-    handleClick = (suggestion) => {
+    handleClick = suggestion => {
+        const { search } = this.state;
+
         this.props.history.push(`/search?${suggestion.query}=${suggestion.param}`);
-        this.props.searchRestaurant(this.props.history.location.search);;
+        this.props.search(this.props.history.location.search);
+        // Set path and search in LS for use in Search component on page refresh
+        localStorage.setItem('path', this.props.history.location.search);
+        localStorage.setItem('search', search);
     }
 
     render() {
@@ -84,7 +88,9 @@ class Home extends Component {
                         />
                         <ul>
                             {
-                                suggestions && suggestions.map((suggestion, i) => (
+                                // Render suggestions, if any
+                                suggestions &&
+                                suggestions.map((suggestion, i) => (
                                     <li key={i}
                                         onClick={this.handleClick.bind(this, suggestion)}
                                         onMouseEnter={this.setSearchValue.bind(this, true, suggestion)}
