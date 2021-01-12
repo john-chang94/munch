@@ -1,4 +1,3 @@
-// const pool = require('../db');
 const client = require('../config/db');
 const { addRestaurantValidator } = require('../middlewares/validator');
 
@@ -21,6 +20,7 @@ const queryCheck = async (reqQuery) => {
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
         queryStr.push(`lower(name) LIKE $${num++} OR lower(category) LIKE $${num++}`);
+        // Search for values that have any characters following the user input with %
         values.push(`${reqQuery['find'].toLowerCase()}%`);
         values.push(`${reqQuery['find'].toLowerCase()}%`);
         isQuery = true;

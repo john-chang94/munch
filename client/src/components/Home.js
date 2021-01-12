@@ -42,8 +42,6 @@ class Home extends Component {
     handleSubmit = e => {
         e.preventDefault();
         const { search } = this.state;
-        // Set search in LS for use in Search component on page refresh
-        localStorage.setItem('search', search);
 
         this.props.history.push(`/search?find=${search}`);
         this.props.search(this.props.history.location.search);
@@ -59,10 +57,6 @@ class Home extends Component {
     }
 
     handleClick = suggestion => {
-        const { search } = this.state;
-        // Set search in LS for use in Search component on page refresh
-        localStorage.setItem('search', search);
-
         this.props.history.push(`/search?find=${suggestion.param}`);
         this.props.search(this.props.history.location.search);
     }

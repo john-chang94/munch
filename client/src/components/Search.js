@@ -36,8 +36,6 @@ const Search = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        // Set search in LS for use in Search component on page refresh
-        localStorage.setItem('search', search);
 
         props.history.push(`/search?find=${search}`);
         props.search(props.history.location.search);
@@ -47,28 +45,31 @@ const Search = (props) => {
     }
 
     const handleClick = suggestion => {
-        localStorage.setItem('search', search);
-
         props.history.push(`/search?find=${suggestion.param}`);
         props.search(props.history.location.search);
-        
+
         setSuggestions([]);
     }
 
+    // On component mount
     useEffect(() => {
-        const search = localStorage.getItem('search');
+        // URLSearchParams is built-in the browser to work with queries
+        const searchInput = new URLSearchParams(props.history.location.search);
+        // Get value of 'find' query param
+        setSearch(searchInput.get('find'));
 
         props.fetchSuggestions();
         props.search(props.history.location.search);
-        setSearch(search);
+
     }, [])
 
+    // On url change
     useEffect(() => {
-        // FIX PREV SEARCH VALUE
-        const find = props.history.location.search.split('find=')
-        console.log(find)
+        const searchInput = new URLSearchParams(props.history.location.search);
+        setSearch(searchInput.get('find'));
+        
         props.search(props.history.location.search);
-        setSearch(find[1]);
+
     }, [props.history.location.search])
 
     return (
