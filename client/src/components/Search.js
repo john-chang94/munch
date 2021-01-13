@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { Link } from 'react-router-dom';
 import RestaurantCard from './RestaurantCard';
+import Preloader from './Preloader';
 
 const Search = (props) => {
     const [search, setSearch] = useState('');
     const [userSearch, setUserSearch] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleChange = e => {
         const { value } = e.target;
@@ -18,7 +20,7 @@ const Search = (props) => {
                 return data.param.toLowerCase().startsWith(value.toLowerCase());
             })
             setSearch(value);
-            setUserSearch(value);
+            setUserSearch(value); // Temp save user input for setSearchValue
             setSuggestions(suggestions);
         } else {
             // If user is not typing, remove suggestions list
@@ -52,14 +54,15 @@ const Search = (props) => {
     }
 
     // On component mount
-    useEffect(() => {
+    useEffect(async () => {
         // URLSearchParams is built-in the browser to work with queries
         const searchInput = new URLSearchParams(props.history.location.search);
         // Get value of 'find' query param
         setSearch(searchInput.get('find'));
 
-        props.fetchSuggestions();
-        props.search(props.history.location.search);
+        await props.fetchSuggestions();
+        await props.search(props.history.location.search);
+        setIsLoading(false);
 
     }, [])
 
@@ -107,20 +110,23 @@ const Search = (props) => {
 
             <div>
                 {
-                    props.results &&
-                    props.results.map((restaurant) => (
-                        <div key={restaurant.restaurant_id}>
-                            <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                <RestaurantCard
-                                    name={restaurant.name}
-                                    category={restaurant.category}
-                                    rating={restaurant.rating}
-                                    total_ratings={restaurant.total_ratings}
-                                    price_range={restaurant.price_range}
-                                />
-                            </Link>
+                    isLoading
+                        ? <div className="center">
+                            <Preloader />
                         </div>
-                    ))
+                        : props.results.map((restaurant) => (
+                            <div key={restaurant.restaurant_id}>
+                                <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                    <RestaurantCard
+                                        name={restaurant.name}
+                                        category={restaurant.category}
+                                        rating={restaurant.rating}
+                                        total_ratings={restaurant.total_ratings}
+                                        price_range={restaurant.price_range}
+                                    />
+                                </Link>
+                            </div>
+                        ))
                 }
             </div>
         </div>

@@ -3,18 +3,22 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import RestaurantCard from './RestaurantCard';
+import Preloader from './Preloader';
 
 class Home extends Component {
     state = {
         search: '',
         userSearch: '',
         query: '',
-        suggestions: []
+        suggestions: [],
+        isLoading: true
     }
 
-    componentDidMount() {
-        this.props.fetchFeatured();
-        this.props.fetchSuggestions();
+    async componentDidMount() {
+        await this.props.fetchFeatured();
+        await this.props.fetchSuggestions();
+
+        this.setState({ isLoading: false })
     }
 
     handleChange = e => {
@@ -62,10 +66,10 @@ class Home extends Component {
     }
 
     render() {
-        const { search, suggestions } = this.state;
+        const { search, suggestions, isLoading } = this.state;
         const { featured } = this.props;
         return (
-            <div>
+            <div className="full">
                 <form className="mt-5" onSubmit={this.handleSubmit}>
                     <div className="input-field" id="search-area">
                         <input
@@ -99,20 +103,23 @@ class Home extends Component {
 
                 <div>
                     {
-                        featured &&
-                        featured.map((restaurant) => (
-                            <div key={restaurant.restaurant_id}>
-                                <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                    <RestaurantCard
-                                        name={restaurant.name}
-                                        category={restaurant.category}
-                                        rating={restaurant.rating}
-                                        total_ratings={restaurant.total_ratings}
-                                        price_range={restaurant.price_range}
-                                    />
-                                </Link>
+                        isLoading
+                            ? <div className="center">
+                                <Preloader />
                             </div>
-                        ))
+                            : featured.map((restaurant) => (
+                                <div key={restaurant.restaurant_id}>
+                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                        <RestaurantCard
+                                            name={restaurant.name}
+                                            category={restaurant.category}
+                                            rating={restaurant.rating}
+                                            total_ratings={restaurant.total_ratings}
+                                            price_range={restaurant.price_range}
+                                        />
+                                    </Link>
+                                </div>
+                            ))
                     }
                 </div>
             </div>
