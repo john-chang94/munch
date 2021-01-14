@@ -1,4 +1,4 @@
-export default (state = {}, action) => {
+const reviewReducer = (state = {}, action) => {
     switch (action.type) {
         case 'ERROR':
             return {
@@ -8,7 +8,8 @@ export default (state = {}, action) => {
         case 'CLEAR_ERROR':
             return {
                 ...state,
-                error: null
+                error: null,
+                images: null
             }
         case 'ADD_REVIEW':
             return {
@@ -28,4 +29,6 @@ export default (state = {}, action) => {
         default:
             return state;
     }
-}
+};
+
+export default reviewReducer;

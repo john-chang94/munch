@@ -11,7 +11,7 @@ class Navbar extends Component {
     render() {
         const { user } = this.props;
         return (
-            <nav>
+            <nav className="mb-sm">
                 <div className="nav-wrapper green darken-1">
                     <Link to='/' className="brand-logo center">Munch!</Link>
                     <ul className="right mr-2">

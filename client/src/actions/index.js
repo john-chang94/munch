@@ -107,11 +107,13 @@ export const fetchImagesForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/review_images/restaurants/${restaurant_id}`);
+            console.log(res)
             dispatch({
                 type: 'FETCH_IMAGES_FOR_RESTAURANT',
                 payload: res.data
             })
         } catch (err) {
+            console.log(err.response)
             dispatch({ type: 'ERROR', payload: err.response.data })
         }
     }

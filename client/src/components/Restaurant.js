@@ -30,11 +30,15 @@ class Restaurant extends Component {
         M.Materialbox.init(document.querySelectorAll('.materialboxed'))
     }
 
+    componentWillUnmount() {
+        this.props.clear();
+    }
+
     render() {
         const { restaurant, images } = this.props;
         const { stars, isLoading } = this.state;
         return (
-            <div>
+            <div className="container">
                 {
                     isLoading
                         ? <div className="center">
@@ -51,10 +55,12 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            <ImageGallery
+                            {
+                                images && <ImageGallery
                                 items={images}
                                 showPlayButton={false}
                             />
+                            }
 
                             <hr className="mt-4 mb-3" />
 

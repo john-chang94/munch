@@ -1,4 +1,4 @@
-export default (state = {}, action) => {
+const dashReducer = (state = {}, action) => {
     switch (action.type) {
         case 'ERROR':
             return {
@@ -33,4 +33,6 @@ export default (state = {}, action) => {
         default:
             return state;
     }
-}
+};
+
+export default dashReducer;

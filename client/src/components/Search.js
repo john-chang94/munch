@@ -54,29 +54,31 @@ const Search = (props) => {
     }
 
     // On component mount
-    useEffect(async () => {
-        // URLSearchParams is built-in the browser to work with queries
-        const searchInput = new URLSearchParams(props.history.location.search);
-        // Get value of 'find' query param
-        setSearch(searchInput.get('find'));
+    useEffect(() => {
+        const onMount = async () => {
+            // URLSearchParams is built-in the browser to work with queries
+            const searchInput = new URLSearchParams(props.history.location.search);
+            // Get value of 'find' query param
+            setSearch(searchInput.get('find'));
 
-        await props.fetchSuggestions();
-        await props.search(props.history.location.search);
-        setIsLoading(false);
-
+            await props.fetchSuggestions();
+            await props.search(props.history.location.search);
+            setIsLoading(false);
+        }
+        onMount();
     }, [])
 
     // On url change
     useEffect(() => {
         const searchInput = new URLSearchParams(props.history.location.search);
         setSearch(searchInput.get('find'));
-        
+
         props.search(props.history.location.search);
 
     }, [props.history.location.search])
 
     return (
-        <div className="full">
+        <div>
             <form className="mt-5" onSubmit={handleSubmit}>
                 <div className="input-field" id="search-area">
                     <input

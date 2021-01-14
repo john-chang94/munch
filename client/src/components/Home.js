@@ -69,7 +69,7 @@ class Home extends Component {
         const { search, suggestions, isLoading } = this.state;
         const { featured } = this.props;
         return (
-            <div className="full">
+            <div className="container">
                 <form className="mt-5" onSubmit={this.handleSubmit}>
                     <div className="input-field" id="search-area">
                         <input
