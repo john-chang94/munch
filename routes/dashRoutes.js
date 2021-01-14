@@ -8,14 +8,14 @@ const queryCheck = async (reqQuery) => {
     let num = 1;
     // Join restaurants and reviews to get the ratings
     let queryStr = [
-        `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+        `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
         AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
             FROM restaurants AS r
             JOIN reviews AS rev
             ON r.restaurant_id = rev.restaurant_id
         WHERE`
     ]
-    const validQueries = ['city', 'category', 'price_range'];
+    const validQueries = ['location', 'category', 'price_range'];
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
@@ -42,7 +42,7 @@ const queryCheck = async (reqQuery) => {
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
     AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
         FROM restaurants AS r
         JOIN reviews AS rev
@@ -75,7 +75,7 @@ module.exports = app => {
         try {
             const { restaurant_id } = req.params;
             const restaurant = await client.query(
-                `SELECT r.restaurant_id, r.name, r.city, r.category, r.price_range,
+                `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
                 AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
                     FROM restaurants AS r
                     JOIN reviews AS rev
@@ -97,11 +97,11 @@ module.exports = app => {
 
     app.post('/api/restaurants', addRestaurantValidator, async (req, res) => {
         try {
-            const { name, city, category, price_range } = req.body;
+            const { name, location, category, price_range } = req.body;
             const restaurant = await client.query(
-                `INSERT INTO restaurants (name, city, category, price_range)
+                `INSERT INTO restaurants (name, location, category, price_range)
                 VALUES ($1, $2, $3, $4)`,
-                [name, city, category, price_range]
+                [name, location, category, price_range]
             )
 
             res.status(201).json({ success: true })
@@ -113,15 +113,15 @@ module.exports = app => {
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
-            const { name, city, category, price_range } = req.body;
+            const { name, location, category, price_range } = req.body;
             const restaurant = await client.query(
                 `UPDATE restaurants
                     SET name = $1,
-                    city = $2,
+                    location = $2,
                     category = $3
                     price_range = $4
                 WHERE restaurant_id = $5 RETURNING *`,
-                [name, city, category, price_range, restaurant_id]
+                [name, location, category, price_range, restaurant_id]
             )
 
             res.status(200).json({
@@ -159,5 +159,5 @@ module.exports = app => {
 
 // console.log(req.query)
 // console.log(Object.keys(req.query))
-// console.log(req.query.hasOwnProperty('city'))
-// console.log(req.query['city'])
+// console.log(req.query.hasOwnProperty('location'))
+// console.log(req.query['location'])

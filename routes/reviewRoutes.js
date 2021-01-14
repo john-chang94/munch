@@ -157,7 +157,14 @@ module.exports = app => {
     app.get('/api/review_images/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
-            const images = await client.query('SELECT * FROM review_images WHERE restaurant_id = $1', [restaurant_id]);
+            const images = await client.query(`
+                SELECT ri.restaurant_id, ri.url AS original, it.thumbUrl AS thumbnail
+                FROM review_images AS ri
+                    JOIN images_thumb as it
+                    ON ri.review_images_id = it.review_images_id
+                WHERE restaurant_id = $1`,
+                [restaurant_id]
+            );
             if (!images.rows.length) return res.status(404).send('No images found');
             
             res.status(200).json({

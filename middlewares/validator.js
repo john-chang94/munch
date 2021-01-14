@@ -11,14 +11,14 @@ const isEmpty = value => {
 
 exports.addRestaurantValidator = (req, res, next) => {
     let errors = {};
-    let { name, city, category, price_range } = req.body;
+    let { name, location, category, price_range } = req.body;
     name = !isEmpty(name) ? name : '';
-    city = !isEmpty(city) ? city : '';
+    location = !isEmpty(location) ? location : '';
     category = !isEmpty(category) ? category : '';
     price_range = !isEmpty(price_range) ? price_range : '';
 
     if (validator.isEmpty(name)) errors = 'Name required';
-    if (validator.isEmpty(city)) errors = 'City required';
+    if (validator.isEmpty(location)) errors = 'location required';
     if (validator.isEmpty(category)) errors = 'Category required';
     if (validator.isEmpty(price_range)) errors = 'Price range required';
 

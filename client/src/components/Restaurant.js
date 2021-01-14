@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { Link } from 'react-router-dom';
 import M from 'materialize-css';
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
 
 import { renderStars } from './starsHelper';
 import AddReview from './AddReview';
@@ -42,7 +43,7 @@ class Restaurant extends Component {
                         : <div>
                             {
                                 restaurant &&
-                                <div>
+                                <div className="mb-1">
                                     <p className="heading">{restaurant.name}</p>
                                     <p className="cat-heading">{restaurant.category}</p>
                                     <p>{stars} ({restaurant.total_ratings})</p>
@@ -50,21 +51,10 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            <div className="row mt-1">
-                                {
-                                    images && images.slice(0, 4).map((image, i) => (
-                                        <div className="col l3 m6 s10 push-s1 mt-1" key={i}>
-                                            <img className="materialboxed w-max" src={image.url} alt="" />
-                                        </div>
-                                    ))
-                                }
-                            </div>
-
-                            <div className="center">
-                                <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
-                                    View All Photos
-                                </Link>
-                            </div>
+                            <ImageGallery
+                                items={images}
+                                showPlayButton={false}
+                            />
 
                             <hr className="mt-4 mb-3" />
 
