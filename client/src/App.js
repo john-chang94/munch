@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 
@@ -24,14 +24,16 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="flex justify-sb outer-wrapper">
-          <Navbar />
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path='/signin' component={SignIn} />
-            <Route path='/register' component={Register} />
-            <Route path='/search' component={Search} />
-            <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
-          </Switch>
+          <div>
+            <Navbar />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route path='/signin' component={SignIn} />
+              <Route path='/register' component={Register} />
+              <Route path='/search' component={Search} />
+              <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
+            </Switch>
+          </div>
           <Footer />
         </div>
       </BrowserRouter>

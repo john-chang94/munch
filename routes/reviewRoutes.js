@@ -5,7 +5,7 @@ module.exports = app => {
     app.get('/api/reviews', async (req, res) => {
         try {
             const reviews = await client.query('SELECT * FROM reviews');
-            if (!results.rows.length) return res.status(404).send('No reviews found');
+            if (!results.rows.length) return res.status(404).send('No reviews yet');
 
             return res.status(200).json({
                 success: true,
@@ -40,7 +40,7 @@ module.exports = app => {
         try {
             const { review_id } = req.params;
             const review = await client.query('SELECT * FROM reviews WHERE review_id = $1', [review_id]);
-            if (!review.rows.length) return res.status(404).send('No review found');
+            if (!review.rows.length) return res.status(404).send('No review yet');
 
             res.status(200).json({
                 success: true,
@@ -65,7 +65,7 @@ module.exports = app => {
                     ORDER BY r.date DESC`,
                 [restaurant_id]
             )
-            if (!reviews.rows.length) return res.status(404).send('No reviews found');
+            if (!reviews.rows.length) return res.status(404).send('No reviews yet');
 
             res.status(200).json({
                 success: true,
@@ -89,7 +89,7 @@ module.exports = app => {
                     WHERE r.user_id = $1`,
                 [user_id]
             )
-            if (!reviews.rows.length) return res.status(404).send('No reviews found');
+            if (!reviews.rows.length) return res.status(404).send('No reviews yet');
 
             res.status(200).json({
                 success: true,
@@ -165,7 +165,7 @@ module.exports = app => {
                 WHERE restaurant_id = $1`,
                 [restaurant_id]
             );
-            if (!images.rows.length) return res.status(404).send('No images found');
+            if (!images.rows.length) return res.status(404).send('No images yet');
             
             res.status(200).json({
                 success: true,

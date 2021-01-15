@@ -23,8 +23,8 @@ class Register extends Component {
         e.preventDefault();
         await this.props.register(this.state);
 
-        if (this.props.error) {
-            M.toast({ html: this.props.error, classes: 'red darken-1' })
+        if (this.props.authError) {
+            M.toast({ html: this.props.authError, classes: 'red darken-1' })
             this.props.clear();
         }
 
@@ -76,7 +76,7 @@ class Register extends Component {
 
 const mapStateToProps = state => {
     return {
-        error: state.auth.error,
+        authError: state.auth.authError,
         success: state.auth.success
     }
 }

@@ -35,7 +35,7 @@ class Restaurant extends Component {
     }
 
     render() {
-        const { restaurant, images } = this.props;
+        const { restaurant, images, dashError } = this.props;
         const { stars, isLoading } = this.state;
         return (
             <div className="container">
@@ -45,7 +45,7 @@ class Restaurant extends Component {
                             <Preloader />
                         </div>
                         : <div>
-                            {
+                            {   // Display restaurant info once fetched
                                 restaurant &&
                                 <div className="mb-1">
                                     <p className="heading">{restaurant.name}</p>
@@ -55,11 +55,13 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            {
-                                images && <ImageGallery
-                                items={images}
-                                showPlayButton={false}
-                            />
+                            {   // Display message if there are no images for the restaurant
+                                dashError
+                                    ? <h5 className="center">{dashError}</h5>
+                                    : <ImageGallery
+                                        items={images}
+                                        showPlayButton={false}
+                                    />
                             }
 
                             <hr className="mt-4 mb-3" />
@@ -79,7 +81,8 @@ class Restaurant extends Component {
 const mapStateToProps = state => {
     return {
         restaurant: state.dash.restaurant,
-        images: state.review.images
+        images: state.review.images,
+        dashError: state.dash.dashError
     }
 }
 

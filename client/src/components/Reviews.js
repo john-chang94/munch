@@ -30,7 +30,7 @@ class Reviews extends Component {
     }
 
     render() {
-        const { error, reviews } = this.props;
+        const { reviewError, reviews } = this.props;
         return (
             <div>
                 <h5>Reviews</h5>
@@ -46,7 +46,7 @@ class Reviews extends Component {
                                 </div>
                             </div>
                         ))
-                        : <div className="center">{error}</div>
+                        : <div className="center">{reviewError}</div>
                 }
             </div>
         );
@@ -56,7 +56,7 @@ class Reviews extends Component {
 const mapStateToProps = state => {
     return {
         reviews: state.review.reviews,
-        error: state.review.error
+        reviewError: state.review.reviewError
     }
 }
 

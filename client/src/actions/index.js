@@ -26,7 +26,7 @@ export const fetchUser = () => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -40,7 +40,7 @@ export const register = body => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -55,7 +55,7 @@ export const signIn = body => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -66,7 +66,7 @@ export const signOut = () => {
             sessionStorage.removeItem('token');
             dispatch({ type: 'SIGN_OUT' })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -84,7 +84,7 @@ export const fetchFeatured = () => {
                 payload: res.data.data.slice(0, 5)
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -98,7 +98,7 @@ export const fetchRestaurant = restaurant_id => {
                 payload: res.data.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -114,7 +114,7 @@ export const fetchImagesForRestaurant = restaurant_id => {
             })
         } catch (err) {
             console.log(err.response)
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -128,7 +128,7 @@ export const search = queries => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -139,7 +139,7 @@ export const fetchSuggestions = () => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/suggestions`);
             dispatch({ type: 'FETCH_SUGGESTIONS', payload: res.data })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }
 }
@@ -157,7 +157,7 @@ export const addReview = body => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
     }
 }
@@ -171,7 +171,7 @@ export const addReviewImage = body => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
     }
 }
@@ -185,7 +185,7 @@ export const fetchReviewsForRestaurant = restaurant_id => {
                 payload: res.data
             })
         } catch (err) {
-            dispatch({ type: 'ERROR', payload: err.response.data })
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
     }
 }

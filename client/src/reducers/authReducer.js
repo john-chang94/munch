@@ -1,14 +1,14 @@
 const authReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'ERROR':
+        case 'AUTH_ERROR':
             return {
                 ...state,
-                error: action.payload
+                authError: action.payload
             }
         case 'CLEAR_ERROR':
             return {
                 ...state,
-                error: null
+                authError: null
             }
         case 'REGISTER':
             return {

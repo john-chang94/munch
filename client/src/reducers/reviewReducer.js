@@ -1,15 +1,14 @@
 const reviewReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'ERROR':
+        case 'REVIEW_ERROR':
             return {
                 ...state,
-                error: action.payload
+                reviewError: action.payload
             }
         case 'CLEAR_ERROR':
             return {
                 ...state,
-                error: null,
-                images: null
+                reviewError: null
             }
         case 'ADD_REVIEW':
             return {

@@ -1,14 +1,14 @@
 const dashReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'ERROR':
+        case 'DASH_ERROR':
             return {
                 ...state,
-                error: action.payload
+                dashError: action.payload
             }
         case 'CLEAR_ERROR':
             return {
                 ...state,
-                error: null
+                dashError: null
             }
         case 'FETCH_FEATURED':
             return {

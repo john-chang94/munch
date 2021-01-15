@@ -80,9 +80,9 @@ class AddReview extends Component {
         // Add review to db
         await this.props.addReview(body);
 
-        if (this.props.error) {
-            M.toast({ html: this.props.error, classes: "red darken-1" })
-            return this.props.clear(); // Clear error in redux store
+        if (this.props.reviewError) {
+            M.toast({ html: this.props.reviewError, classes: "red darken-1" })
+            return this.props.clear(); // Clear reviewError in redux store
         }
 
         // Add image to firebase
@@ -103,10 +103,12 @@ class AddReview extends Component {
                         }
                         // Add image url to db with required foreign keys
                         await this.props.addReviewImage(imageBody);
+                        
                         // Show success message and clear form
-                        M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
+                        M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
                         this.setState({ details: '' })
                         this.renderEmptyStars();
+
                         // Refresh review list
                         this.props.fetchReviewsForRestaurant(restaurant_id);
                     });
@@ -159,7 +161,7 @@ const mapStateToProps = state => {
     return {
         user: state.auth.user,
         review: state.review.review,
-        error: state.review.error
+        reviewError: state.review.reviewError
     }
 }
 
