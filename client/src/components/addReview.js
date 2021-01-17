@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { storage } from '../config/fb';
 import moment from 'moment';
 import M from 'materialize-css';
+import SignInModal from './SignInModal';
 
 class AddReview extends Component {
     state = {
+        stars: [],
         rating: '',
         details: '',
         file: '',
         url: '',
-        stars: []
+        modalIsOpen: true
     }
 
     componentDidMount() {
@@ -103,7 +105,7 @@ class AddReview extends Component {
                         }
                         // Add image url to db with required foreign keys
                         await this.props.addReviewImage(imageBody);
-                        
+
                         // Show success message and clear form
                         M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
                         this.setState({ details: '' })
@@ -124,34 +126,47 @@ class AddReview extends Component {
         }
     }
 
-    renderSignInReview = () => {
-        return (
-            <p><Link to='/signin'>Sign in</Link> to leave a review.</p>
-        )
+    openModal = () => {
+        this.setState({ modalIsOpen: true })
+    }
+
+    closeModal = () => {
+        this.setState({ modalIsOpen: false })
     }
 
     render() {
-        const { details, stars } = this.state;
-        if (!this.props.user) return this.renderSignInReview();
+        const { details, stars, modalIsOpen } = this.state;
+        const { user } = this.props;
         return (
-            <div className="bg-x-light-gray pt-2 pb-3 pl-2 pr-2">
-                <p>Leave a review</p>
-                <div>
-                    <p>{stars}</p>
-                </div>
-                <form onSubmit={this.handleSubmit}>
-                    <div className="input-field">
-                        <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
-                        <label htmlFor="details">Details</label>
-                    </div>
-                    <div>
-                        <p>Add a photo (optional)</p>
-                        <input type="file" onChange={this.handleImage} />
-                    </div>
-                    <div className="mt-1">
-                        <button className="btn">Submit</button>
-                    </div>
-                </form>
+            <div>
+                {
+                    user
+                        ? <div className="bg-x-light-gray pt-2 pb-3 pl-2 pr-2">
+                            <p>Leave a review</p>
+                            <div>
+                                <p>{stars}</p>
+                            </div>
+                            <form onSubmit={this.handleSubmit}>
+                                <div className="input-field">
+                                    <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
+                                    <label htmlFor="details">Details</label>
+                                </div>
+                                <div>
+                                    <p>Add a photo (optional)</p>
+                                    <input type="file" onChange={this.handleImage} />
+                                </div>
+                                <div className="mt-1">
+                                    <button className="btn">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        : <p><span className="blue-text pointer" onClick={this.openModal}>Sign in</span> to leave a review.</p>
+                }
+
+                <SignInModal
+                    modalIsOpen={modalIsOpen}
+                    closeModal={this.closeModal}
+                />
             </div>
         );
     }

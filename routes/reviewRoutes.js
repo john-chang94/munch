@@ -176,4 +176,23 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
+    
+    app.get('/api/review_images/users/:user_id', async (req, res) => {
+        try {
+            const { user_id } = req.params;
+            const userImages = await client.query(
+                `SELECT * FROM review_images
+                    WHERE user_id = $1
+                    `,
+                [user_id]
+            )
+
+            res.status(200).json({
+                success: true,
+                results: userImages.rows
+            });
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
 }

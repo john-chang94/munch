@@ -55,14 +55,14 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            {   // Display message if there are no images for the restaurant
+                            {/* {   // Display message if there are no images for the restaurant
                                 dashError
                                     ? <h5 className="center">{dashError}</h5>
                                     : <ImageGallery
                                         items={images}
                                         showPlayButton={false}
                                     />
-                            }
+                            } */}
 
                             <hr className="mt-4 mb-3" />
 
