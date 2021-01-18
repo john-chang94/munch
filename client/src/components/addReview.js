@@ -14,7 +14,7 @@ class AddReview extends Component {
         details: '',
         file: '',
         url: '',
-        modalIsOpen: true
+        modalIsOpen: false
     }
 
     componentDidMount() {

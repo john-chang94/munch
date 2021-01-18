@@ -41,7 +41,7 @@ class Restaurant extends Component {
             <div className="container">
                 {
                     isLoading
-                        ? <div className="center">
+                        ? <div className="center mt-5">
                             <Preloader />
                         </div>
                         : <div>
