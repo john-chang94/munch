@@ -11,7 +11,8 @@ class Home extends Component {
         userSearch: '',
         query: '',
         suggestions: [],
-        isLoading: true
+        isLoading: true,
+        cursor: -1
     }
 
     async componentDidMount() {
@@ -38,8 +39,24 @@ class Home extends Component {
             // If user is not typing, remove suggestions list
             this.setState({
                 search: '',
-                suggestions: []
+                suggestions: [],
+                cursor: -1
             })
+        }
+    }
+
+    handleKeyDown = e => {
+        const { cursor, suggestions } = this.state;
+        if (e.key === 'ArrowUp' && cursor > -1) {
+            this.setState(prevState => ({
+                cursor: prevState.cursor - 1
+            }))
+            console.log('up', cursor)
+        } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
+            this.setState(prevState => ({
+                cursor: prevState.cursor + 1
+            }))
+            console.log('down', cursor)
         }
     }
 
@@ -51,13 +68,19 @@ class Home extends Component {
         this.props.search(this.props.history.location.search);
     }
 
-    setSearchValue = (isHovered, suggestion) => {
+    setSearchValue = (isHovered, suggestion, index) => {
         const { userSearch } = this.state;
 
         // Set value of suggestion in search box when isHovered is true
-        if (isHovered) this.setState({ search: suggestion.param })
+        if (isHovered) this.setState({
+            search: suggestion.param,
+            cursor: index
+        })
         // Set original value in search box that the user was typing when isHovered is false
-        else this.setState({ search: userSearch })
+        else this.setState({
+            search: userSearch,
+            cursor: -1
+        })
     }
 
     handleClick = suggestion => {
@@ -66,7 +89,7 @@ class Home extends Component {
     }
 
     render() {
-        const { search, suggestions, isLoading } = this.state;
+        const { search, suggestions, isLoading, cursor } = this.state;
         const { featured } = this.props;
         return (
             <div className="container">
@@ -79,6 +102,7 @@ class Home extends Component {
                             value={search}
                             onChange={this.handleChange}
                             autoComplete="off"
+                            onKeyDown={this.handleKeyDown}
                         />
                         <ul>
                             {
@@ -86,10 +110,11 @@ class Home extends Component {
                                 suggestions &&
                                 suggestions.map((suggestion, i) => (
                                     <li key={i}
+                                        className={cursor === i ? 'sugg-active' : null}
                                         onClick={this.handleClick.bind(this, suggestion)}
-                                        onMouseEnter={this.setSearchValue.bind(this, true, suggestion)}
-                                        onMouseLeave={this.setSearchValue.bind(this, false, suggestion)}
-                                    >{suggestion.param}</li>
+                                        onMouseEnter={this.setSearchValue.bind(this, true, suggestion, i)}
+                                        onMouseLeave={this.setSearchValue.bind(this, false, suggestion, i)}
+                                    >{i} {suggestion.param}</li>
                                 ))
                             }
                         </ul>

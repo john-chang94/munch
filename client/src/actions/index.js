@@ -112,7 +112,6 @@ export const fetchImagesForRestaurant = restaurant_id => {
                 payload: res.data
             })
         } catch (err) {
-            console.log(err.response)
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
     }

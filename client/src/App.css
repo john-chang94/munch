@@ -336,10 +336,14 @@ html, body, #root, #root>.outer-wrapper {
 
 #search-area ul li {
   list-style: none;
-  background-color: white;
   padding: 8px 12px;
+  background-color: white;
 }
 
 #search-area ul li:hover {
   background-color: rgb(233, 233, 233);
+}
+
+.sugg-active {
+  background-color: rgb(233, 233, 233)!important;
 }

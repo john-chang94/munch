@@ -11,9 +11,7 @@ class SignIn extends Component {
     }
 
     handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        this.setState({ [e.target.id]: e.target.value })
     }
 
     handleSubmit = async (e) => {
@@ -32,7 +30,7 @@ class SignIn extends Component {
         const { email, password } = this.state;
         return (
             <div className="container h-100 flex-center">
-                <div className="w-50">
+                <div className="w-50 mb-5">
                     <h4>Sign In</h4>
                     <form onSubmit={this.handleSubmit}>
                         <div className="input-field">

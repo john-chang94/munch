@@ -14,9 +14,7 @@ class Register extends Component {
     }
 
     handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        this.setState({ [e.target.id]: e.target.value })
     }
 
     handleSubmit = async (e) => {
@@ -38,7 +36,7 @@ class Register extends Component {
         const { first_name, last_name, email, password, confirmPassword } = this.state;
         return (
             <div className="container h-100 flex-center">
-                <div className="w-50">
+                <div className="w-50 mb-5">
                     <h4>Create a new account</h4>
                     <form onSubmit={this.handleSubmit}>
                         <div className="input-field">

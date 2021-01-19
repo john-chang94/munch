@@ -61,15 +61,11 @@ class AddReview extends Component {
     }
 
     handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        this.setState({ [e.target.id]: e.target.value })
     }
 
     handleImage = e => {
-        this.setState({
-            file: e.target.files[0]
-        })
+        this.setState({ file: e.target.files[0] })
     }
 
     handleSubmit = async (e) => {
