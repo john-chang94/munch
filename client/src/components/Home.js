@@ -21,7 +21,7 @@ class Home extends Component {
         this.setState({ isLoading: false })
     }
 
-    // Update search input value of selected item in suggestions using arrow keys
+    // Update search input value of selected item from suggestions using arrow keys
     componentDidUpdate() {
         let item = document.getElementById(this.state.cursor);
         let search = document.getElementById('search');
@@ -55,15 +55,17 @@ class Home extends Component {
     handleKeyDown = e => {
         const { cursor, suggestions } = this.state;
         if (e.key === 'ArrowUp' && cursor > -1) {
+            e.preventDefault();
             this.setState({ cursor: cursor - 1 })
 
         } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
             this.setState({ cursor: cursor + 1 })
 
         } else if (e.key === 'Enter') {
-            let search = document.getElementById('search');
+            e.preventDefault();
+            let searchValue = document.getElementById('search');
 
-            this.props.history.push(`/search?find=${search.value}`);
+            this.props.history.push(`/search?find=${searchValue.value}`);
             this.props.search(this.props.history.location.search);
         }
     }

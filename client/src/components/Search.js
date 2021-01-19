@@ -32,12 +32,14 @@ const Search = (props) => {
 
     const handleKeyDown = e => {
         if (e.key === 'ArrowUp' && cursor > -1) {
+            e.preventDefault();
             setCursor(cursor - 1)
 
         } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
             setCursor(cursor + 1)
 
         } else if (e.key === 'Enter') {
+            e.preventDefault();
             let searchValue = document.getElementById('search');
 
             props.history.push(`/search?find=${searchValue.value}`);
