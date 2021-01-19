@@ -10,6 +10,7 @@ const Search = (props) => {
     const [userSearch, setUserSearch] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [cursor, setCursor] = useState(-1);
 
     const handleChange = e => {
         const { value } = e.target;
@@ -26,6 +27,21 @@ const Search = (props) => {
             // If user is not typing, remove suggestions list
             setSearch('');
             setSuggestions([]);
+        }
+    }
+
+    const handleKeyDown = e => {
+        if (e.key === 'ArrowUp' && cursor > -1) {
+            setCursor(cursor - 1)
+
+        } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
+            setCursor(cursor + 1)
+
+        } else if (e.key === 'Enter') {
+            let searchValue = document.getElementById('search');
+
+            props.history.push(`/search?find=${searchValue.value}`);
+            props.search(props.history.location.search);
         }
     }
 
@@ -68,6 +84,14 @@ const Search = (props) => {
         onMount();
     }, [])
 
+    // On cursor pointer change from arrow keys
+    useEffect(() => {
+        let item = document.getElementById(cursor);
+        let search = document.getElementById('search');
+
+        if (item) search.value = item.textContent
+    }, [cursor])
+
     // On url change
     useEffect(() => {
         const searchInput = new URLSearchParams(props.history.location.search);
@@ -88,6 +112,7 @@ const Search = (props) => {
                         value={search}
                         onChange={handleChange}
                         autoComplete="off"
+                        onKeyDown={handleKeyDown}
                     />
                     <ul>
                         {
@@ -95,6 +120,8 @@ const Search = (props) => {
                             suggestions &&
                             suggestions.map((suggestion, i) => (
                                 <li key={i}
+                                    id={i}
+                                    className={cursor === i ? 'sugg-active': null}
                                     onClick={handleClick.bind(this, suggestion)}
                                     onMouseEnter={setSearchValue.bind(this, true, suggestion)}
                                     onMouseLeave={setSearchValue.bind(this, false, suggestion)}

@@ -9,7 +9,6 @@ class Home extends Component {
     state = {
         search: '',
         userSearch: '',
-        query: '',
         suggestions: [],
         isLoading: true,
         cursor: -1
@@ -20,6 +19,14 @@ class Home extends Component {
         await this.props.fetchSuggestions();
 
         this.setState({ isLoading: false })
+    }
+
+    // Update search input value of selected item in suggestions using arrow keys
+    componentDidUpdate() {
+        let item = document.getElementById(this.state.cursor);
+        let search = document.getElementById('search');
+
+        if (item) search.value = item.textContent;
     }
 
     handleChange = e => {
@@ -48,15 +55,16 @@ class Home extends Component {
     handleKeyDown = e => {
         const { cursor, suggestions } = this.state;
         if (e.key === 'ArrowUp' && cursor > -1) {
-            this.setState(prevState => ({
-                cursor: prevState.cursor - 1
-            }))
-            console.log('up', cursor)
+            this.setState({ cursor: cursor - 1 })
+
         } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
-            this.setState(prevState => ({
-                cursor: prevState.cursor + 1
-            }))
-            console.log('down', cursor)
+            this.setState({ cursor: cursor + 1 })
+
+        } else if (e.key === 'Enter') {
+            let search = document.getElementById('search');
+
+            this.props.history.push(`/search?find=${search.value}`);
+            this.props.search(this.props.history.location.search);
         }
     }
 
@@ -110,11 +118,12 @@ class Home extends Component {
                                 suggestions &&
                                 suggestions.map((suggestion, i) => (
                                     <li key={i}
+                                        id={i}
                                         className={cursor === i ? 'sugg-active' : null}
                                         onClick={this.handleClick.bind(this, suggestion)}
                                         onMouseEnter={this.setSearchValue.bind(this, true, suggestion, i)}
                                         onMouseLeave={this.setSearchValue.bind(this, false, suggestion, i)}
-                                    >{i} {suggestion.param}</li>
+                                    >{suggestion.param}</li>
                                 ))
                             }
                         </ul>
