@@ -24,7 +24,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="flex justify-sb outer-wrapper">
-          <div className="h-100">
+          <div>
             <Navbar />
             <Switch>
               <Route exact path='/' component={Home} />

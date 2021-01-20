@@ -20,6 +20,7 @@ const queryCheck = async (reqQuery) => {
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
         queryStr.push(`lower(name) LIKE $${num++} OR lower(category) LIKE $${num++}`);
+        queryStr.push('AND');
         // Search for values that have any characters following the user input with %
         values.push(`${reqQuery['find'].toLowerCase()}%`);
         values.push(`${reqQuery['find'].toLowerCase()}%`);
@@ -30,12 +31,15 @@ const queryCheck = async (reqQuery) => {
     for (let i = 0; i < validQueries.length; i++) {
         if (reqQuery.hasOwnProperty(validQueries[i])) {
             // Append SQL command with query param in lowercase
-            queryStr.push(`AND lower(${validQueries[i]}) = $${num++}`);
+            queryStr.push(`lower(${validQueries[i]}) = $${num++}`);
+            queryStr.push('AND');
             // Add the value of the query param in the values array in lowercase
             values.push(reqQuery[validQueries[i]].toLowerCase());
             isQuery = true;
         }
     }
+    // Remove extra 'AND'
+    queryStr.pop();
     // Add the final GROUP BY clause
     queryStr.push('GROUP BY r.restaurant_id');
     // Join the queryStr array to get one whole query string

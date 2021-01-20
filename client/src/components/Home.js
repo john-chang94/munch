@@ -55,7 +55,7 @@ class Home extends Component {
     handleKeyDown = e => {
         const { cursor, suggestions } = this.state;
         if (e.key === 'ArrowUp' && cursor > -1) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent insertion point from moving to the beginning
             this.setState({ cursor: cursor - 1 })
 
         } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {

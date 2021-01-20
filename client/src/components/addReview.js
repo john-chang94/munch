@@ -83,6 +83,15 @@ class AddReview extends Component {
             return this.props.clear(); // Clear reviewError in redux store
         }
 
+        // Run if no image upload
+        if (!file) {
+            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
+            this.setState({ details: '' })
+            this.renderEmptyStars();
+            // Refresh review list
+            this.props.fetchReviewsForRestaurant(restaurant_id);
+        }
+
         // Add image to firebase
         if (file) {
             // Reference images folder in firebase storage
@@ -111,14 +120,6 @@ class AddReview extends Component {
                         this.props.fetchReviewsForRestaurant(restaurant_id);
                     });
             });
-        }
-
-        if (!file) {
-            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
-            this.setState({ details: '' })
-            this.renderEmptyStars();
-            // Refresh review list
-            this.props.fetchReviewsForRestaurant(restaurant_id);
         }
     }
 

@@ -11,6 +11,7 @@ const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cursor, setCursor] = useState(-1);
+    const [price_range, setPriceRange] = useState('');
 
     const handleChange = e => {
         const { value } = e.target;
@@ -32,18 +33,20 @@ const Search = (props) => {
 
     const handleKeyDown = e => {
         if (e.key === 'ArrowUp' && cursor > -1) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent insertion point from moving to the beginning
             setCursor(cursor - 1)
 
         } else if (e.key === 'ArrowDown' && cursor < suggestions.length - 1) {
             setCursor(cursor + 1)
 
         } else if (e.key === 'Enter') {
-            e.preventDefault();
+            e.preventDefault(); // Prevent duplicate push to history
             let searchValue = document.getElementById('search');
 
             props.history.push(`/search?find=${searchValue.value}`);
-            props.search(props.history.location.search);
+            // props.search(props.history.location.search);
+
+            setSuggestions([]);
         }
     }
 
@@ -58,7 +61,7 @@ const Search = (props) => {
         e.preventDefault();
 
         props.history.push(`/search?find=${search}`);
-        props.search(props.history.location.search);
+        // props.search(props.history.location.search);
 
         // Remove suggestions list so onMouseLeave does not trigger after search
         setSuggestions([]);
@@ -66,7 +69,7 @@ const Search = (props) => {
 
     const handleClick = suggestion => {
         props.history.push(`/search?find=${suggestion.param}`);
-        props.search(props.history.location.search);
+        // props.search(props.history.location.search);
 
         setSuggestions([]);
     }
@@ -89,76 +92,151 @@ const Search = (props) => {
     // On cursor pointer change from arrow keys
     useEffect(() => {
         let item = document.getElementById(cursor);
-        let search = document.getElementById('search');
+        let searchValue = document.getElementById('search');
 
-        if (item) search.value = item.textContent
+        if (item) searchValue.value = item.textContent
     }, [cursor])
 
-    // On url change
+    // On url change, set search input value from query
     useEffect(() => {
-        const searchInput = new URLSearchParams(props.history.location.search);
-        setSearch(searchInput.get('find'));
+        const searchQuery = new URLSearchParams(props.history.location.search);
+        setSearch(searchQuery.get('find'));
+        if (searchQuery.has('price_range')) setPriceRange(searchQuery.get('price_range'))
 
         props.search(props.history.location.search);
 
     }, [props.history.location.search])
 
+    // On price_range state change, set price range input value from query
+    useEffect(() => {
+        const searchQuery = new URLSearchParams(props.history.location.search);
+
+        if (!price_range) {
+            return;
+        } else {
+            if (searchQuery.has('price_range')) {
+                
+                searchQuery.set('price_range', price_range);
+                props.history.push(`/search?${searchQuery.toString()}`)
+            } else {
+
+                searchQuery.append('price_range', price_range);
+                props.history.push(`/search?${searchQuery.toString()}`)
+            }
+        }
+    }, [price_range])
+
     return (
-        <div>
-            <form className="mt-5" onSubmit={handleSubmit}>
-                <div className="input-field" id="search-area">
-                    <input
-                        type="text"
-                        placeholder="Search for restaurants..."
-                        id="search"
-                        value={search}
-                        onChange={handleChange}
-                        autoComplete="off"
-                        onKeyDown={handleKeyDown}
-                    />
-                    <ul>
-                        {
-                            // Render suggestions, if any
-                            suggestions &&
-                            suggestions.map((suggestion, i) => (
-                                <li key={i}
-                                    id={i}
-                                    className={cursor === i ? 'sugg-active': null}
-                                    onClick={handleClick.bind(this, suggestion)}
-                                    onMouseEnter={setSearchValue.bind(this, true, suggestion)}
-                                    onMouseLeave={setSearchValue.bind(this, false, suggestion)}
-                                >{suggestion.param}</li>
-                            ))
-                        }
-                    </ul>
-                    <button className="btn mt-sm">Search</button>
+        <div className="row">
+            <div className="col l2 m2 mt-4">
+                <p className="center">Filter</p>
+                <div>
+                    <p>
+                        <label>
+                            <input type="radio"
+                                name='group1'
+                                value="1"
+                                checked={price_range === '1'}
+                                onChange={() => setPriceRange('1')}
+                                className="with-gap"
+                            />
+                            <span>$</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="radio"
+                                name='group1'
+                                value="2"
+                                checked={price_range === '2'}
+                                onChange={() => setPriceRange('2')}
+                                className="with-gap"
+                            />
+                            <span>$$</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="radio"
+                                name='group1'
+                                value="3"
+                                checked={price_range === '3'}
+                                onChange={() => setPriceRange('3')}
+                                className="with-gap"
+                            />
+                            <span>$$$</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="radio"
+                                name='group1'
+                                value="4"
+                                checked={price_range === '4'}
+                                onChange={() => setPriceRange('4')}
+                                className="with-gap"
+                            />
+                            <span>$$$$</span>
+                        </label>
+                    </p>
                 </div>
-            </form>
-
-            <div>
-                <h4>Results</h4>
             </div>
+            <div className="col l9 m19">
+                <form className="mt-4" onSubmit={handleSubmit}>
+                    <div className="input-field" id="search-area">
+                        <input
+                            type="text"
+                            placeholder="Search for restaurants..."
+                            id="search"
+                            value={search}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            onKeyDown={handleKeyDown}
+                        />
+                        <ul>
+                            {
+                                // Render suggestions, if any
+                                suggestions &&
+                                suggestions.map((suggestion, i) => (
+                                    <li key={i}
+                                        id={i}
+                                        className={cursor === i ? 'sugg-active' : null}
+                                        onClick={handleClick.bind(this, suggestion)}
+                                        onMouseEnter={setSearchValue.bind(this, true, suggestion)}
+                                        onMouseLeave={setSearchValue.bind(this, false, suggestion)}
+                                    >{suggestion.param}</li>
+                                ))
+                            }
+                        </ul>
+                        <button className="btn mt-sm">Search</button>
+                    </div>
+                </form>
 
-            <div>
-                {
-                    isLoading
-                        ? <div className="center">
-                            <Preloader />
-                        </div>
-                        : props.results.map((restaurant) => (
-                            <div key={restaurant.restaurant_id}>
-                                <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                    <RestaurantCard
-                                        name={restaurant.name}
-                                        category={restaurant.category}
-                                        rating={restaurant.rating}
-                                        total_ratings={restaurant.total_ratings}
-                                        price_range={restaurant.price_range}
-                                    />
-                                </Link>
+                <div>
+                    <h4>Results</h4>
+                </div>
+
+                <div>
+                    {
+                        isLoading
+                            ? <div className="center">
+                                <Preloader />
                             </div>
-                        ))
-                }
+                            : props.results.map((restaurant) => (
+                                <div key={restaurant.restaurant_id}>
+                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                        <RestaurantCard
+                                            name={restaurant.name}
+                                            category={restaurant.category}
+                                            rating={restaurant.rating}
+                                            total_ratings={restaurant.total_ratings}
+                                            price_range={restaurant.price_range}
+                                        />
+                                    </Link>
+                                </div>
+                            ))
+                    }
+                </div>
             </div>
         </div>
     );

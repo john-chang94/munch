@@ -35,7 +35,7 @@ class Register extends Component {
     render() {
         const { first_name, last_name, email, password, confirmPassword } = this.state;
         return (
-            <div className="container h-100 flex-center">
+            <div className="container mt-5 flex-center">
                 <div className="w-50 mb-5">
                     <h4>Create a new account</h4>
                     <form onSubmit={this.handleSubmit}>
