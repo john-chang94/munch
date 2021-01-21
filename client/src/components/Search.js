@@ -4,6 +4,7 @@ import * as actions from '../actions';
 import { Link } from 'react-router-dom';
 import RestaurantCard from './RestaurantCard';
 import Preloader from './Preloader';
+import Filters from './Filters';
 
 const Search = (props) => {
     const [search, setSearch] = useState('');
@@ -81,12 +82,18 @@ const Search = (props) => {
             const searchInput = new URLSearchParams(props.history.location.search);
             // Get value of 'find' query param
             setSearch(searchInput.get('find'));
+            setPriceRange(searchInput.get('price_range'))
 
             await props.fetchSuggestions();
             await props.search(props.history.location.search);
             setIsLoading(false);
         }
         onMount();
+
+        // Clear error message on component unmount
+        return () => {
+            props.clear();
+        }
     }, [])
 
     // On cursor pointer change from arrow keys
@@ -101,7 +108,7 @@ const Search = (props) => {
     useEffect(() => {
         const searchQuery = new URLSearchParams(props.history.location.search);
         setSearch(searchQuery.get('find'));
-        if (searchQuery.has('price_range')) setPriceRange(searchQuery.get('price_range'))
+        setPriceRange(searchQuery.get('price_range'))
 
         props.search(props.history.location.search);
 
@@ -109,78 +116,34 @@ const Search = (props) => {
 
     // On price_range state change, set price range input value from query
     useEffect(() => {
+        // Clear error message when user clicks on a different filter
+        if (props.dashError) props.clear();
         const searchQuery = new URLSearchParams(props.history.location.search);
 
         if (!price_range) {
-            return;
+            // Load all search results if user removes price filter
+            searchQuery.delete('price_range');
+            props.history.push(`/search?${searchQuery}`)
         } else {
             if (searchQuery.has('price_range')) {
-                
+
                 searchQuery.set('price_range', price_range);
-                props.history.push(`/search?${searchQuery.toString()}`)
+                props.history.push(`/search?${searchQuery}`)
             } else {
 
                 searchQuery.append('price_range', price_range);
-                props.history.push(`/search?${searchQuery.toString()}`)
+                props.history.push(`/search?${searchQuery}`)
             }
         }
+
     }, [price_range])
 
     return (
         <div className="row">
-            <div className="col l2 m2 mt-4">
-                <p className="center">Filter</p>
-                <div>
-                    <p>
-                        <label>
-                            <input type="radio"
-                                name='group1'
-                                value="1"
-                                checked={price_range === '1'}
-                                onChange={() => setPriceRange('1')}
-                                className="with-gap"
-                            />
-                            <span>$</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio"
-                                name='group1'
-                                value="2"
-                                checked={price_range === '2'}
-                                onChange={() => setPriceRange('2')}
-                                className="with-gap"
-                            />
-                            <span>$$</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio"
-                                name='group1'
-                                value="3"
-                                checked={price_range === '3'}
-                                onChange={() => setPriceRange('3')}
-                                className="with-gap"
-                            />
-                            <span>$$$</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio"
-                                name='group1'
-                                value="4"
-                                checked={price_range === '4'}
-                                onChange={() => setPriceRange('4')}
-                                className="with-gap"
-                            />
-                            <span>$$$$</span>
-                        </label>
-                    </p>
-                </div>
-            </div>
+            <Filters
+                price_range={price_range}
+                setPriceRange={setPriceRange}
+            />
             <div className="col l9 m19">
                 <form className="mt-4" onSubmit={handleSubmit}>
                     <div className="input-field" id="search-area">
@@ -222,19 +185,33 @@ const Search = (props) => {
                             ? <div className="center">
                                 <Preloader />
                             </div>
-                            : props.results.map((restaurant) => (
-                                <div key={restaurant.restaurant_id}>
-                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
-                                        <RestaurantCard
-                                            name={restaurant.name}
-                                            category={restaurant.category}
-                                            rating={restaurant.rating}
-                                            total_ratings={restaurant.total_ratings}
-                                            price_range={restaurant.price_range}
-                                        />
-                                    </Link>
-                                </div>
-                            ))
+                            : <div>
+                                {
+                                    // Render error message if no restaurants found with price filter
+                                    props.dashError &&
+                                    <div className="center">
+                                        <p>{props.dashError}</p>
+                                    </div>
+                                }
+
+                                {
+                                    // Only render when restaurants are found without error
+                                    (props.results && !props.dashError) &&
+                                    props.results.map((restaurant) => (
+                                        <div key={restaurant.restaurant_id}>
+                                            <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                                <RestaurantCard
+                                                    name={restaurant.name}
+                                                    category={restaurant.category}
+                                                    rating={restaurant.rating}
+                                                    total_ratings={restaurant.total_ratings}
+                                                    price_range={restaurant.price_range}
+                                                />
+                                            </Link>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                     }
                 </div>
             </div>
@@ -245,7 +222,8 @@ const Search = (props) => {
 const mapStateToProps = state => {
     return {
         results: state.dash.results,
-        suggestions: state.dash.suggestions
+        suggestions: state.dash.suggestions,
+        dashError: state.dash.dashError
     }
 }
 
