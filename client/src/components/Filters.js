@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Filters = ({ setPriceRange, price_range }) => {
+const Filters = ({ setPriceRange, price_range, propsPriceRange }) => {
     return (
         <div className="col l2 m2 mt-4">
                 <p className="center">Filter</p>
@@ -9,7 +9,7 @@ const Filters = ({ setPriceRange, price_range }) => {
                         <label>
                             <input type="checkbox"
                                 name='group1'
-                                checked={price_range === '1'}
+                                checked={propsPriceRange === '1'}
                                 onChange={() => price_range !== '1' ? setPriceRange('1') : setPriceRange('')}
                                 className="filled-in"
                             />
@@ -20,7 +20,7 @@ const Filters = ({ setPriceRange, price_range }) => {
                         <label>
                             <input type="checkbox"
                                 name='group1'
-                                checked={price_range === '2'}
+                                checked={propsPriceRange === '2'}
                                 onChange={() => price_range !== '2' ? setPriceRange('2') : setPriceRange('')}
                                 className="filled-in"
                             />
@@ -31,7 +31,7 @@ const Filters = ({ setPriceRange, price_range }) => {
                         <label>
                             <input type="checkbox"
                                 name='group1'
-                                checked={price_range === '3'}
+                                checked={propsPriceRange === '3'}
                                 onChange={() => price_range !== '3' ? setPriceRange('3') : setPriceRange('')}
                                 className="filled-in"
                             />
@@ -42,7 +42,7 @@ const Filters = ({ setPriceRange, price_range }) => {
                         <label>
                             <input type="checkbox"
                                 name='group1'
-                                checked={price_range === '4'}
+                                checked={propsPriceRange === '4'}
                                 onChange={() => price_range !== '4' ? setPriceRange('4') : setPriceRange('')}
                                 className="filled-in"
                             />

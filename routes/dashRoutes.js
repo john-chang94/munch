@@ -19,7 +19,7 @@ const queryCheck = async (reqQuery) => {
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
-        queryStr.push(`lower(name) LIKE $${num++} OR lower(category) LIKE $${num++}`);
+        queryStr.push(`(lower(name) LIKE $${num++} OR lower(category) LIKE $${num++})`);
         queryStr.push('AND');
         // Search for values that have any characters following the user input with %
         values.push(`${reqQuery['find'].toLowerCase()}%`);

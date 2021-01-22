@@ -13,6 +13,7 @@ const Search = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [cursor, setCursor] = useState(-1);
     const [price_range, setPriceRange] = useState('');
+    const [propsPriceRange, setPropsPriceRange] = useState();
 
     const handleChange = e => {
         const { value } = e.target;
@@ -79,10 +80,11 @@ const Search = (props) => {
     useEffect(() => {
         const onMount = async () => {
             // URLSearchParams is built-in the browser to work with queries
-            const searchInput = new URLSearchParams(props.history.location.search);
+            const searchQuery = new URLSearchParams(props.history.location.search);
             // Get value of 'find' query param
-            setSearch(searchInput.get('find'));
-            setPriceRange(searchInput.get('price_range'))
+            setSearch(searchQuery.get('find'));
+            setPriceRange(searchQuery.get('price_range'))
+            setPropsPriceRange(searchQuery.get('price_range'))
 
             await props.fetchSuggestions();
             await props.search(props.history.location.search);
@@ -93,6 +95,7 @@ const Search = (props) => {
         // Clear error message on component unmount
         return () => {
             props.clear();
+            setPriceRange('')
         }
     }, [])
 
@@ -108,7 +111,10 @@ const Search = (props) => {
     useEffect(() => {
         const searchQuery = new URLSearchParams(props.history.location.search);
         setSearch(searchQuery.get('find'));
-        setPriceRange(searchQuery.get('price_range'))
+        // Separate state for price range as identifier and for props because
+        // executing setPriceRange here will cause the useEffect below to run
+        // which will cause this useEffect to run like an endless cycle
+        setPropsPriceRange(searchQuery.get('price_range'))
 
         props.search(props.history.location.search);
 
@@ -121,16 +127,17 @@ const Search = (props) => {
         const searchQuery = new URLSearchParams(props.history.location.search);
 
         if (!price_range) {
+            
             // Load all search results if user removes price filter
             searchQuery.delete('price_range');
             props.history.push(`/search?${searchQuery}`)
         } else {
             if (searchQuery.has('price_range')) {
-
+                
                 searchQuery.set('price_range', price_range);
                 props.history.push(`/search?${searchQuery}`)
             } else {
-
+                
                 searchQuery.append('price_range', price_range);
                 props.history.push(`/search?${searchQuery}`)
             }
@@ -141,7 +148,8 @@ const Search = (props) => {
     return (
         <div className="row">
             <Filters
-                price_range={price_range}
+                price_range={propsPriceRange}
+                propsPriceRange={propsPriceRange}
                 setPriceRange={setPriceRange}
             />
             <div className="col l9 m19">
