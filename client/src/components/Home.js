@@ -66,7 +66,6 @@ class Home extends Component {
             let searchValue = document.getElementById('search');
 
             this.props.history.push(`/search?find=${searchValue.value}`);
-            this.props.search(this.props.history.location.search);
         }
     }
 
@@ -75,7 +74,6 @@ class Home extends Component {
         const { search } = this.state;
 
         this.props.history.push(`/search?find=${search}`);
-        this.props.search(this.props.history.location.search);
     }
 
     setSearchValue = (isHovered, suggestion, index) => {
@@ -95,7 +93,6 @@ class Home extends Component {
 
     handleClick = suggestion => {
         this.props.history.push(`/search?find=${suggestion.param}`);
-        this.props.search(this.props.history.location.search);
     }
 
     render() {

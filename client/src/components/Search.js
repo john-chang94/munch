@@ -105,8 +105,11 @@ const Search = (props) => {
 
     // On url change, set search input value from query
     useEffect(() => {
+        // Clear any error message before search results are fetched
+        if (props.dashError) props.clear();
         const searchQuery = new URLSearchParams(props.history.location.search);
         setSearch(searchQuery.get('find'));
+
         // Separate state for price range as identifier and for props because
         // executing setPriceRange here will cause the useEffect below to run
         // which will cause this useEffect to run like an endless cycle.
