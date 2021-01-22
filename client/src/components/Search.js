@@ -46,7 +46,6 @@ const Search = (props) => {
             let searchValue = document.getElementById('search');
 
             props.history.push(`/search?find=${searchValue.value}`);
-            // props.search(props.history.location.search);
 
             setSuggestions([]);
         }
@@ -61,9 +60,7 @@ const Search = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-
         props.history.push(`/search?find=${search}`);
-        // props.search(props.history.location.search);
 
         // Remove suggestions list so onMouseLeave does not trigger after search
         setSuggestions([]);
@@ -71,7 +68,6 @@ const Search = (props) => {
 
     const handleClick = suggestion => {
         props.history.push(`/search?find=${suggestion.param}`);
-        // props.search(props.history.location.search);
 
         setSuggestions([]);
     }
@@ -81,10 +77,10 @@ const Search = (props) => {
         const onMount = async () => {
             // URLSearchParams is built-in the browser to work with queries
             const searchQuery = new URLSearchParams(props.history.location.search);
-            // Get value of 'find' query param
+            
             setSearch(searchQuery.get('find'));
-            setPriceRange(searchQuery.get('price_range'))
-            setPropsPriceRange(searchQuery.get('price_range'))
+            setPriceRange(searchQuery.get('price_range'));
+            setPropsPriceRange(searchQuery.get('price_range'));
 
             await props.fetchSuggestions();
             await props.search(props.history.location.search);
@@ -92,7 +88,7 @@ const Search = (props) => {
         }
         onMount();
 
-        // Clear error message on component unmount
+        // Clear state on component unmount
         return () => {
             props.clear();
             setPriceRange('')
@@ -113,7 +109,8 @@ const Search = (props) => {
         setSearch(searchQuery.get('find'));
         // Separate state for price range as identifier and for props because
         // executing setPriceRange here will cause the useEffect below to run
-        // which will cause this useEffect to run like an endless cycle
+        // which will cause this useEffect to run like an endless cycle.
+        // Identifier for filters to determine which checkboxes are checked, if any.
         setPropsPriceRange(searchQuery.get('price_range'))
 
         props.search(props.history.location.search);
@@ -122,7 +119,7 @@ const Search = (props) => {
 
     // On price_range state change, set price range input value from query
     useEffect(() => {
-        // Clear error message when user clicks on a different filter
+        // Clear any error message when user clicks on a different filter
         if (props.dashError) props.clear();
         const searchQuery = new URLSearchParams(props.history.location.search);
 
@@ -148,7 +145,7 @@ const Search = (props) => {
     return (
         <div className="row">
             <Filters
-                price_range={propsPriceRange}
+                price_range={price_range}
                 propsPriceRange={propsPriceRange}
                 setPriceRange={setPriceRange}
             />
