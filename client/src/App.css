@@ -306,7 +306,10 @@ html, body, #root, #root>.outer-wrapper {
 
 .justify-sb {
   justify-content: space-between;
-  flex-direction: column;
+}
+
+.justify-se {
+  justify-content: space-evenly;
 }
 
 .justify-start {
@@ -315,6 +318,28 @@ html, body, #root, #root>.outer-wrapper {
 
 .wrap-around {
   flex-wrap: wrap;
+}
+
+.crop {
+  overflow: hidden;
+  width: 250px;
+  height: 250px;
+}
+
+.crop img {
+  max-width: 500px;
+  max-height: 500px;
+}
+
+.all-img {
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+}
+
+.all-img img {
+  max-width: 400px;
+  max-height: 400px;
 }
 
 #search {

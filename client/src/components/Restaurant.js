@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import M from 'materialize-css';
-import ImageGallery from 'react-image-gallery';
-import "react-image-gallery/styles/css/image-gallery.css";
+import { Link } from 'react-router-dom';
 
 import { renderStars } from './starsHelper';
 import AddReview from './AddReview';
@@ -55,14 +54,27 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            {/* {   // Display message if there are no images for the restaurant
+                            {   // Display message if there are no images for the restaurant
                                 dashError
                                     ? <h5 className="center">{dashError}</h5>
-                                    : <ImageGallery
-                                        items={images}
-                                        showPlayButton={false}
-                                    />
-                            } */}
+                                    : <div>
+                                        <div className="flex justify-se mt-1 mb-2">
+                                            {
+                                                images && images.slice(0, 4).map((image, i) => (
+                                                    <div className="crop z-depth-2" key={i}>
+                                                        <img className="materialboxed" src={image.url} alt="" />
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+
+                                        <div className="center">
+                                            <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
+                                                View All Photos
+                                            </Link>
+                                        </div>
+                                    </div>
+                            }
 
                             <hr className="mt-4 mb-3" />
 

@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import * as actions from './actions';
 
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import Register from './components/Register';
 import Restaurant from './components/Restaurant';
-import Footer from './components/Footer';
+import RestaurantImages from './components/RestaurantImages';
 import Search from './components/Search';
 
 class App extends Component {
@@ -23,7 +25,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="flex justify-sb outer-wrapper">
+        <div className="flex justify-sb flex-col outer-wrapper">
           <div>
             <Navbar />
             <Switch>
@@ -32,6 +34,7 @@ class App extends Component {
               <Route path='/register' component={Register} />
               <Route path='/search' component={Search} />
               <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
+              <Route exact path='/restaurants/:restaurant_id/photos' component={RestaurantImages} />
             </Switch>
           </div>
           <Footer />
