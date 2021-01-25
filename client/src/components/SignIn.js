@@ -29,7 +29,7 @@ class SignIn extends Component {
     render() {
         const { email, password } = this.state;
         return (
-            <div className="container mt-5 flex-center">
+            <div className="mt-5 flex-center">
                 <div className="w-50 mb-5">
                     <h4>Sign In</h4>
                     <form onSubmit={this.handleSubmit}>

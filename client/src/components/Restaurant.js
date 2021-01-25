@@ -58,17 +58,17 @@ class Restaurant extends Component {
                                 dashError
                                     ? <h5 className="center">{dashError}</h5>
                                     : <div>
-                                        <div className="flex justify-se mt-1 mb-2">
+                                        <div className="flex wrap-around justify-se">
                                             {
                                                 images && images.slice(0, 4).map((image, i) => (
-                                                    <div className="crop z-depth-2" key={i}>
+                                                    <div className="crop mt-1 mb-sm z-depth-2" key={i}>
                                                         <img className="materialboxed" src={image.url} alt="" />
                                                     </div>
                                                 ))
                                             }
                                         </div>
 
-                                        <div className="center">
+                                        <div className="center mt-1">
                                             <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
                                                 View All Photos
                                             </Link>

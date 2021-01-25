@@ -113,7 +113,7 @@ const Search = (props) => {
         // Separate state for price range as identifier and for props because
         // executing setPriceRange here will cause the useEffect below to run
         // which will cause this useEffect to run like an endless cycle.
-        // Identifier for filters to determine which checkboxes are checked, if any.
+        // Also, an identifier for filters to determine which checkboxes are checked, if any.
         setPropsPriceRange(searchQuery.get('price_range'))
 
         props.search(props.history.location.search);
@@ -152,7 +152,7 @@ const Search = (props) => {
                 propsPriceRange={propsPriceRange}
                 setPriceRange={setPriceRange}
             />
-            <div className="col l9 m19">
+            <div className="col l9 m9 s8">
                 <form className="mt-4" onSubmit={handleSubmit}>
                     <div className="input-field" id="search-area">
                         <input
