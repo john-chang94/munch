@@ -17,12 +17,12 @@ export const clear = () => {
 /////// AUTH ACTIONS ////////
 /////////////////////////////
 
-export const fetchUser = () => {
+export const verifyUser = () => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/verify`)
             dispatch({
-                type: 'FETCH_USER',
+                type: 'VERIFY_USER',
                 payload: res.data
             })
         } catch (err) {
@@ -67,6 +67,24 @@ export const signOut = () => {
             dispatch({ type: 'SIGN_OUT' })
         } catch (err) {
             dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
+        }
+    }
+}
+
+/////////////////////////////
+/////// USER ACTIONS ////////
+/////////////////////////////
+
+export const fetchUser = user_id => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`)
+            dispatch({
+                type: 'FETCH_USER',
+                payload: res.data
+            })
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 }

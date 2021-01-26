@@ -27,7 +27,7 @@ const authReducer = (state = {}, action) => {
                 token: null,
                 user: null
             }
-        case 'FETCH_USER':
+        case 'VERIFY_USER':
             return {
                 ...state,
                 user: action.payload

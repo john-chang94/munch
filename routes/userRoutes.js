@@ -35,6 +35,7 @@ module.exports = app => {
         }
     })
 
+    // Update user profile
     app.put('/api/users/:user_id', async (req, res) => {
         try {
             const { user_id } = req.params;
@@ -54,6 +55,7 @@ module.exports = app => {
         }
     })
 
+    // Update user password
     app.put('/api/users/:user_id', async (req, res) => {
         try {
             const { user_id } = req.params;

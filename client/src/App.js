@@ -13,12 +13,13 @@ import Register from './components/Register';
 import Restaurant from './components/Restaurant';
 import RestaurantImages from './components/RestaurantImages';
 import Search from './components/Search';
+import Profile from './components/Profile';
 
 class App extends Component {
   componentDidMount() {
     const token = sessionStorage.getItem('token');
     if (token) {
-      this.props.fetchUser();
+      this.props.verifyUser();
     }
   }
 
@@ -35,6 +36,7 @@ class App extends Component {
               <Route path='/search' component={Search} />
               <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
               <Route exact path='/restaurants/:restaurant_id/photos' component={RestaurantImages} />
+              <Route exact path='/profile/:user_id' component={Profile} />
             </Switch>
           </div>
           <Footer />
