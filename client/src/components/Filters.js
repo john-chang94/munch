@@ -2,8 +2,8 @@ import React from 'react';
 
 const Filters = ({ setPriceRange, price_range, propsPriceRange }) => {
     return (
-        <div className="col l2 m2 mt-4">
-                <p className="center">Filter</p>
+        <div className="col l1 m1 offset-l1 offset-m1 mt-4">
+                <p className="mb-sm">Filter</p>
                 <div>
                     <p>
                         <label>

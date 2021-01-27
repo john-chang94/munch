@@ -21,10 +21,7 @@ export const verifyUser = () => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/verify`)
-            dispatch({
-                type: 'VERIFY_USER',
-                payload: res.data
-            })
+            dispatch({ type: 'VERIFY_USER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
@@ -35,10 +32,7 @@ export const register = body => {
     return async (dispatch) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, body);
-            dispatch({
-                type: 'REGISTER',
-                payload: res.data
-            })
+            dispatch({ type: 'REGISTER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
@@ -50,10 +44,8 @@ export const signIn = body => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signin`, body);
             sessionStorage.setItem('token', res.data.token);
-            dispatch({
-                type: 'SIGN_IN',
-                payload: res.data
-            })
+            
+            dispatch({ type: 'SIGN_IN', payload: res.data })
         } catch (err) {
             dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
         }
@@ -79,15 +71,34 @@ export const fetchUser = user_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`)
-            dispatch({
-                type: 'FETCH_USER',
-                payload: res.data
-            })
+            dispatch({ type: 'FETCH_USER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 }
+
+export const updateUser = (user_id, body) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`, body)
+            // dispatch({ type: 'UPDATE_USER', payload: res.data })
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
+        }
+    }
+}
+
+export const updatePassword = (user_id, body) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/reset-pw/${user_id}`, body);
+            // dispatch({ type: 'UPDATE_PASSWORD', payload: res.data })
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
+        }
+    }
+} 
 
 /////////////////////////////
 /////// DASH ACTIONS ////////
@@ -97,10 +108,7 @@ export const fetchFeatured = () => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants`);
-            dispatch({
-                type: 'FETCH_FEATURED',
-                payload: res.data.data.slice(0, 5)
-            })
+            dispatch({ type: 'FETCH_FEATURED', payload: res.data.data.slice(0, 5) })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
@@ -111,10 +119,7 @@ export const fetchRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants/${restaurant_id}`)
-            dispatch({
-                type: 'FETCH_RESTAURANT',
-                payload: res.data.data
-            })
+            dispatch({ type: 'FETCH_RESTAURANT', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
@@ -125,10 +130,7 @@ export const fetchImagesForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/review_images/restaurants/${restaurant_id}`);
-            dispatch({
-                type: 'FETCH_IMAGES_FOR_RESTAURANT',
-                payload: res.data
-            })
+            dispatch({ type: 'FETCH_IMAGES_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
@@ -139,10 +141,7 @@ export const search = queries => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants${queries}`);
-            dispatch({
-                type: 'SEARCH',
-                payload: res.data
-            })
+            dispatch({ type: 'SEARCH', payload: res.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
@@ -168,10 +167,7 @@ export const addReview = body => {
     return async (dispatch) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/reviews`, body);
-            dispatch({
-                type: 'ADD_REVIEW',
-                payload: res.data
-            })
+            dispatch({ type: 'ADD_REVIEW', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
@@ -182,10 +178,7 @@ export const addReviewImage = body => {
     return async (dispatch) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/review_images`, body);
-            dispatch({
-                type: 'ADD_REVIEW_IMAGE',
-                payload: res.data
-            })
+            dispatch({ type: 'ADD_REVIEW_IMAGE', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
@@ -196,10 +189,7 @@ export const fetchReviewsForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/restaurant/${restaurant_id}`);
-            dispatch({
-                type: 'FETCH_REVIEWS_FOR_RESTAURANT',
-                payload: res.data
-            })
+            dispatch({ type: 'FETCH_REVIEWS_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }

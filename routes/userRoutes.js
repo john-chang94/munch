@@ -1,5 +1,6 @@
 const client = require('../config/db');
 const bcrypt = require('bcrypt');
+const { updateUserValidator } = require('../middlewares/validator');
 
 module.exports = app => {
     app.get('/api/users', async (req, res) => {
@@ -36,7 +37,7 @@ module.exports = app => {
     })
 
     // Update user profile
-    app.put('/api/users/:user_id', async (req, res) => {
+    app.put('/api/users/:user_id', updateUserValidator, async (req, res) => {
         try {
             const { user_id } = req.params;
             const { first_name, last_name, email } = req.body;
@@ -56,7 +57,7 @@ module.exports = app => {
     })
 
     // Update user password
-    app.put('/api/users/:user_id', async (req, res) => {
+    app.put('/api/users/reset-pw/:user_id', async (req, res) => {
         try {
             const { user_id } = req.params;
             let { password, newPassword, confirmNewPassword } = req.body;

@@ -152,8 +152,8 @@ const Search = (props) => {
                 propsPriceRange={propsPriceRange}
                 setPriceRange={setPriceRange}
             />
-            <div className="col l9 m9 s8">
-                <form className="mt-4" onSubmit={handleSubmit}>
+            <div className="col l8 m8 s12">
+                <form className="mt-3" onSubmit={handleSubmit}>
                     <div className="input-field" id="search-area">
                         <input
                             type="text"

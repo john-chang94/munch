@@ -49,6 +49,23 @@ exports.registerUserValidator = (req, res, next) => {
     next();
 }
 
+exports.updateUserValidator = (req, res, next) => {
+    let errors = {};
+    let { first_name, last_name, email } = req.body;
+    first_name = !isEmpty(first_name) ? first_name : '';
+    last_name = !isEmpty(last_name) ? last_name : '';
+    email = !isEmpty(email) ? email : '';
+
+    if (validator.isEmpty(first_name)) errors = 'First name required';
+    if (validator.isEmpty(last_name)) errors = 'Last name required';
+    if (validator.isEmpty(email)) errors = 'Email required';
+    if (!validator.isEmail(email)) errors = 'Must be a valid email';
+
+    if (!isEmpty(errors)) return res.status(400).json(errors);
+
+    next();
+}
+
 exports.addReviewValidator = (req, res, next) => {
     let errors = {};
     let { restaurant_id, user_id, rating, details, date} = req.body;
