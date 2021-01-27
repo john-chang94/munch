@@ -69,7 +69,7 @@ class Restaurant extends Component {
                                         </div>
 
                                         <div className="center mt-1">
-                                            <Link className="black-text bg-light-gray text-expand" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
+                                            <Link className="z-depth-1 black-text bg-x-light-gray bg-hover view-all" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
                                                 View All Photos
                                             </Link>
                                         </div>

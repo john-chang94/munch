@@ -245,21 +245,14 @@ html, body, #root, #root>.outer-wrapper {
   text-decoration: underline;
 }
 
-.text-expand {
+.view-all {
   padding: 5px 30px;
   border-radius: 5px;
+  border: solid 1px rgb(218, 218, 218);
 }
 
-.text-expand:hover {
-  background-color: rgb(223, 223, 223);
-}
-
-.card:hover {
-  background-color: rgb(240, 240, 240);
-}
-
-.bg-gray {
-  background-color: rgb(204, 204, 204);
+.bg-hover:hover {
+  background-color: rgb(235, 235, 235);
 }
 
 .bg-light-gray {
@@ -268,6 +261,10 @@ html, body, #root, #root>.outer-wrapper {
 
 .bg-x-light-gray {
   background-color: rgb(245, 245, 245);
+}
+
+.light-border {
+  border: solid 1px lightgray;
 }
 
 .flex {
