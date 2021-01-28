@@ -94,4 +94,55 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
+
+    app.post('/api/users/user_images', async (req, res) => {
+        try {
+            const { user_id, url } = req.body;
+            // Remove previous user image
+            const remove = await client.query('DELETE FROM user_images WHERE user_id = $1', [user_id])
+            // Add new user image
+            const image = await client.query(
+                `INSERT INTO user_images (user_id, url)
+                VALUES ($1, $2)`,
+                [user_id, url]
+            )
+
+            res.status(201).json({ success: true });
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.delete('/api/users/user_images/:user_id', async (req, res) => {
+        try {
+            const { user_id } = req.params;
+            // Remove current user image
+            const remove = await client.query('DELETE FROM user_images WHERE user_id = $1', [user_id])
+            // Get default user image
+            const image = await client.query('SELECT * FROM user_images WHERE user_id = 0')
+            // Add default user image
+            const addImage = await client.query(
+                `INSERT INTO user_images (user_id, url)
+                VALUES ($1, $2)`,
+                [user_id, image.rows[0]]
+            )
+
+            res.status(200).json({ success: true });
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.get('/api/users/user_images/:user_id', async (req, res) => {
+        try {
+            const { user_id } = req.params;
+            const image = await client.query('SELECT * FROM user_images WHERE user_id = $1', [user_id])
+            res.status(200).json({
+                success: true,
+                data: image.rows[0]
+            })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
 }

@@ -15,7 +15,6 @@ class Profile extends Component {
         newPassword: '',
         confirmNewPassword: '',
         file: '',
-        url: '',
         showEditGeneral: false,
         showGeneralInfo: true,
         showEditPassword: false,
@@ -24,6 +23,7 @@ class Profile extends Component {
 
     async componentDidMount() {
         await this.props.fetchUser(this.props.match.params.user_id);
+        await this.props.fetchUserImage(this.props.match.params.user_id);
         this.setState({ isLoading: false })
     }
 
@@ -63,28 +63,29 @@ class Profile extends Component {
         })
     }
 
-    handleImageUpload = () => {
-        const { file } = this.state;
-        const uploadTask = storage.ref(`/images/users/${file.name}`).put(file);
-        uploadTask.on('state_changed', console.log, console.error, () => {
-            storage
-                .ref('images/users') // Images folder in firebase storage
-                .child(file.name) // Child is the level inside images directory
-                .getDownloadURL() // Fetch image URL from firebase
-                .then(async (url) => {
-                    const imageBody = {
-                        // user_id,
-                        // url
-                    }
-                    // Add image url to db with required foreign keys
-                    // await this.props.addUserImage(imageBody);
+    handleImageUpload = e => {
+        if (e.target.files[0]) {
+            const file = e.target.files[0];
+            const user_id = this.props.match.params.user_id;
 
-                    // Show success message and clear form
-                    M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
-                    this.setState({ showPictureUpload: false })
+            const uploadTask = storage.ref(`/images/users/${file.name}`).put(file);
+            uploadTask.on('state_changed', console.log, console.error, () => {
+                storage
+                    .ref('images/users') // Images folder in firebase storage
+                    .child(file.name) // Child is the level inside images directory
+                    .getDownloadURL() // Fetch image URL from firebase
+                    .then(async (url) => {
+                        const imageBody = { user_id, url };
+                        // Add image url to db
+                        await this.props.addUserImage(imageBody);
+                        // Fetch updated image to display from props
+                        this.props.fetchUserImage(user_id);
 
-                });
-        });
+                        // Clear file input form
+                        e.target.value = null;
+                    });
+            });
+        }
     }
 
     handleUpdateUser = async () => {
@@ -104,12 +105,12 @@ class Profile extends Component {
         }
     }
 
-    handleUpdatePassword = async () => {
+    handleUpdateUserPassword = async () => {
         const { password, newPassword, confirmNewPassword } = this.state;
         const user_id = this.props.match.params.user_id;
         const body = { password, newPassword, confirmNewPassword };
 
-        await this.props.updatePassword(user_id, body);
+        await this.props.updateUserPassword(user_id, body);
 
         if (this.props.userError) {
             M.toast({ html: this.props.userError, classes: "red darken-1" });
@@ -188,14 +189,14 @@ class Profile extends Component {
                     <input type="password" id="confirmNewPassword" value={confirmNewPassword} onChange={this.handleChange} />
                     <label htmlFor="confirmNewPassword">Confirm New Password</label>
                 </div>
-                <button className="btn" onClick={this.handleUpdatePassword}>Update</button>
+                <button className="btn" onClick={this.handleUpdateUserPassword}>Update</button>
             </div>
         )
     }
 
     render() {
         const { isLoading, showEditGeneral, showGeneralInfo, showEditPassword } = this.state;
-        const { user } = this.props;
+        const { user, userImage } = this.props;
         return (
             <div className="container">
                 {
@@ -209,7 +210,11 @@ class Profile extends Component {
                                 <div>
                                     <div className="col l3 m3 s12 mt-3">
                                         <div className="center">
-                                            <img src="https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fusers%2Fperson-blank.png?alt=media&token=4aee30b3-f925-45cf-bfe5-decedd6fc5b8" className="w-50" alt="" />
+                                            <img src={userImage.url} className="w-100" alt="" />
+                                            <div className="mt-sm">
+                                                <p>Update photo</p>
+                                                <input type="file" id="file" onChange={this.handleImageUpload} />
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="col l9 m9 s12 mt-3">
@@ -250,6 +255,7 @@ class Profile extends Component {
 
 const mapStateToProps = ({ user }) => {
     return {
+        userImage: user.userImage,
         user: user.user,
         userError: user.userError
     }

@@ -82,23 +82,52 @@ export const updateUser = (user_id, body) => {
     return async (dispatch) => {
         try {
             const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`, body)
-            // dispatch({ type: 'UPDATE_USER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 }
 
-export const updatePassword = (user_id, body) => {
+export const updateUserPassword = (user_id, body) => {
     return async (dispatch) => {
         try {
             const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/reset-pw/${user_id}`, body);
-            // dispatch({ type: 'UPDATE_PASSWORD', payload: res.data })
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 } 
+
+export const addUserImage = body => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/user_images`, body)
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
+        }
+    }
+}
+
+export const fetchUserImage = user_id => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/user_images/${user_id}`)
+            dispatch({ type: 'FETCH_USER_IMAGE', payload: res.data })
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
+        }
+    }
+}
+
+export const deleteUserImage = user_id => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/user_images/${user_id}`)
+        } catch (err) {
+            dispatch({ type: 'USER_ERROR', payload: err.response.data })
+        }
+    }
+}
 
 /////////////////////////////
 /////// DASH ACTIONS ////////

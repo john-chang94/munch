@@ -44,6 +44,12 @@ CREATE TABLE images_thumb (
     thumbUrl VARCHAR(500) NOT NULL
 );
 
+CREATE TABLE user_images (
+    user_images_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    url VARCHAR(500) NOT NULL
+);
+
 CREATE TABLE suggestions (
     suggestions_id SERIAL PRIMARY KEY,
     param VARCHAR(255) NOT NULL,

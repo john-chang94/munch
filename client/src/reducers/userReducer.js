@@ -15,6 +15,11 @@ const userReducer = (state = {}, action) => {
                 ...state,
                 user: action.payload.data
             }
+        case 'FETCH_USER_IMAGE':
+            return {
+                ...state,
+                userImage: action.payload.data
+            }
         default:
             return state;
     }
