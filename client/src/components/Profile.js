@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { storage } from '../config/fb';
 import M from 'materialize-css';
 import Preloader from './Preloader';
+import EditUserImageModal from './EditUserImageModal';
 
 class Profile extends Component {
     state = {
@@ -14,11 +14,11 @@ class Profile extends Component {
         password: '',
         newPassword: '',
         confirmNewPassword: '',
-        file: '',
         showEditGeneral: false,
         showGeneralInfo: true,
         showEditPassword: false,
-        showPictureUpload: false
+        showPictureUpload: false,
+        ModalIsOpen: false
     }
 
     async componentDidMount() {
@@ -48,6 +48,7 @@ class Profile extends Component {
         this.setState({ showEditGeneral: false })
     }
 
+    // Used to toggle tabs
     toggleGeneralInfo = () => {
         this.setState({
             showGeneralInfo: true,
@@ -55,6 +56,7 @@ class Profile extends Component {
         })
     }
 
+    // Used to toggle tabs
     toggleEditPassword = () => {
         this.setState({
             showEditPassword: true,
@@ -63,29 +65,12 @@ class Profile extends Component {
         })
     }
 
-    handleImageUpload = e => {
-        if (e.target.files[0]) {
-            const file = e.target.files[0];
-            const user_id = this.props.match.params.user_id;
+    openModal = () => {
+        this.setState({ modalIsOpen: true })
+    }
 
-            const uploadTask = storage.ref(`/images/users/${file.name}`).put(file);
-            uploadTask.on('state_changed', console.log, console.error, () => {
-                storage
-                    .ref('images/users') // Images folder in firebase storage
-                    .child(file.name) // Child is the level inside images directory
-                    .getDownloadURL() // Fetch image URL from firebase
-                    .then(async (url) => {
-                        const imageBody = { user_id, url };
-                        // Add image url to db
-                        await this.props.addUserImage(imageBody);
-                        // Fetch updated image to display from props
-                        this.props.fetchUserImage(user_id);
-
-                        // Clear file input form
-                        e.target.value = null;
-                    });
-            });
-        }
+    closeModal = () => {
+        this.setState({ modalIsOpen: false })
     }
 
     handleUpdateUser = async () => {
@@ -195,7 +180,7 @@ class Profile extends Component {
     }
 
     render() {
-        const { isLoading, showEditGeneral, showGeneralInfo, showEditPassword } = this.state;
+        const { isLoading, showEditGeneral, showGeneralInfo, showEditPassword, modalIsOpen } = this.state;
         const { user, userImage } = this.props;
         return (
             <div className="container">
@@ -206,14 +191,13 @@ class Profile extends Component {
                         </div>
                         : <div className="row">
                             {
-                                user &&
+                                (user && userImage) &&
                                 <div>
                                     <div className="col l3 m3 s12 mt-3">
                                         <div className="center">
-                                            <img src={userImage.url} className="w-100" alt="" />
+                                            <img src={userImage.url} className="w-75" alt="" />
                                             <div className="mt-sm">
-                                                <p>Update photo</p>
-                                                <input type="file" id="file" onChange={this.handleImageUpload} />
+                                                <p className="teal-text darken-4 pointer" onClick={this.openModal}>Edit profile picture</p>
                                             </div>
                                         </div>
                                     </div>
@@ -246,6 +230,13 @@ class Profile extends Component {
                                     </div>
                                 </div>
                             }
+
+                            <EditUserImageModal
+                                modalIsOpen={modalIsOpen}
+                                closeModal={this.closeModal}
+                                user={user}
+                                userImage={userImage}
+                            />
                         </div>
                 }
             </div>

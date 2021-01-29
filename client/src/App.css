@@ -208,6 +208,10 @@ html, body, #root, #root>.outer-wrapper {
   width: 100%;
 }
 
+.w-75 {
+  width: 75%;
+}
+
 .w-50 {
   width: 50%;
 }
@@ -235,10 +239,6 @@ html, body, #root, #root>.outer-wrapper {
 
 .text-i {
   font-style: italic;
-}
-
-.text-b {
-  font-weight: bold;
 }
 
 .text-u {
