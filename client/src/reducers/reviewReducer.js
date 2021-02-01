@@ -25,6 +25,11 @@ const reviewReducer = (state = {}, action) => {
                 ...state,
                 images: action.payload.data
             }
+        case 'FETCH_REVIEWS_BY_USER':
+            return {
+                ...state,
+                reviews: action.payload.data
+            }
         default:
             return state;
     }

@@ -224,8 +224,9 @@ html, body, #root, #root>.outer-wrapper {
   max-width: 100%;
 }
 
-.pointer {
+.pointer:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .heading {

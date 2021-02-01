@@ -4,6 +4,7 @@ import * as actions from '../actions';
 import M from 'materialize-css';
 import Preloader from './Preloader';
 import EditUserImageModal from './EditUserImageModal';
+import { Link } from 'react-router-dom';
 
 class Profile extends Component {
     state = {
@@ -130,6 +131,9 @@ class Profile extends Component {
                 </div>
                 <div className="mt-1">
                     <button className="btn" onClick={this.enableEditGeneral}>Edit</button>
+                </div>
+                <div className="mt-1">
+                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
                 </div>
             </div>
         )

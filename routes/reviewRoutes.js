@@ -53,7 +53,7 @@ module.exports = app => {
     })
 
     // Get all reviews for a restaurant with user info
-    app.get('/api/reviews/restaurant/:restaurant_id', async (req, res) => {
+    app.get('/api/reviews/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
             const reviews = await client.query(
@@ -78,15 +78,16 @@ module.exports = app => {
     })
 
     // Get all reviews from a user
-    app.get('/api/reviews/user/:user_id', async (req, res) => {
+    app.get('/api/reviews/users/:user_id', async (req, res) => {
         try {
             const { user_id } = req.params;
             const reviews = await client.query(
-                `SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date
+                `SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date, re.name
                     FROM reviews AS r
                         JOIN restaurants AS re
                         ON r.restaurant_id = re.restaurant_id
-                    WHERE r.user_id = $1`,
+                    WHERE r.user_id = $1
+                    ORDER BY r.date DESC`,
                 [user_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews yet');
