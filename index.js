@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
+
+require('./config/mdb');
 
 app.use(cors());
 app.use(express.json());

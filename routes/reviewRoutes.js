@@ -1,5 +1,6 @@
 const client = require('../config/db');
-const { addReviewValidator } = require('../middlewares/validator');
+const { addReviewValidator, addReviewValidatorM } = require('../middlewares/validator');
+const Review = require('../mdbModels/Review');
 
 module.exports = app => {
     app.get('/api/reviews', async (req, res) => {
@@ -30,6 +31,43 @@ module.exports = app => {
                 success: true,
                 review: review.rows[0]
             })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.post('/api/reviews/m', addReviewValidatorM, async (req, res) => {
+        try {
+            const review = new Review({ ...req.body });
+            const result = review.save();
+
+            res.status(201).json(review);
+        } catch (err) {
+            res.status(500).send('Server error')
+        }
+    })
+
+    app.put('/api/reviews/m/:reviewId', async (req, res) => {
+        try {
+            const result = await Review.findByIdAndUpdate(req.params.reviewId,
+                { $push: { images: req.body } },
+                { new: true, useFindAndModify: false }
+            )
+
+            res.status(200).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.put('/api/reviews/m/rem/:reviewId', async (req, res) => {
+        try {
+            const result = await Review.findByIdAndUpdate(req.params.reviewId,
+                { $pull: { images: { _id: req.body.imageId } } },
+                { useFindAndModify: false }
+            )
+
+            res.status(200).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }
@@ -117,7 +155,7 @@ module.exports = app => {
                 WHERE review_id = $6 RETURNING *`,
                 [restaurant_id, user_id, rating, details, date, review_id]
             )
-            
+
             res.status(200).json({
                 success: true,
                 data: review.rows[0]
@@ -160,7 +198,7 @@ module.exports = app => {
             const { restaurant_id } = req.params;
             const images = await client.query('SELECT * FROM review_images WHERE restaurant_id = $1', [restaurant_id]);
             if (!images.rows.length) return res.status(404).send('No images yet');
-            
+
             res.status(200).json({
                 success: true,
                 results: images.rows.length,
@@ -170,7 +208,7 @@ module.exports = app => {
             res.status(500).send('Server error');
         }
     })
-    
+
     app.get('/api/review_images/users/:user_id', async (req, res) => {
         try {
             const { user_id } = req.params;
