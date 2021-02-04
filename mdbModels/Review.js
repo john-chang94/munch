@@ -29,7 +29,8 @@ const reviewSchema = new Schema({
             type: Boolean,
             default: false
         }
-    }]
+    }],
+    updatedAt: Date
 })
 
 module.exports = mongoose.model('Review', reviewSchema);

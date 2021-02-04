@@ -1,57 +1,70 @@
 CREATE DATABASE munch;
 
 CREATE TABLE restaurants (
-    restaurant_id SERIAL PRIMARY KEY,
+    restaurantId SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     location VARCHAR(50) NOT NULL,
     category VARCHAR(50) NOT NULL,
-    price_range VARCHAR(1) NOT NULL
+    priceRange VARCHAR(1) NOT NULL
 );
 
+CREATE TABLE categories (
+    categoryId SERIAL PRIMARY KEY,
+    category VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE restaurantCategories (
+    restaurantCategoriesId SERIAL PRIMARY KEY,
+    restaurantId INT NOT NULL,
+    categoryId INT NOT NULL,
+    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
+    FOREIGN KEY (categoryId) REFERENCES categories(categoryId)
+)
+
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
+    userId SERIAL PRIMARY KEY,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE reviews (
-    review_id SERIAL PRIMARY KEY,
-    restaurant_id INT NOT NULL,
-    user_id INT NOT NULL,
-    rating INT NOT NULL check(rating >= 1 AND rating <= 5),
+    reviewId SERIAL PRIMARY KEY,
+    restaurantId INT NOT NULL,
+    userId INT NOT NULL,
+    rating VARCHAR(1) NOT NULL,
     details VARCHAR(1000) NOT NULL,
     date DATE NOT NULL,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
+    FOREIGN KEY (userId) REFERENCES users(userId)
 );
 
-CREATE TABLE review_images (
-    review_images_id SERIAL PRIMARY KEY,
-    restaurant_id INT NOT NULL,
-    user_id INT NOT NULL,
-    review_id INT NOT NULL,
+CREATE TABLE reviewImages (
+    reviewImagesId SERIAL PRIMARY KEY,
+    restaurantId INT NOT NULL,
+    userId INT NOT NULL,
+    reviewId INT NOT NULL,
     url VARCHAR(500) NOT NULL,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (review_id) REFERENCES reviews(review_id)
+    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
+    FOREIGN KEY (userId) REFERENCES users(userId),
+    FOREIGN KEY (reviewId) REFERENCES reviews(reviewId)
 );
 
 CREATE TABLE images_thumb (
-    images_thumb_id SERIAL PRIMARY KEY,
-    review_images_id INT NOT NULL,
+    imagesThumbId SERIAL PRIMARY KEY,
+    reviewImagesId INT NOT NULL,
     thumbUrl VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE user_images (
-    user_images_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+CREATE TABLE userImages (
+    userImagesId SERIAL PRIMARY KEY,
+    userId INT NOT NULL,
     url VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE suggestions (
-    suggestions_id SERIAL PRIMARY KEY,
+    suggestionsId SERIAL PRIMARY KEY,
     param VARCHAR(255) NOT NULL,
     query VARCHAR(50) NOT NULL
 );
