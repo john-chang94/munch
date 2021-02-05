@@ -16,10 +16,10 @@ class Restaurant extends Component {
     }
 
     async componentDidMount() {
-        const restaurant_id = this.props.match.params.restaurant_id;
+        const restaurantId = this.props.match.params.restaurantId;
 
-        await this.props.fetchImagesForRestaurant(restaurant_id);
-        await this.props.fetchRestaurant(restaurant_id);
+        await this.props.fetchImagesForRestaurant(restaurantId);
+        await this.props.fetchRestaurant(restaurantId);
 
         // Render rating with stars
         let stars = renderStars(this.props.restaurant.rating);
@@ -49,8 +49,8 @@ class Restaurant extends Component {
                                 <div className="mb-1">
                                     <p className="heading">{restaurant.name}</p>
                                     <p className="cat-heading">{restaurant.category}</p>
-                                    <p>{stars} ({restaurant.total_ratings})</p>
-                                    <p>Price range: {'$'.repeat(parseInt(restaurant.price_range))}</p>
+                                    <p>{stars} ({restaurant.totalRatings})</p>
+                                    <p>Price range: {'$'.repeat(parseInt(restaurant.priceRange))}</p>
                                 </div>
                             }
 
@@ -69,7 +69,7 @@ class Restaurant extends Component {
                                         </div>
 
                                         <div className="center mt-2">
-                                            <Link className="z-depth-1 black-text bg-x-light-gray bg-hover view-all" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
+                                            <Link className="z-depth-1 black-text bg-x-light-gray bg-hover view-all" to={`/restaurants/${this.props.match.params.restaurantId}/photos`}>
                                                 View All Photos
                                             </Link>
                                         </div>
@@ -82,7 +82,7 @@ class Restaurant extends Component {
 
                             <hr className="mt-3 mb-3" />
 
-                            <Reviews restaurant_id={this.props.match.params.restaurant_id} />
+                            <Reviews restaurantId={this.props.match.params.restaurantId} />
                         </div>
                 }
             </div>

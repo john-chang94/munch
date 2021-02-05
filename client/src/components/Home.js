@@ -141,14 +141,14 @@ class Home extends Component {
                                 <Preloader />
                             </div>
                             : featured.map((restaurant) => (
-                                <div key={restaurant.restaurant_id}>
-                                    <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
+                                <div key={restaurant.restaurantId}>
+                                    <Link to={`/restaurants/${restaurant.restaurantId}`} className="black-text">
                                         <RestaurantCard
                                             name={restaurant.name}
                                             category={restaurant.category}
                                             rating={restaurant.rating}
-                                            total_ratings={restaurant.total_ratings}
-                                            price_range={restaurant.price_range}
+                                            totalRatings={restaurant.totalRatings}
+                                            priceRange={restaurant.priceRange}
                                         />
                                     </Link>
                                 </div>

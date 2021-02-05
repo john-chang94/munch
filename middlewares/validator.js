@@ -11,16 +11,16 @@ const isEmpty = value => {
 
 exports.addRestaurantValidator = (req, res, next) => {
     let errors = {};
-    let { name, location, category, price_range } = req.body;
+    let { name, location, category, priceRange } = req.body;
     name = !isEmpty(name) ? name : '';
     location = !isEmpty(location) ? location : '';
     category = !isEmpty(category) ? category : '';
-    price_range = !isEmpty(price_range) ? price_range : '';
+    priceRange = !isEmpty(priceRange) ? priceRange : '';
 
     if (validator.isEmpty(name)) errors = 'Name required';
     if (validator.isEmpty(location)) errors = 'location required';
     if (validator.isEmpty(category)) errors = 'Category required';
-    if (validator.isEmpty(price_range)) errors = 'Price range required';
+    if (validator.isEmpty(priceRange)) errors = 'Price range required';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);
 
@@ -29,15 +29,15 @@ exports.addRestaurantValidator = (req, res, next) => {
 
 exports.registerUserValidator = (req, res, next) => {
     let errors = {};
-    let { first_name, last_name, email, password, confirmPassword } = req.body;
-    first_name = !isEmpty(first_name) ? first_name : '';
-    last_name = !isEmpty(last_name) ? last_name : '';
+    let { firstName, lastName, email, password, confirmPassword } = req.body;
+    firstName = !isEmpty(firstName) ? firstName : '';
+    lastName = !isEmpty(lastName) ? lastName : '';
     email = !isEmpty(email) ? email : '';
     password = !isEmpty(password) ? password : '';
     confirmPassword = !isEmpty(confirmPassword) ? confirmPassword : '';
 
-    if (validator.isEmpty(first_name)) errors = 'First name required';
-    if (validator.isEmpty(last_name)) errors = 'Last name required';
+    if (validator.isEmpty(firstName)) errors = 'First name required';
+    if (validator.isEmpty(lastName)) errors = 'Last name required';
     if (validator.isEmpty(email)) errors = 'Email required';
     if (!validator.isEmail(email)) errors = 'Must be a valid email';
     if (validator.isEmpty(password)) errors = 'Password required';
@@ -51,13 +51,13 @@ exports.registerUserValidator = (req, res, next) => {
 
 exports.updateUserValidator = (req, res, next) => {
     let errors = {};
-    let { first_name, last_name, email } = req.body;
-    first_name = !isEmpty(first_name) ? first_name : '';
-    last_name = !isEmpty(last_name) ? last_name : '';
+    let { firstName, lastName, email } = req.body;
+    firstName = !isEmpty(firstName) ? firstName : '';
+    lastName = !isEmpty(lastName) ? lastName : '';
     email = !isEmpty(email) ? email : '';
 
-    if (validator.isEmpty(first_name)) errors = 'First name required';
-    if (validator.isEmpty(last_name)) errors = 'Last name required';
+    if (validator.isEmpty(firstName)) errors = 'First name required';
+    if (validator.isEmpty(lastName)) errors = 'Last name required';
     if (validator.isEmpty(email)) errors = 'Email required';
     if (!validator.isEmail(email)) errors = 'Must be a valid email';
 
@@ -68,15 +68,15 @@ exports.updateUserValidator = (req, res, next) => {
 
 exports.addReviewValidator = (req, res, next) => {
     let errors = {};
-    let { restaurant_id, user_id, rating, details, date} = req.body;
-    restaurant_id = !isEmpty(restaurant_id) ? restaurant_id.toString() : '';
-    user_id = !isEmpty(user_id) ? user_id.toString() : '';
+    let { restaurantId, userId, rating, details, date} = req.body;
+    restaurantId = !isEmpty(restaurantId) ? restaurantId.toString() : '';
+    userId = !isEmpty(userId) ? userId.toString() : '';
     rating = !isEmpty(rating) ? rating.toString() : '';
     details = !isEmpty(details) ? details : '';
     date = !isEmpty(date) ? date : '';
 
-    if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
-    if (validator.isEmpty(user_id)) errors = 'User id required';
+    if (validator.isEmpty(restaurantId)) errors = 'Restaurant id required';
+    if (validator.isEmpty(userId)) errors = 'User id required';
     if (validator.isEmpty(rating)) errors = 'Rating required';
     if (validator.isEmpty(details)) errors = 'Details required';
     if (validator.isEmpty(date)) errors = 'Date required';

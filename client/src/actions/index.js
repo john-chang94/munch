@@ -67,10 +67,10 @@ export const signOut = () => {
 /////// USER ACTIONS ////////
 /////////////////////////////
 
-export const fetchUser = user_id => {
+export const fetchUser = userId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${userId}`)
             dispatch({ type: 'FETCH_USER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
@@ -78,20 +78,20 @@ export const fetchUser = user_id => {
     }
 }
 
-export const updateUser = (user_id, body) => {
+export const updateUser = (userId, body) => {
     return async (dispatch) => {
         try {
-            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${user_id}`, body)
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${userId}`, body)
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 }
 
-export const updateUserPassword = (user_id, body) => {
+export const updateUserPassword = (userId, body) => {
     return async (dispatch) => {
         try {
-            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/reset-pw/${user_id}`, body);
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/users/reset-pw/${userId}`, body);
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
@@ -101,17 +101,17 @@ export const updateUserPassword = (user_id, body) => {
 export const addUserImage = body => {
     return async (dispatch) => {
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/user_images`, body)
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/userImages`, body)
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
 }
 
-export const fetchUserImage = user_id => {
+export const fetchUserImage = userId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/user_images/${user_id}`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/userImages/${userId}`)
             dispatch({ type: 'FETCH_USER_IMAGE', payload: res.data })
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
@@ -119,10 +119,10 @@ export const fetchUserImage = user_id => {
     }
 }
 
-export const deleteUserImage = user_id => {
+export const deleteUserImage = userId => {
     return async (dispatch) => {
         try {
-            const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/user_images/${user_id}`)
+            const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/userImages/${userId}`)
         } catch (err) {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
@@ -144,10 +144,10 @@ export const fetchFeatured = () => {
     }
 }
 
-export const fetchRestaurant = restaurant_id => {
+export const fetchRestaurant = restaurantId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants/${restaurant_id}`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants/${restaurantId}`)
             dispatch({ type: 'FETCH_RESTAURANT', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
@@ -155,10 +155,10 @@ export const fetchRestaurant = restaurant_id => {
     }
 }
 
-export const fetchImagesForRestaurant = restaurant_id => {
+export const fetchImagesForRestaurant = restaurantId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/review_images/restaurants/${restaurant_id}`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviewImages/restaurants/${restaurantId}`);
             dispatch({ type: 'FETCH_IMAGES_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
@@ -206,7 +206,7 @@ export const addReview = body => {
 export const addReviewImage = body => {
     return async (dispatch) => {
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/review_images`, body);
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/reviewImages`, body);
             dispatch({ type: 'ADD_REVIEW_IMAGE', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
@@ -214,10 +214,10 @@ export const addReviewImage = body => {
     }
 }
 
-export const fetchReviewsForRestaurant = restaurant_id => {
+export const fetchReviewsForRestaurant = restaurantId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/restaurants/${restaurant_id}`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/restaurants/${restaurantId}`);
             dispatch({ type: 'FETCH_REVIEWS_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
@@ -225,10 +225,10 @@ export const fetchReviewsForRestaurant = restaurant_id => {
     }
 }
 
-export const fetchReviewsByUser = user_id => {
+export const fetchReviewsByUser = userId => {
     return async (dispatch) => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${user_id}`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${userId}`)
             dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })

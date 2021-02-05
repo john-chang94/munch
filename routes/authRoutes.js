@@ -7,7 +7,7 @@ const authorizeToken = require('../middlewares/authorizeToken');
 module.exports = app => {
     app.post('/auth/register', registerUserValidator, async (req, res) => {
         try {
-            let { first_name, last_name, email, password } = req.body;
+            let { firstName, lastName, email, password } = req.body;
 
             // Check if user exists
             const user = await client.query('SELECT * FROM users WHERE email = $1', [email])
@@ -24,9 +24,9 @@ module.exports = app => {
 
                         // Add new user into db
                         const newUser = await client.query(
-                            `INSERT INTO users (first_name, last_name, email, password)
+                            `INSERT INTO users (firstName, lastName, email, password)
                             VALUES ($1, $2, $3, $4) RETURNING *`,
-                            [first_name, last_name, email, password]
+                            [firstName, lastName, email, password]
                         )
 
                         res.status(201).json({ success: true })
@@ -51,7 +51,7 @@ module.exports = app => {
             if (!validPassword) return res.status(400).send('Invalid credentials');
 
             // Provide token if successful
-            const token = jwtGenerator(user.rows[0].user_id);
+            const token = jwtGenerator(user.rows[0].userId);
             // Remove password from response user object
             delete user.rows[0].password;
             res.status(200).json({
@@ -69,7 +69,7 @@ module.exports = app => {
     app.get('/auth/verify', authorizeToken, async (req, res) => {
         try {
             // req.id comes from authorizeToken middleware
-            const user = await client.query('SELECT * FROM users WHERE user_id = $1', [req.id]);
+            const user = await client.query('SELECT * FROM users WHERE userId = $1', [req.id]);
             delete user.rows[0].password;
             res.status(200).json(user.rows[0]);
         } catch (err) {
@@ -77,8 +77,8 @@ module.exports = app => {
         }
     })
 
-    // app.param('user_id', async (req, res, next, user_id) => {
-    //     const user = await client.query('SELECT * FROM users WHERE user_id = $1', [user_id])
+    // app.param('userId', async (req, res, next, userId) => {
+    //     const user = await client.query('SELECT * FROM users WHERE userId = $1', [userId])
     //     req.user = user;
     //     next();
     // })

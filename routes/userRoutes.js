@@ -19,10 +19,10 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/users/:user_id', async (req, res) => {
+    app.get('/api/users/:userId', async (req, res) => {
         try {
-            const { user_id } = req.params;
-            const user = await client.query('SELECT * FROM users WHERE user_id = $1', [user_id]);
+            const { userId } = req.params;
+            const user = await client.query('SELECT * FROM users WHERE userId = $1', [userId]);
 
             if (!user.rows.length) return res.status(404).send('No user found');
 
@@ -37,17 +37,17 @@ module.exports = app => {
     })
 
     // Update user profile
-    app.put('/api/users/:user_id', updateUserValidator, async (req, res) => {
+    app.put('/api/users/:userId', updateUserValidator, async (req, res) => {
         try {
-            const { user_id } = req.params;
-            const { first_name, last_name, email } = req.body;
+            const { userId } = req.params;
+            const { firstName, lastName, email } = req.body;
             const user = await client.query(
                 `UPDATE users
-                    SET first_name = $1,
-                        last_name = $2,
+                    SET firstName = $1,
+                        lastName = $2,
                         email = $3
-                    WHERE user_id = $4`,
-                [first_name, last_name, email, user_id]
+                    WHERE userId = $4`,
+                [firstName, lastName, email, userId]
             )
 
             res.status(200).json({ success: true });
@@ -57,12 +57,12 @@ module.exports = app => {
     })
 
     // Update user password
-    app.put('/api/users/reset-pw/:user_id', async (req, res) => {
+    app.put('/api/users/reset-pw/:userId', async (req, res) => {
         try {
-            const { user_id } = req.params;
+            const { userId } = req.params;
             let { password, newPassword, confirmNewPassword } = req.body;
 
-            const user = await client.query('SELECT * FROM users WHERE user_id = $1', [user_id]);
+            const user = await client.query('SELECT * FROM users WHERE userId = $1', [userId]);
 
             // Validate user's current password
             const validPassword = await bcrypt.compare(password, user.rows[0].password);
@@ -82,8 +82,8 @@ module.exports = app => {
                         const newUserPass = await client.query(
                             `UPDATE users
                                 SET password = $1
-                                WHERE user_id = $2`,
-                            [newPassword, user_id]
+                                WHERE userId = $2`,
+                            [newPassword, userId]
                         )
 
                         res.status(200).json({ success: true })
@@ -95,13 +95,13 @@ module.exports = app => {
         }
     })
 
-    app.post('/api/users/user_images', async (req, res) => {
+    app.post('/api/users/userImages', async (req, res) => {
         try {
-            const { user_id, url } = req.body;
+            const { userId, url } = req.body;
             const image = await client.query(
-                `INSERT INTO user_images (user_id, url)
+                `INSERT INTO userImages (userId, url)
                 VALUES ($1, $2)`,
-                [user_id, url]
+                [userId, url]
             )
 
             res.status(201).json({ success: true });
@@ -110,10 +110,10 @@ module.exports = app => {
         }
     })
 
-    app.delete('/api/users/user_images/:user_id', async (req, res) => {
+    app.delete('/api/users/userImages/:userId', async (req, res) => {
         try {
-            const { user_id } = req.params;
-            const removed = await client.query('DELETE FROM user_images WHERE user_id = $1', [user_id])
+            const { userId } = req.params;
+            const removed = await client.query('DELETE FROM userImages WHERE userId = $1', [userId])
 
             res.status(200).json({ success: true });
         } catch (err) {
@@ -121,14 +121,14 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/users/user_images/:user_id', async (req, res) => {
+    app.get('/api/users/userImages/:userId', async (req, res) => {
         try {
-            const { user_id } = req.params;
-            const image = await client.query('SELECT * FROM user_images WHERE user_id = $1', [user_id])
+            const { userId } = req.params;
+            const image = await client.query('SELECT * FROM userImages WHERE userId = $1', [userId])
 
             // Return default image if there is no user profile picture
             if (!image.rows.length) {
-                const def = await client.query('SELECT * FROM user_images WHERE user_id = 0')
+                const def = await client.query('SELECT * FROM userImages WHERE userId = 0')
 
                 return res.status(200).json({
                     success: true,

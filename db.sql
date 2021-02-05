@@ -8,6 +8,17 @@ CREATE TABLE restaurants (
     priceRange VARCHAR(1) NOT NULL
 );
 
+CREATE TABLE restaurants2 (
+    restaurantId SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price VARCHAR(1) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    unit VARCHAR(50),
+    city VARCHAR(255) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    zip VARCHAR(50) NOT NULL
+)
+
 CREATE TABLE categories (
     categoryId SERIAL PRIMARY KEY,
     category VARCHAR(50) NOT NULL
@@ -23,10 +34,12 @@ CREATE TABLE restaurantCategories (
 
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
+    admin BOOLEAN,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    updatedAt DATE
 );
 
 CREATE TABLE reviews (
@@ -36,6 +49,7 @@ CREATE TABLE reviews (
     rating VARCHAR(1) NOT NULL,
     details VARCHAR(1000) NOT NULL,
     date DATE NOT NULL,
+    updatedAt DATE,
     FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
     FOREIGN KEY (userId) REFERENCES users(userId)
 );
@@ -45,7 +59,7 @@ CREATE TABLE reviewImages (
     restaurantId INT NOT NULL,
     userId INT NOT NULL,
     reviewId INT NOT NULL,
-    url VARCHAR(500) NOT NULL,
+    imageUrl VARCHAR(500) NOT NULL,
     FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
     FOREIGN KEY (userId) REFERENCES users(userId),
     FOREIGN KEY (reviewId) REFERENCES reviews(reviewId)
@@ -69,7 +83,7 @@ CREATE TABLE suggestions (
     query VARCHAR(50) NOT NULL
 );
 
-INSERT INTO restaurants (name, location, category, price_range)
+INSERT INTO restaurants (name, location, category, priceRange)
 VALUES ('Dennys', '3012 W Temple Ave, Pomona, CA 91766', 'Diners', '2'),
 ('Burger King', '3943 Grande Ave, Chino Hills, CA 91710', 'Fast Food', '1'),
 ('Yard House', '1875 Newport Blvd, Costa Mesa, CA 92627', 'American', '2'),
@@ -174,7 +188,7 @@ VALUES ('Dennys', 'name'),
 ('Cafe', 'category');
 
 
-INSERT INTO images_thumb (review_images_id, thumbUrl)
+INSERT INTO images_thumb (reviewImages_id, thumbUrl)
 VALUES (2, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fburger-fries.jpg?alt=media&token=66b137b1-14dc-41e0-8ca4-fff40eb5d478'),
 (3, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcake-cappuccino.jpg?alt=media&token=c5aa070b-63e3-4eb5-b158-94a3b1b71c12'),
 (4, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcheese.jpg?alt=media&token=ef1a9c6e-a3c9-40be-9008-ef5eabfae586'),

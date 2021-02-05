@@ -6,7 +6,7 @@ import { renderStars } from './starsHelper'
 
 class Reviews extends Component {
     componentDidMount() {
-        this.props.fetchReviewsForRestaurant(this.props.restaurant_id);
+        this.props.fetchReviewsForRestaurant(this.props.restaurantId);
     }
 
     render() {
@@ -22,7 +22,7 @@ class Reviews extends Component {
                                 <p>{review.details}</p>
                                 <div className="mt-1">
                                     <p className="text-i">{moment(review.date).format('LL')}</p>
-                                    <p>Reviewer: {review.first_name} {review.last_name}</p>
+                                    <p>Reviewer: {review.firstName} {review.lastName}</p>
                                 </div>
                             </div>
                         ))

@@ -12,7 +12,7 @@ class EditUserImageModal extends Component {
     handleImageUpload = e => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
-            const user_id = this.props.user.user_id;
+            const userId = this.props.user.userId;
 
             const uploadTask = storage.ref(`/images/users/${file.name}`).put(file);
             uploadTask.on('state_changed', console.log, console.error, () => {
@@ -21,11 +21,11 @@ class EditUserImageModal extends Component {
                     .child(file.name) // Child is the level inside images directory
                     .getDownloadURL() // Fetch image URL from firebase
                     .then(async (url) => {
-                        const imageBody = { user_id, url };
+                        const imageBody = { userId, url };
                         // Add image url to db
                         await this.props.addUserImage(imageBody);
                         // Fetch updated image to display from props
-                        this.props.fetchUserImage(user_id);
+                        this.props.fetchUserImage(userId);
 
                         this.props.closeModal();
                     });
@@ -35,8 +35,8 @@ class EditUserImageModal extends Component {
 
     handleImageDelete = async () => {
         if (window.confirm('Are you sure you want to delete?')) {
-            await this.props.deleteUserImage(this.props.user.user_id);
-            await this.props.fetchUserImage(this.props.user.user_id);
+            await this.props.deleteUserImage(this.props.user.userId);
+            await this.props.fetchUserImage(this.props.user.userId);
             this.props.closeModal();
         }
     }
@@ -66,7 +66,7 @@ class EditUserImageModal extends Component {
                     <div>
                         <img src={userImage.url} style={{ maxHeight: '350px', maxWidth: '75%' }} alt="" />
                         {
-                            !userImage.user_id == 0 &&
+                            !userImage.userId == 0 &&
                             <p className="red-text darken-1 pointer" onClick={this.handleImageDelete}>Delete profile picture</p>
                         }
                     </div>

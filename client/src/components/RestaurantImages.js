@@ -5,7 +5,7 @@ import M from 'materialize-css';
 
 class RestaurantImages extends Component {
     async componentDidMount() {
-        await this.props.fetchImagesForRestaurant(this.props.match.params.restaurant_id);
+        await this.props.fetchImagesForRestaurant(this.props.match.params.restaurantId);
         M.Materialbox.init(document.querySelectorAll('.materialboxed'))
     }
 

@@ -71,9 +71,9 @@ class AddReview extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         const { rating, details, file } = this.state;
-        const { user_id } = this.props.user;
-        const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
-        const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
+        const { userId } = this.props.user;
+        const restaurantId = parseInt(this.props.match.params.restaurantId); // Must be INT in db
+        const body = { restaurantId, userId, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
 
         // Add review to db
         await this.props.addReview(body);
@@ -89,7 +89,7 @@ class AddReview extends Component {
             this.setState({ details: '' })
             this.renderEmptyStars();
             // Refresh review list
-            this.props.fetchReviewsForRestaurant(restaurant_id);
+            this.props.fetchReviewsForRestaurant(restaurantId);
         }
 
         // Add image to firebase
@@ -103,9 +103,9 @@ class AddReview extends Component {
                     .getDownloadURL() // Fetch image URL from firebase
                     .then(async (url) => {
                         const imageBody = {
-                            restaurant_id,
-                            user_id,
-                            review_id: this.props.review.review_id,
+                            restaurantId,
+                            userId,
+                            reviewId: this.props.review.reviewId,
                             url
                         }
                         // Add image url to db with required foreign keys
@@ -117,7 +117,7 @@ class AddReview extends Component {
                         this.renderEmptyStars();
 
                         // Refresh review list
-                        this.props.fetchReviewsForRestaurant(restaurant_id);
+                        this.props.fetchReviewsForRestaurant(restaurantId);
                     });
             });
         }

@@ -35,10 +35,10 @@ class App extends Component {
               <Route path='/signin' component={SignIn} />
               <Route path='/register' component={Register} />
               <Route path='/search' component={Search} />
-              <Route exact path='/restaurants/:restaurant_id' component={Restaurant} />
-              <Route exact path='/restaurants/:restaurant_id/photos' component={RestaurantImages} />
-              <Route exact path='/profile/:user_id' component={Profile} />
-              <Route exact path='/profile/:user_id/reviews' component={UserReviews} />
+              <Route exact path='/restaurants/:restaurantId' component={Restaurant} />
+              <Route exact path='/restaurants/:restaurantId/photos' component={RestaurantImages} />
+              <Route exact path='/profile/:userId' component={Profile} />
+              <Route exact path='/profile/:userId/reviews' component={UserReviews} />
             </Switch>
           </div>
           <Footer />

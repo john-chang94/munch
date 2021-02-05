@@ -6,8 +6,8 @@ import M from 'materialize-css';
 
 class Register extends Component {
     state = {
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -33,19 +33,19 @@ class Register extends Component {
     }
 
     render() {
-        const { first_name, last_name, email, password, confirmPassword } = this.state;
+        const { firstName, lastName, email, password, confirmPassword } = this.state;
         return (
             <div className="mt-5 flex-center">
                 <div className="w-50 mb-5">
                     <h4>Create a new account</h4>
                     <form onSubmit={this.handleSubmit}>
                         <div className="input-field">
-                            <input type="text" id="first_name" value={first_name} onChange={this.handleChange} />
-                            <label htmlFor="first_name">First Name</label>
+                            <input type="text" id="firstName" value={firstName} onChange={this.handleChange} />
+                            <label htmlFor="firstName">First Name</label>
                         </div>
                         <div className="input-field">
-                            <input type="text" id="last_name" value={last_name} onChange={this.handleChange} />
-                            <label htmlFor="last_name">Last Name</label>
+                            <input type="text" id="lastName" value={lastName} onChange={this.handleChange} />
+                            <label htmlFor="lastName">Last Name</label>
                         </div>
                         <div className="input-field">
                             <input type="text" id="email" value={email} onChange={this.handleChange} />

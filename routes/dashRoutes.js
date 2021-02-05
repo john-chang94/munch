@@ -8,14 +8,14 @@ const queryCheck = async (reqQuery) => {
     let num = 1;
     // Join restaurants and reviews to get the ratings
     let queryStr = [
-        `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
-        AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+        `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+        AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
             FROM restaurants AS r
             JOIN reviews AS rev
-            ON r.restaurant_id = rev.restaurant_id
+            ON r.restaurantId = rev.restaurantId
         WHERE`
     ]
-    const validQueries = ['location', 'category', 'price_range'];
+    const validQueries = ['location', 'category', 'priceRange'];
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
@@ -41,17 +41,17 @@ const queryCheck = async (reqQuery) => {
     // Remove extra 'AND'
     queryStr.pop();
     // Add the final GROUP BY clause
-    queryStr.push('GROUP BY r.restaurant_id');
+    queryStr.push('GROUP BY r.restaurantId');
     // Join the queryStr array to get one whole query string
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
-    AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+    if (!isQuery) ratingText = `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+    AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
         FROM restaurants AS r
         JOIN reviews AS rev
-        ON r.restaurant_id = rev.restaurant_id
-    GROUP BY r.restaurant_id`
+        ON r.restaurantId = rev.restaurantId
+    GROUP BY r.restaurantId`
 
     // Run query in pg
     let results = await client.query(ratingText, values);
@@ -75,17 +75,17 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/restaurants/:restaurant_id', async (req, res) => {
+    app.get('/api/restaurants/:restaurantId', async (req, res) => {
         try {
-            const { restaurant_id } = req.params;
+            const { restaurantId } = req.params;
             const restaurant = await client.query(
-                `SELECT r.restaurant_id, r.name, r.location, r.category, r.price_range,
-                AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+                `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+                AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
                     FROM restaurants AS r
                     JOIN reviews AS rev
-                    ON r.restaurant_id = rev.restaurant_id
-                WHERE r.restaurant_id = $1
-                GROUP BY r.restaurant_id`, [restaurant_id])
+                    ON r.restaurantId = rev.restaurantId
+                WHERE r.restaurantId = $1
+                GROUP BY r.restaurantId`, [restaurantId])
 
             if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
 
@@ -101,11 +101,11 @@ module.exports = app => {
 
     app.post('/api/restaurants', addRestaurantValidator, async (req, res) => {
         try {
-            const { name, location, category, price_range } = req.body;
+            const { name, location, category, priceRange } = req.body;
             const restaurant = await client.query(
-                `INSERT INTO restaurants (name, location, category, price_range)
+                `INSERT INTO restaurants (name, location, category, priceRange)
                 VALUES ($1, $2, $3, $4)`,
-                [name, location, category, price_range]
+                [name, location, category, priceRange]
             )
 
             res.status(201).json({ success: true })
@@ -116,16 +116,16 @@ module.exports = app => {
 
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
-            const { restaurant_id } = req.params;
-            const { name, location, category, price_range } = req.body;
+            const { restaurantId } = req.params;
+            const { name, location, category, priceRange } = req.body;
             const restaurant = await client.query(
                 `UPDATE restaurants
                     SET name = $1,
                     location = $2,
                     category = $3
-                    price_range = $4
-                WHERE restaurant_id = $5 RETURNING *`,
-                [name, location, category, price_range, restaurant_id]
+                    priceRange = $4
+                WHERE restaurantId = $5 RETURNING *`,
+                [name, location, category, priceRange, restaurantId]
             )
 
             res.status(200).json({
@@ -140,7 +140,7 @@ module.exports = app => {
     app.delete('/api/restaurants/:id', async (req, res) => {
         try {
             const { id } = req.params;
-            const restaurant = await client.query('DELETE FROM restaurants WHERE restaurant_id = $1', [id])
+            const restaurant = await client.query('DELETE FROM restaurants WHERE restaurantId = $1', [id])
 
             res.status(200).json({ success: true })
         } catch (err) {

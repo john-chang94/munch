@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 class Profile extends Component {
     state = {
         isLoading: true,
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         newPassword: '',
@@ -23,8 +23,8 @@ class Profile extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchUser(this.props.match.params.user_id);
-        await this.props.fetchUserImage(this.props.match.params.user_id);
+        await this.props.fetchUser(this.props.match.params.userId);
+        await this.props.fetchUserImage(this.props.match.params.userId);
         this.setState({ isLoading: false })
     }
 
@@ -35,8 +35,8 @@ class Profile extends Component {
     enableEditGeneral = async () => {
         const { user } = this.props;
         await this.setState({
-            first_name: user.first_name,
-            last_name: user.last_name,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             bio: user.bio,
             showEditGeneral: true
@@ -75,17 +75,17 @@ class Profile extends Component {
     }
 
     handleUpdateUser = async () => {
-        const { first_name, last_name, email } = this.state;
-        const user_id = this.props.match.params.user_id;
-        const body = { first_name, last_name, email };
+        const { firstName, lastName, email } = this.state;
+        const userId = this.props.match.params.userId;
+        const body = { firstName, lastName, email };
 
-        await this.props.updateUser(user_id, body);
+        await this.props.updateUser(userId, body);
 
         if (this.props.userError) {
             M.toast({ html: this.props.userError, classes: "red darken-1" });
             this.props.clear();
         } else {
-            await this.props.fetchUser(user_id);
+            await this.props.fetchUser(userId);
             M.toast({ html: 'Update success!', classes: "light-blue darken-2" });
             this.setState({ showEditGeneral: false })
         }
@@ -93,10 +93,10 @@ class Profile extends Component {
 
     handleUpdateUserPassword = async () => {
         const { password, newPassword, confirmNewPassword } = this.state;
-        const user_id = this.props.match.params.user_id;
+        const userId = this.props.match.params.userId;
         const body = { password, newPassword, confirmNewPassword };
 
-        await this.props.updateUserPassword(user_id, body);
+        await this.props.updateUserPassword(userId, body);
 
         if (this.props.userError) {
             M.toast({ html: this.props.userError, classes: "red darken-1" });
@@ -119,11 +119,11 @@ class Profile extends Component {
                 <div className="mt-sm">
                     <p className="mb-sm teal-text darken-4"><strong>General information</strong></p>
                     <label htmlFor="">First Name</label>
-                    <p>{user.first_name}</p>
+                    <p>{user.firstName}</p>
                 </div>
                 <div className="mt-sm">
                     <label htmlFor="">Last Name</label>
-                    <p>{user.last_name}</p>
+                    <p>{user.lastName}</p>
                 </div>
                 <div className="mt-sm">
                     <label htmlFor="">Email</label>
@@ -133,23 +133,23 @@ class Profile extends Component {
                     <button className="btn" onClick={this.enableEditGeneral}>Edit</button>
                 </div>
                 <div className="mt-1">
-                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
+                    <Link to={`/profile/${user.userId}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
                 </div>
             </div>
         )
     }
 
     renderEditGeneral = () => {
-        const { first_name, last_name, email } = this.state;
+        const { firstName, lastName, email } = this.state;
         return (
             <div className="mt-3">
                 <div className="input-field">
-                    <input type="text" id="first_name" value={first_name} onChange={this.handleChange} />
-                    <label htmlFor="first_name">First Name</label>
+                    <input type="text" id="firstName" value={firstName} onChange={this.handleChange} />
+                    <label htmlFor="firstName">First Name</label>
                 </div>
                 <div className="input-field">
-                    <input type="text" id="last_name" value={last_name} onChange={this.handleChange} />
-                    <label htmlFor="last_name">Last Name</label>
+                    <input type="text" id="lastName" value={lastName} onChange={this.handleChange} />
+                    <label htmlFor="lastName">Last Name</label>
                 </div>
                 <div className="input-field">
                     <input type="text" id="email" value={email} onChange={this.handleChange} />

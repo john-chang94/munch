@@ -24,11 +24,7 @@ const reviewSchema = new Schema({
         required: true
     },
     images: [{
-        url: String,
-        pinned: {
-            type: Boolean,
-            default: false
-        }
+        imageUrl: String
     }],
     updatedAt: Date
 })
