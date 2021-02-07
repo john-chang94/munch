@@ -8,14 +8,14 @@ const queryCheck = async (reqQuery) => {
     let num = 1;
     // Join restaurants and reviews to get the ratings
     let queryStr = [
-        `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+        `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
         AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
             FROM restaurants AS r
             JOIN reviews AS rev
             ON r.restaurantId = rev.restaurantId
         WHERE`
     ]
-    const validQueries = ['location', 'category', 'priceRange'];
+    const validQueries = ['location', 'category', 'price'];
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
@@ -46,7 +46,7 @@ const queryCheck = async (reqQuery) => {
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    if (!isQuery) ratingText = `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+    if (!isQuery) ratingText = `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
     AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
         FROM restaurants AS r
         JOIN reviews AS rev
@@ -79,7 +79,7 @@ module.exports = app => {
         try {
             const { restaurantId } = req.params;
             const restaurant = await client.query(
-                `SELECT r.restaurantId, r.name, r.location, r.category, r.priceRange,
+                `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
                 AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
                     FROM restaurants AS r
                     JOIN reviews AS rev
@@ -101,11 +101,11 @@ module.exports = app => {
 
     app.post('/api/restaurants', addRestaurantValidator, async (req, res) => {
         try {
-            const { name, location, category, priceRange } = req.body;
+            const { name, address, suite, city, state, zip, price } = req.body;
             const restaurant = await client.query(
-                `INSERT INTO restaurants (name, location, category, priceRange)
-                VALUES ($1, $2, $3, $4)`,
-                [name, location, category, priceRange]
+                `INSERT INTO restaurants (name, address, suite, city, state, zip, price)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+                [name, address, suite, city, state, zip, price]
             )
 
             res.status(201).json({ success: true })
@@ -117,15 +117,15 @@ module.exports = app => {
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
             const { restaurantId } = req.params;
-            const { name, location, category, priceRange } = req.body;
+            const { name, location, category, price } = req.body;
             const restaurant = await client.query(
                 `UPDATE restaurants
                     SET name = $1,
                     location = $2,
                     category = $3
-                    priceRange = $4
+                    price = $4
                 WHERE restaurantId = $5 RETURNING *`,
-                [name, location, category, priceRange, restaurantId]
+                [name, location, category, price, restaurantId]
             )
 
             res.status(200).json({
@@ -143,6 +143,52 @@ module.exports = app => {
             const restaurant = await client.query('DELETE FROM restaurants WHERE restaurantId = $1', [id])
 
             res.status(200).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.post('/api/categories', async (req, res) => {
+        try {
+            const { category } = req.body;
+            const addCategory = await client.query('INSERT INTO categories (category) VALUES $1', [category])
+
+            res.status(201).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.get('/api/categories', async (req, res) => {
+        try {
+            const categories = await client.query('SELECT * FROM categories');
+
+            res.status(200).json(categories.rows);
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.post('/api/restaurantCategories', async (req, res) => {
+        try {
+            const { restaurantId, categoryId } = req.body;
+            const addCategory = await client.query(
+                `INSERT INTO restaurantCategories (restaurantId, categoryId)
+                VALUES ($1, $2)`,
+                [restaurantId, categoryId]
+            )
+
+            res.status(201).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.get('/api/restaurantCategories', async (req, res) => {
+        try {
+            const categories = await client.query('SELECT * FROM restaurantCategories')
+
+            res.status(200).json(categories.rows);
         } catch (err) {
             res.status(500).send('Server error');
         }

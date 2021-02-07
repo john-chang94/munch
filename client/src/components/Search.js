@@ -12,8 +12,8 @@ const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cursor, setCursor] = useState(-1);
-    const [priceRange, setPriceRange] = useState('');
-    const [propsPriceRange, setPropsPriceRange] = useState();
+    const [price, setprice] = useState('');
+    const [propsprice, setPropsprice] = useState();
 
     const handleChange = e => {
         const { value } = e.target;
@@ -79,8 +79,8 @@ const Search = (props) => {
             const searchQuery = new URLSearchParams(props.history.location.search);
             
             setSearch(searchQuery.get('find'));
-            setPriceRange(searchQuery.get('priceRange'));
-            setPropsPriceRange(searchQuery.get('priceRange'));
+            setprice(searchQuery.get('price'));
+            setPropsprice(searchQuery.get('price'));
 
             await props.fetchSuggestions();
             await props.search(props.history.location.search);
@@ -91,7 +91,7 @@ const Search = (props) => {
         // Clear state on component unmount
         return () => {
             props.clear();
-            setPriceRange('')
+            setprice('')
         }
     }, [])
 
@@ -111,46 +111,46 @@ const Search = (props) => {
         setSearch(searchQuery.get('find'));
 
         // Separate state for price range as identifier and for props because
-        // executing setPriceRange here will cause the useEffect below to run
+        // executing setprice here will cause the useEffect below to run
         // which will cause this useEffect to run like an endless cycle.
         // Also, an identifier for filters to determine which checkboxes are checked, if any.
-        setPropsPriceRange(searchQuery.get('priceRange'))
+        setPropsprice(searchQuery.get('price'))
 
         props.search(props.history.location.search);
 
     }, [props.history.location.search])
 
-    // On priceRange state change, set price range input value from query
+    // On price state change, set price range input value from query
     useEffect(() => {
         // Clear any error message when user clicks on a different filter
         if (props.dashError) props.clear();
         const searchQuery = new URLSearchParams(props.history.location.search);
 
-        if (!priceRange) {
+        if (!price) {
             
             // Load all search results if user removes price filter
-            searchQuery.delete('priceRange');
+            searchQuery.delete('price');
             props.history.push(`/search?${searchQuery}`)
         } else {
-            if (searchQuery.has('priceRange')) {
+            if (searchQuery.has('price')) {
                 
-                searchQuery.set('priceRange', priceRange);
+                searchQuery.set('price', price);
                 props.history.push(`/search?${searchQuery}`)
             } else {
                 
-                searchQuery.append('priceRange', priceRange);
+                searchQuery.append('price', price);
                 props.history.push(`/search?${searchQuery}`)
             }
         }
 
-    }, [priceRange])
+    }, [price])
 
     return (
         <div className="row">
             <Filters
-                priceRange={priceRange}
-                propsPriceRange={propsPriceRange}
-                setPriceRange={setPriceRange}
+                price={price}
+                propsprice={propsprice}
+                setprice={setprice}
             />
             <div className="col l8 m8 s12">
                 <form className="mt-3" onSubmit={handleSubmit}>
@@ -213,7 +213,7 @@ const Search = (props) => {
                                                     category={restaurant.category}
                                                     rating={restaurant.rating}
                                                     totalRatings={restaurant.totalRatings}
-                                                    priceRange={restaurant.priceRange}
+                                                    price={restaurant.price}
                                                 />
                                             </Link>
                                         </div>

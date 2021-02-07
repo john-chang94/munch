@@ -134,7 +134,7 @@ class Home extends Component {
                     <h4>Featured</h4>
                 </div>
 
-                <div>
+                {/* <div>
                     {
                         isLoading
                             ? <div className="center">
@@ -148,13 +148,13 @@ class Home extends Component {
                                             category={restaurant.category}
                                             rating={restaurant.rating}
                                             totalRatings={restaurant.totalRatings}
-                                            priceRange={restaurant.priceRange}
+                                            price={restaurant.price}
                                         />
                                     </Link>
                                 </div>
                             ))
                     }
-                </div>
+                </div> */}
             </div>
         );
     }

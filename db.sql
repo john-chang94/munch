@@ -3,17 +3,9 @@ CREATE DATABASE munch;
 CREATE TABLE restaurants (
     restaurantId SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    location VARCHAR(50) NOT NULL,
-    category VARCHAR(50) NOT NULL,
-    priceRange VARCHAR(1) NOT NULL
-);
-
-CREATE TABLE restaurants2 (
-    restaurantId SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
     price VARCHAR(1) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    unit VARCHAR(50),
+    suite VARCHAR(50),
     city VARCHAR(255) NOT NULL,
     state VARCHAR(50) NOT NULL,
     zip VARCHAR(50) NOT NULL
@@ -74,7 +66,7 @@ CREATE TABLE images_thumb (
 CREATE TABLE userImages (
     userImagesId SERIAL PRIMARY KEY,
     userId INT NOT NULL,
-    url VARCHAR(500) NOT NULL
+    imageUrl VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE suggestions (
@@ -83,7 +75,7 @@ CREATE TABLE suggestions (
     query VARCHAR(50) NOT NULL
 );
 
-INSERT INTO restaurants (name, location, category, priceRange)
+INSERT INTO restaurants (name, location, category, price)
 VALUES ('Dennys', '3012 W Temple Ave, Pomona, CA 91766', 'Diners', '2'),
 ('Burger King', '3943 Grande Ave, Chino Hills, CA 91710', 'Fast Food', '1'),
 ('Yard House', '1875 Newport Blvd, Costa Mesa, CA 92627', 'American', '2'),
@@ -120,15 +112,44 @@ VALUES ('Dennys', '3012 W Temple Ave, Pomona, CA 91766', 'Diners', '2'),
 ('Factory Tea Bar', '323 S Mission Dr, San Gabriel, CA 91776', 'Tea house', '1'),
 ('Banana Bay', '18230 Colima Rd, Rowland Heights, CA 91748', 'Thai', '2'),
 ('Mister Bossam', '18162 Colima Rd, Rowland Heights, CA 91748', 'Korean', '2'),
-('Mos 2', '1008 W Lincoln Ave, Anaheim, CA 92805', 'Asian', '1'),
-('Mr Dumpling', '9319 Foothill Blvd, Rancho Cucamongo, CA 91730', 'Chinese', '1'),
+('Mr Dumpling', '9319 Foothill Blvd, Rancho Cucamonga, CA 91730', 'Chinese', '1'),
 ('Jack in the Box', '8521 Archibald Ave, Rancho Cucamonga, CA 91730' 'Fast Food', '1'),
 ('Jollibee', '11632 South St, Artesia, CA 90701', 'Fast Food', '1'),
 ('Providence', '5955 Melrose Ave, Los Angeles, CA 90038', 'American', '4');
 
+INSERT INTO categories (category)
+VALUES ('Fast Food'),
+('American'),
+('Chinese'),
+('Vietnamese'),
+('Steakhouses'),
+('Sandwiches'),
+('Thai'),
+('Cuban'),
+('Korean'),
+('Japanese'),
+('Mexican'),
+('Coffee'),
+('Tea House'),
+('Italian'),
+('Asian'),
+('Barbecue'),
+('Cafe'),
+-- ('Ramen'),
+-- ('Sushi'),
+('Coffee and Tea'),
+-- ('Taiwanese'),
+-- ('Hot Pot')
+-- ('Breakfast and Brunch')
+-- ('Bar')
+-- ('Gastropub'),
+('Restaurant'),
+('Noodles'),
+-- ('Pizza'),
+-- ('Wings')
 
 INSERT INTO suggestions (param, query)
-VALUES ('Dennys', 'name'),
+VALUES ("Denny's", 'name'),
 ('Burger King', 'name'),
 ('Yard House', 'name'),
 ('Pick Up Stix', 'name'),
@@ -175,8 +196,7 @@ VALUES ('Dennys', 'name'),
 ('Factory Tea Bar', 'name'),
 ('Banana Bay', 'name'),
 ('Mister Bossam', 'name'),
-('Mos 2', 'name'),
-('Mr Dumpling', 'name'),
+('Mr. Dumpling', 'name'),
 ('Jack in the Box', 'name'),
 ('Jollibee', 'name'),
 ('Providence', 'name'),

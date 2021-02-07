@@ -50,7 +50,7 @@ class Restaurant extends Component {
                                     <p className="heading">{restaurant.name}</p>
                                     <p className="cat-heading">{restaurant.category}</p>
                                     <p>{stars} ({restaurant.totalRatings})</p>
-                                    <p>Price range: {'$'.repeat(parseInt(restaurant.priceRange))}</p>
+                                    <p>Price range: {'$'.repeat(parseInt(restaurant.price))}</p>
                                 </div>
                             }
 

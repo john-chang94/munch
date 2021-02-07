@@ -18,8 +18,8 @@ class Navbar extends Component {
                         {
                             user
                                 ? [
-                                    <li key={1} className="mr-1">Hi, {user.first_name}</li>,
-                                    <li key={2}><Link to={`/profile/${user.user_id}`}>Account</Link></li>,
+                                    <li key={1} className="mr-1">Hi, {user.firstName}</li>,
+                                    <li key={2}><Link to={`/profile/${user.userId}`}>Account</Link></li>,
                                     <li key={3} onClick={this.handleClick}><Link to='/'>Sign Out</Link></li>
                                 ]
                                 : [
