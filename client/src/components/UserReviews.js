@@ -11,7 +11,7 @@ class UserReviews extends Component {
     }
 
     async componentDidMount() {
-        this.props.fetchReviewsByUser(this.props.match.params.userId);
+        this.props.fetchReviewsByUser(this.props.match.params.user_id);
         this.setState({ isLoading: false });
     }
 

@@ -8,11 +8,11 @@ const queryCheck = async (reqQuery) => {
     let num = 1;
     // Join restaurants and reviews to get the ratings
     let queryStr = [
-        `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
-        AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
+        `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
+        AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
             FROM restaurants AS r
             JOIN reviews AS rev
-            ON r.restaurantId = rev.restaurantId
+            ON r.restaurant_id = rev.restaurant_id
         WHERE`
     ]
     const validQueries = ['location', 'category', 'price'];
@@ -41,17 +41,17 @@ const queryCheck = async (reqQuery) => {
     // Remove extra 'AND'
     queryStr.pop();
     // Add the final GROUP BY clause
-    queryStr.push('GROUP BY r.restaurantId');
+    queryStr.push('GROUP BY r.restaurant_id');
     // Join the queryStr array to get one whole query string
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    if (!isQuery) ratingText = `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
-    AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
+    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
+    AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
         FROM restaurants AS r
         JOIN reviews AS rev
-        ON r.restaurantId = rev.restaurantId
-    GROUP BY r.restaurantId`
+        ON r.restaurant_id = rev.restaurant_id
+    GROUP BY r.restaurant_id`
 
     // Run query in pg
     let results = await client.query(ratingText, values);
@@ -75,17 +75,17 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/restaurants/:restaurantId', async (req, res) => {
+    app.get('/api/restaurants/:restaurant_id', async (req, res) => {
         try {
-            const { restaurantId } = req.params;
+            const { restaurant_id } = req.params;
             const restaurant = await client.query(
-                `SELECT r.restaurantId, r.name, r.location, r.category, r.price,
-                AVG(rev.rating) AS rating, COUNT(rev.rating) AS totalRatings
+                `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
+                AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
                     FROM restaurants AS r
                     JOIN reviews AS rev
-                    ON r.restaurantId = rev.restaurantId
-                WHERE r.restaurantId = $1
-                GROUP BY r.restaurantId`, [restaurantId])
+                    ON r.restaurant_id = rev.restaurant_id
+                WHERE r.restaurant_id = $1
+                GROUP BY r.restaurant_id`, [restaurant_id])
 
             if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
 
@@ -116,7 +116,7 @@ module.exports = app => {
 
     app.put('/api/restaurants/:id', async (req, res) => {
         try {
-            const { restaurantId } = req.params;
+            const { restaurant_id } = req.params;
             const { name, location, category, price } = req.body;
             const restaurant = await client.query(
                 `UPDATE restaurants
@@ -124,8 +124,8 @@ module.exports = app => {
                     location = $2,
                     category = $3
                     price = $4
-                WHERE restaurantId = $5 RETURNING *`,
-                [name, location, category, price, restaurantId]
+                WHERE restaurant_id = $5 RETURNING *`,
+                [name, location, category, price, restaurant_id]
             )
 
             res.status(200).json({
@@ -140,7 +140,7 @@ module.exports = app => {
     app.delete('/api/restaurants/:id', async (req, res) => {
         try {
             const { id } = req.params;
-            const restaurant = await client.query('DELETE FROM restaurants WHERE restaurantId = $1', [id])
+            const restaurant = await client.query('DELETE FROM restaurants WHERE restaurant_id = $1', [id])
 
             res.status(200).json({ success: true })
         } catch (err) {
@@ -169,13 +169,13 @@ module.exports = app => {
         }
     })
 
-    app.post('/api/restaurantCategories', async (req, res) => {
+    app.post('/api/restaurant_categories', async (req, res) => {
         try {
-            const { restaurantId, categoryId } = req.body;
+            const { restaurant_id, category_id } = req.body;
             const addCategory = await client.query(
-                `INSERT INTO restaurantCategories (restaurantId, categoryId)
+                `INSERT INTO restaurant_categories (restaurant_id, category_id)
                 VALUES ($1, $2)`,
-                [restaurantId, categoryId]
+                [restaurant_id, category_id]
             )
 
             res.status(201).json({ success: true })
@@ -184,9 +184,9 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/restaurantCategories', async (req, res) => {
+    app.get('/api/restaurant_categories', async (req, res) => {
         try {
-            const categories = await client.query('SELECT * FROM restaurantCategories')
+            const categories = await client.query('SELECT * FROM restaurant_categories')
 
             res.status(200).json(categories.rows);
         } catch (err) {

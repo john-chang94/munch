@@ -1,7 +1,7 @@
 CREATE DATABASE munch;
 
 CREATE TABLE restaurants (
-    restaurantId SERIAL PRIMARY KEY,
+    restaurant_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     price VARCHAR(1) NOT NULL,
     address VARCHAR(255) NOT NULL,
@@ -12,65 +12,65 @@ CREATE TABLE restaurants (
 )
 
 CREATE TABLE categories (
-    categoryId SERIAL PRIMARY KEY,
+    category_id SERIAL PRIMARY KEY,
     category VARCHAR(50) NOT NULL
 )
 
-CREATE TABLE restaurantCategories (
-    restaurantCategoriesId SERIAL PRIMARY KEY,
-    restaurantId INT NOT NULL,
-    categoryId INT NOT NULL,
-    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
-    FOREIGN KEY (categoryId) REFERENCES categories(categoryId)
+CREATE TABLE restaurant_categories (
+    restaurant_categories_id SERIAL PRIMARY KEY,
+    restaurant_id INT NOT NULL,
+    category_id INT NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
 )
 
 CREATE TABLE users (
-    userId SERIAL PRIMARY KEY,
-    admin BOOLEAN,
-    firstName VARCHAR(255) NOT NULL,
-    lastName VARCHAR(255) NOT NULL,
+    user_id SERIAL PRIMARY KEY,
+    is_admin BOOLEAN,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    updatedAt DATE
+    updated_at DATE
 );
 
 CREATE TABLE reviews (
-    reviewId SERIAL PRIMARY KEY,
-    restaurantId INT NOT NULL,
-    userId INT NOT NULL,
+    review_id SERIAL PRIMARY KEY,
+    restaurant_id INT NOT NULL,
+    user_id INT NOT NULL,
     rating VARCHAR(1) NOT NULL,
     details VARCHAR(1000) NOT NULL,
     date DATE NOT NULL,
-    updatedAt DATE,
-    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
-    FOREIGN KEY (userId) REFERENCES users(userId)
+    updated_at DATE,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE reviewImages (
-    reviewImagesId SERIAL PRIMARY KEY,
-    restaurantId INT NOT NULL,
-    userId INT NOT NULL,
-    reviewId INT NOT NULL,
-    imageUrl VARCHAR(500) NOT NULL,
-    FOREIGN KEY (restaurantId) REFERENCES restaurants(restaurantId),
-    FOREIGN KEY (userId) REFERENCES users(userId),
-    FOREIGN KEY (reviewId) REFERENCES reviews(reviewId)
+CREATE TABLE review_images (
+    review_images_id SERIAL PRIMARY KEY,
+    restaurant_id INT NOT NULL,
+    user_id INT NOT NULL,
+    review_id INT NOT NULL,
+    image_url VARCHAR(500) NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (review_id) REFERENCES reviews(review_id)
 );
 
 CREATE TABLE images_thumb (
     imagesThumbId SERIAL PRIMARY KEY,
-    reviewImagesId INT NOT NULL,
+    review_images_id INT NOT NULL,
     thumbUrl VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE userImages (
-    userImagesId SERIAL PRIMARY KEY,
-    userId INT NOT NULL,
-    imageUrl VARCHAR(500) NOT NULL
+CREATE TABLE user_images (
+    user_images_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    image_url VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE suggestions (
-    suggestionsId SERIAL PRIMARY KEY,
+    suggestions_id SERIAL PRIMARY KEY,
     param VARCHAR(255) NOT NULL,
     query VARCHAR(50) NOT NULL
 );
@@ -208,7 +208,7 @@ VALUES ("Denny's", 'name'),
 ('Cafe', 'category');
 
 
-INSERT INTO images_thumb (reviewImages_id, thumbUrl)
+INSERT INTO images_thumb (review_images_id, thumbUrl)
 VALUES (2, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fburger-fries.jpg?alt=media&token=66b137b1-14dc-41e0-8ca4-fff40eb5d478'),
 (3, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcake-cappuccino.jpg?alt=media&token=c5aa070b-63e3-4eb5-b158-94a3b1b71c12'),
 (4, 'https://firebasestorage.googleapis.com/v0/b/munch-41699.appspot.com/o/images%2Fcheese.jpg?alt=media&token=ef1a9c6e-a3c9-40be-9008-ef5eabfae586'),

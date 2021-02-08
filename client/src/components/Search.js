@@ -12,8 +12,8 @@ const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cursor, setCursor] = useState(-1);
-    const [price, setprice] = useState('');
-    const [propsprice, setPropsprice] = useState();
+    const [price, setPrice] = useState('');
+    const [propsPrice, setPropsPrice] = useState();
 
     const handleChange = e => {
         const { value } = e.target;
@@ -79,8 +79,8 @@ const Search = (props) => {
             const searchQuery = new URLSearchParams(props.history.location.search);
             
             setSearch(searchQuery.get('find'));
-            setprice(searchQuery.get('price'));
-            setPropsprice(searchQuery.get('price'));
+            setPrice(searchQuery.get('price'));
+            setPropsPrice(searchQuery.get('price'));
 
             await props.fetchSuggestions();
             await props.search(props.history.location.search);
@@ -91,7 +91,7 @@ const Search = (props) => {
         // Clear state on component unmount
         return () => {
             props.clear();
-            setprice('')
+            setPrice('')
         }
     }, [])
 
@@ -111,10 +111,10 @@ const Search = (props) => {
         setSearch(searchQuery.get('find'));
 
         // Separate state for price range as identifier and for props because
-        // executing setprice here will cause the useEffect below to run
+        // executing setPrice here will cause the useEffect below to run
         // which will cause this useEffect to run like an endless cycle.
         // Also, an identifier for filters to determine which checkboxes are checked, if any.
-        setPropsprice(searchQuery.get('price'))
+        setPropsPrice(searchQuery.get('price'))
 
         props.search(props.history.location.search);
 
@@ -149,8 +149,8 @@ const Search = (props) => {
         <div className="row">
             <Filters
                 price={price}
-                propsprice={propsprice}
-                setprice={setprice}
+                propsPrice={propsPrice}
+                setPrice={setPrice}
             />
             <div className="col l8 m8 s12">
                 <form className="mt-3" onSubmit={handleSubmit}>
@@ -206,13 +206,13 @@ const Search = (props) => {
                                     // Only render when restaurants are found without error
                                     (props.results && !props.dashError) &&
                                     props.results.map((restaurant) => (
-                                        <div key={restaurant.restaurantId}>
-                                            <Link to={`/restaurants/${restaurant.restaurantId}`} className="black-text">
+                                        <div key={restaurant.restaurant_id}>
+                                            <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
                                                 <RestaurantCard
                                                     name={restaurant.name}
                                                     category={restaurant.category}
                                                     rating={restaurant.rating}
-                                                    totalRatings={restaurant.totalRatings}
+                                                    total_ratings={restaurant.total_ratings}
                                                     price={restaurant.price}
                                                 />
                                             </Link>

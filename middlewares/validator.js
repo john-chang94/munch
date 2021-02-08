@@ -33,20 +33,20 @@ exports.addRestaurantValidator = (req, res, next) => {
 
 exports.registerUserValidator = (req, res, next) => {
     let errors = {};
-    let { firstName, lastName, email, password, confirmPassword } = req.body;
-    firstName = !isEmpty(firstName) ? firstName : '';
-    lastName = !isEmpty(lastName) ? lastName : '';
+    let { first_name, last_name, email, password, confirm_password } = req.body;
+    first_name = !isEmpty(first_name) ? first_name : '';
+    last_name = !isEmpty(last_name) ? last_name : '';
     email = !isEmpty(email) ? email : '';
     password = !isEmpty(password) ? password : '';
-    confirmPassword = !isEmpty(confirmPassword) ? confirmPassword : '';
+    confirm_password = !isEmpty(confirm_password) ? confirm_password : '';
 
-    if (validator.isEmpty(firstName)) errors = 'First name required';
-    if (validator.isEmpty(lastName)) errors = 'Last name required';
+    if (validator.isEmpty(first_name)) errors = 'First name required';
+    if (validator.isEmpty(last_name)) errors = 'Last name required';
     if (validator.isEmpty(email)) errors = 'Email required';
     if (!validator.isEmail(email)) errors = 'Must be a valid email';
     if (validator.isEmpty(password)) errors = 'Password required';
     if (!validator.isLength(password, { min: 8 })) errors = 'Password must be at least 8 characters';
-    if (!validator.equals(password, confirmPassword)) errors = 'Passwords do not match';
+    if (!validator.equals(password, confirm_password)) errors = 'Passwords do not match';
 
     if (!isEmpty(errors)) return res.status(400).json(errors);
 
@@ -55,13 +55,13 @@ exports.registerUserValidator = (req, res, next) => {
 
 exports.updateUserValidator = (req, res, next) => {
     let errors = {};
-    let { firstName, lastName, email } = req.body;
-    firstName = !isEmpty(firstName) ? firstName : '';
-    lastName = !isEmpty(lastName) ? lastName : '';
+    let { first_name, last_name, email } = req.body;
+    first_name = !isEmpty(first_name) ? first_name : '';
+    last_name = !isEmpty(last_name) ? last_name : '';
     email = !isEmpty(email) ? email : '';
 
-    if (validator.isEmpty(firstName)) errors = 'First name required';
-    if (validator.isEmpty(lastName)) errors = 'Last name required';
+    if (validator.isEmpty(first_name)) errors = 'First name required';
+    if (validator.isEmpty(last_name)) errors = 'Last name required';
     if (validator.isEmpty(email)) errors = 'Email required';
     if (!validator.isEmail(email)) errors = 'Must be a valid email';
 
@@ -72,15 +72,15 @@ exports.updateUserValidator = (req, res, next) => {
 
 exports.addReviewValidator = (req, res, next) => {
     let errors = {};
-    let { restaurantId, userId, rating, details, date} = req.body;
-    restaurantId = !isEmpty(restaurantId) ? restaurantId.toString() : '';
-    userId = !isEmpty(userId) ? userId.toString() : '';
+    let { restaurant_id, user_id, rating, details, date} = req.body;
+    restaurant_id = !isEmpty(restaurant_id) ? restaurant_id.toString() : '';
+    user_id = !isEmpty(user_id) ? user_id.toString() : '';
     rating = !isEmpty(rating) ? rating.toString() : '';
     details = !isEmpty(details) ? details : '';
     date = !isEmpty(date) ? date : '';
 
-    if (validator.isEmpty(restaurantId)) errors = 'Restaurant id required';
-    if (validator.isEmpty(userId)) errors = 'User id required';
+    if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
+    if (validator.isEmpty(user_id)) errors = 'User id required';
     if (validator.isEmpty(rating)) errors = 'Rating required';
     if (validator.isEmpty(details)) errors = 'Details required';
     if (validator.isEmpty(date)) errors = 'Date required';
@@ -92,15 +92,15 @@ exports.addReviewValidator = (req, res, next) => {
 
 exports.addReviewValidatorM = (req, res, next) => {
     let errors = {};
-    let { restaurantId, userId, rating, details, date} = req.body;
-    restaurantId = !isEmpty(restaurantId) ? restaurantId.toString() : '';
-    userId = !isEmpty(userId) ? userId.toString() : '';
+    let { restaurant_id, user_id, rating, details, date} = req.body;
+    restaurant_id = !isEmpty(restaurant_id) ? restaurant_id.toString() : '';
+    user_id = !isEmpty(user_id) ? user_id.toString() : '';
     rating = !isEmpty(rating) ? rating.toString() : '';
     details = !isEmpty(details) ? details : '';
     date = !isEmpty(date) ? date : '';
 
-    if (validator.isEmpty(restaurantId)) errors = 'Restaurant id required';
-    if (validator.isEmpty(userId)) errors = 'User id required';
+    if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
+    if (validator.isEmpty(user_id)) errors = 'User id required';
     if (validator.isEmpty(rating)) errors = 'Rating required';
     if (validator.isEmpty(details)) errors = 'Details required';
     if (validator.isEmpty(date)) errors = 'Date required';

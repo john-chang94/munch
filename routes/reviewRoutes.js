@@ -20,11 +20,11 @@ module.exports = app => {
 
     app.post('/api/reviews', addReviewValidator, async (req, res) => {
         try {
-            const { restaurantId, userId, rating, details, date } = req.body;
+            const { restaurant_id, user_id, rating, details, date } = req.body;
             const review = await client.query(
-                `INSERT INTO reviews (restaurantId, userId, rating, details, date)
+                `INSERT INTO reviews (restaurant_id, user_id, rating, details, date)
                 VALUES ($1, $2, $3, $4, $5) returning *`,
-                [restaurantId, userId, rating, details, date]
+                [restaurant_id, user_id, rating, details, date]
             )
 
             res.status(201).json({
@@ -47,9 +47,9 @@ module.exports = app => {
         }
     })
 
-    app.put('/api/reviews/m/:reviewId', async (req, res) => {
+    app.put('/api/reviews/m/:review_id', async (req, res) => {
         try {
-            const result = await Review.findByIdAndUpdate(req.params.reviewId,
+            const result = await Review.findByIdAndUpdate(req.params.review_id,
                 { $push: { images: req.body } },
                 { new: true, useFindAndModify: false }
             )
@@ -60,9 +60,9 @@ module.exports = app => {
         }
     })
 
-    app.put('/api/reviews/m/rem/:reviewId', async (req, res) => {
+    app.put('/api/reviews/m/rem/:review_id', async (req, res) => {
         try {
-            const result = await Review.findByIdAndUpdate(req.params.reviewId,
+            const result = await Review.findByIdAndUpdate(req.params.review_id,
                 { $pull: { images: { _id: req.body.imageId } } },
                 { useFindAndModify: false }
             )
@@ -74,10 +74,10 @@ module.exports = app => {
     })
 
     // Get a specific review
-    app.get('/api/reviews/:reviewId', async (req, res) => {
+    app.get('/api/reviews/:review_id', async (req, res) => {
         try {
-            const { reviewId } = req.params;
-            const review = await client.query('SELECT * FROM reviews WHERE reviewId = $1', [reviewId]);
+            const { review_id } = req.params;
+            const review = await client.query('SELECT * FROM reviews WHERE review_id = $1', [review_id]);
             if (!review.rows.length) return res.status(404).send('No review yet');
 
             res.status(200).json({
@@ -91,17 +91,17 @@ module.exports = app => {
     })
 
     // Get all reviews for a restaurant with user info
-    app.get('/api/reviews/restaurants/:restaurantId', async (req, res) => {
+    app.get('/api/reviews/restaurants/:restaurant_id', async (req, res) => {
         try {
-            const { restaurantId } = req.params;
+            const { restaurant_id } = req.params;
             const reviews = await client.query(
-                `SELECT r.rating, r.details, r.date, u.userId, u.firstName, u.lastName
+                `SELECT r.rating, r.details, r.date, u.user_id, u.first_name, u.last_name
                     FROM reviews AS r
                         JOIN users AS u
-                        ON r.userId = u.userId
-                    WHERE restaurantId = $1
+                        ON r.user_id = u.user_id
+                    WHERE restaurant_id = $1
                     ORDER BY r.date DESC`,
-                [restaurantId]
+                [restaurant_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews yet');
 
@@ -116,17 +116,17 @@ module.exports = app => {
     })
 
     // Get all reviews from a user
-    app.get('/api/reviews/users/:userId', async (req, res) => {
+    app.get('/api/reviews/users/:user_id', async (req, res) => {
         try {
-            const { userId } = req.params;
+            const { user_id } = req.params;
             const reviews = await client.query(
-                `SELECT r.reviewId, r.restaurantId, r.rating, r.details, r.date, re.name
+                `SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date, re.name
                     FROM reviews AS r
                         JOIN restaurants AS re
-                        ON r.restaurantId = re.restaurantId
-                    WHERE r.userId = $1
+                        ON r.restaurant_id = re.restaurant_id
+                    WHERE r.user_id = $1
                     ORDER BY r.date DESC`,
-                [userId]
+                [user_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews yet');
 
@@ -141,19 +141,19 @@ module.exports = app => {
     })
 
     // Update a review
-    app.put('/api/reviews/:reviewId', addReviewValidator, async (req, res) => {
+    app.put('/api/reviews/:review_id', addReviewValidator, async (req, res) => {
         try {
-            const { reviewId } = req.params;
-            const { restaurantId, userId, rating, details, date } = req.body;
+            const { review_id } = req.params;
+            const { restaurant_id, user_id, rating, details, date } = req.body;
             const review = await client.query(
                 `UPDATE reviews
-                    SET restaurantId = $1,
-                    userId = $2,
+                    SET restaurant_id = $1,
+                    user_id = $2,
                     rating = $3,
                     details = $4,
                     date = $5
-                WHERE reviewId = $6 RETURNING *`,
-                [restaurantId, userId, rating, details, date, reviewId]
+                WHERE review_id = $6 RETURNING *`,
+                [restaurant_id, user_id, rating, details, date, review_id]
             )
 
             res.status(200).json({
@@ -165,10 +165,10 @@ module.exports = app => {
         }
     })
 
-    app.delete('/api/reviews/:reviewId', async (req, res) => {
+    app.delete('/api/reviews/:review_id', async (req, res) => {
         try {
-            const { reviewId } = req.params;
-            const review = await client.query('DELETE FROM reviews WHERE reviewId = $1', [reviewId]);
+            const { review_id } = req.params;
+            const review = await client.query('DELETE FROM reviews WHERE review_id = $1', [review_id]);
 
             res.status(200).json({ success: true })
         } catch (err) {
@@ -177,13 +177,13 @@ module.exports = app => {
     })
 
     // Add an image url
-    app.post('/api/reviewImages', async (req, res) => {
+    app.post('/api/review_images', async (req, res) => {
         try {
-            const { restaurantId, userId, reviewId, url } = req.body;
+            const { restaurant_id, user_id, review_id, url } = req.body;
             const image = await client.query(
-                `INSERT INTO reviewImages (restaurantId, userId, reviewId, url)
+                `INSERT INTO review_images (restaurant_id, user_id, review_id, url)
                 VALUES ($1, $2, $3, $4)`,
-                [restaurantId, userId, reviewId, url]
+                [restaurant_id, user_id, review_id, url]
             )
 
             res.status(201).json({ success: true })
@@ -193,10 +193,10 @@ module.exports = app => {
     })
 
     // Get images for a restaurant
-    app.get('/api/reviewImages/restaurants/:restaurantId', async (req, res) => {
+    app.get('/api/review_images/restaurants/:restaurant_id', async (req, res) => {
         try {
-            const { restaurantId } = req.params;
-            const images = await client.query('SELECT * FROM reviewImages WHERE restaurantId = $1', [restaurantId]);
+            const { restaurant_id } = req.params;
+            const images = await client.query('SELECT * FROM review_images WHERE restaurant_id = $1', [restaurant_id]);
             if (!images.rows.length) return res.status(404).send('No images yet');
 
             res.status(200).json({
@@ -209,19 +209,19 @@ module.exports = app => {
         }
     })
 
-    app.get('/api/reviewImages/users/:userId', async (req, res) => {
+    app.get('/api/review_images/users/:user_id', async (req, res) => {
         try {
-            const { userId } = req.params;
-            const userImages = await client.query(
-                `SELECT * FROM reviewImages
-                    WHERE userId = $1
+            const { user_id } = req.params;
+            const user_images = await client.query(
+                `SELECT * FROM review_images
+                    WHERE user_id = $1
                     `,
-                [userId]
+                [user_id]
             )
 
             res.status(200).json({
                 success: true,
-                results: userImages.rows
+                results: user_images.rows
             });
         } catch (err) {
             res.status(500).send('Server error');

@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const reviewSchema = new Schema({
-    restaurantId: {
+    restaurant_id: {
         type: Number,
         required: true
     },
-    userId: {
+    user_id: {
         type: Number,
         required: true
     },
@@ -24,9 +24,9 @@ const reviewSchema = new Schema({
         required: true
     },
     images: [{
-        imageUrl: String
+        image_url: String
     }],
-    updatedAt: Date
+    updated_at: Date
 })
 
 module.exports = mongoose.model('Review', reviewSchema);

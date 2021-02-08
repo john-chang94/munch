@@ -9,12 +9,12 @@ import { Link } from 'react-router-dom';
 class Profile extends Component {
     state = {
         isLoading: true,
-        firstName: '',
-        lastName: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
-        newPassword: '',
-        confirmNewPassword: '',
+        new_password: '',
+        confirm_new_password: '',
         showEditGeneral: false,
         showGeneralInfo: true,
         showEditPassword: false,
@@ -23,8 +23,8 @@ class Profile extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchUser(this.props.match.params.userId);
-        await this.props.fetchUserImage(this.props.match.params.userId);
+        await this.props.fetchUser(this.props.match.params.user_id);
+        await this.props.fetchUserImage(this.props.match.params.user_id);
         this.setState({ isLoading: false })
     }
 
@@ -35,10 +35,9 @@ class Profile extends Component {
     enableEditGeneral = async () => {
         const { user } = this.props;
         await this.setState({
-            firstName: user.firstName,
-            lastName: user.lastName,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,
-            bio: user.bio,
             showEditGeneral: true
         })
         // Prefill values and move labels above
@@ -75,28 +74,28 @@ class Profile extends Component {
     }
 
     handleUpdateUser = async () => {
-        const { firstName, lastName, email } = this.state;
-        const userId = this.props.match.params.userId;
-        const body = { firstName, lastName, email };
+        const { first_name, last_name, email } = this.state;
+        const user_id = this.props.match.params.user_id;
+        const body = { first_name, last_name, email };
 
-        await this.props.updateUser(userId, body);
+        await this.props.updateUser(user_id, body);
 
         if (this.props.userError) {
             M.toast({ html: this.props.userError, classes: "red darken-1" });
             this.props.clear();
         } else {
-            await this.props.fetchUser(userId);
+            await this.props.fetchUser(user_id);
             M.toast({ html: 'Update success!', classes: "light-blue darken-2" });
             this.setState({ showEditGeneral: false })
         }
     }
 
     handleUpdateUserPassword = async () => {
-        const { password, newPassword, confirmNewPassword } = this.state;
-        const userId = this.props.match.params.userId;
-        const body = { password, newPassword, confirmNewPassword };
+        const { password, new_password, confirm_new_password } = this.state;
+        const user_id = this.props.match.params.user_id;
+        const body = { password, new_password, confirm_new_password };
 
-        await this.props.updateUserPassword(userId, body);
+        await this.props.updateUserPassword(user_id, body);
 
         if (this.props.userError) {
             M.toast({ html: this.props.userError, classes: "red darken-1" });
@@ -105,8 +104,8 @@ class Profile extends Component {
             M.toast({ html: 'Update success!', classes: "light-blue darken-2" });
             this.setState({
                 password: '',
-                newPassword: '',
-                confirmNewPassword: ''
+                new_password: '',
+                confirm_new_password: ''
             })
             M.updateTextFields();
         }
@@ -119,11 +118,11 @@ class Profile extends Component {
                 <div className="mt-sm">
                     <p className="mb-sm teal-text darken-4"><strong>General information</strong></p>
                     <label htmlFor="">First Name</label>
-                    <p>{user.firstName}</p>
+                    <p>{user.first_name}</p>
                 </div>
                 <div className="mt-sm">
                     <label htmlFor="">Last Name</label>
-                    <p>{user.lastName}</p>
+                    <p>{user.last_name}</p>
                 </div>
                 <div className="mt-sm">
                     <label htmlFor="">Email</label>
@@ -133,23 +132,23 @@ class Profile extends Component {
                     <button className="btn" onClick={this.enableEditGeneral}>Edit</button>
                 </div>
                 <div className="mt-1">
-                    <Link to={`/profile/${user.userId}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
+                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
                 </div>
             </div>
         )
     }
 
     renderEditGeneral = () => {
-        const { firstName, lastName, email } = this.state;
+        const { first_name, last_name, email } = this.state;
         return (
             <div className="mt-3">
                 <div className="input-field">
-                    <input type="text" id="firstName" value={firstName} onChange={this.handleChange} />
-                    <label htmlFor="firstName">First Name</label>
+                    <input type="text" id="first_name" value={first_name} onChange={this.handleChange} />
+                    <label htmlFor="first_name">First Name</label>
                 </div>
                 <div className="input-field">
-                    <input type="text" id="lastName" value={lastName} onChange={this.handleChange} />
-                    <label htmlFor="lastName">Last Name</label>
+                    <input type="text" id="last_name" value={last_name} onChange={this.handleChange} />
+                    <label htmlFor="last_name">Last Name</label>
                 </div>
                 <div className="input-field">
                     <input type="text" id="email" value={email} onChange={this.handleChange} />
@@ -162,7 +161,7 @@ class Profile extends Component {
     }
 
     renderEditPassword = () => {
-        const { password, newPassword, confirmNewPassword } = this.state;
+        const { password, new_password, confirm_new_password } = this.state;
         return (
             <div className="mt-2">
                 <p className="teal-text darken-4"><strong>Reset password</strong></p>
@@ -171,12 +170,12 @@ class Profile extends Component {
                     <label htmlFor="password">Current Password</label>
                 </div>
                 <div className="input-field">
-                    <input type="password" id="newPassword" value={newPassword} onChange={this.handleChange} />
-                    <label htmlFor="newPassword">New Password</label>
+                    <input type="password" id="new_password" value={new_password} onChange={this.handleChange} />
+                    <label htmlFor="new_password">New Password</label>
                 </div>
                 <div className="input-field">
-                    <input type="password" id="confirmNewPassword" value={confirmNewPassword} onChange={this.handleChange} />
-                    <label htmlFor="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirm_new_password" value={confirm_new_password} onChange={this.handleChange} />
+                    <label htmlFor="confirm_new_password">Confirm New Password</label>
                 </div>
                 <button className="btn" onClick={this.handleUpdateUserPassword}>Update</button>
             </div>
