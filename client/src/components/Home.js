@@ -134,18 +134,18 @@ class Home extends Component {
                     <h4>Featured</h4>
                 </div>
 
-                {/* <div>
+                <div>
                     {
                         isLoading
                             ? <div className="center">
                                 <Preloader />
                             </div>
-                            : featured.map((restaurant) => (
-                                <div key={restaurant.restaurant_id}>
+                            : featured.map((restaurant, i) => (
+                                <div key={i}>
                                     <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
                                         <RestaurantCard
                                             name={restaurant.name}
-                                            category={restaurant.category}
+                                            categories={restaurant.categories}
                                             rating={restaurant.rating}
                                             total_ratings={restaurant.total_ratings}
                                             price={restaurant.price}
@@ -154,7 +154,7 @@ class Home extends Component {
                                 </div>
                             ))
                     }
-                </div> */}
+                </div>
             </div>
         );
     }

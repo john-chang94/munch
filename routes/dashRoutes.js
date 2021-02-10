@@ -46,12 +46,23 @@ const queryCheck = async (reqQuery) => {
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
-    AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
-        FROM restaurants AS r
-        JOIN reviews AS rev
-        ON r.restaurant_id = rev.restaurant_id
-    GROUP BY r.restaurant_id`
+    // if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
+    // AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+    //     FROM restaurants AS r
+    //     JOIN reviews AS rev
+    //     ON r.restaurant_id = rev.restaurant_id
+    // GROUP BY r.restaurant_id`
+
+    if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.price, array_agg(DISTINCT c.category) AS categories,
+    AVG(re.rating) AS rating, COUNT(DISTINCT re.rating) AS total_ratings
+    FROM restaurants AS r
+        JOIN restaurant_categories AS rc
+            ON r.restaurant_id = rc.restaurant_id
+        JOIN categories AS c
+            ON rc.category_id = c.category_id
+        LEFT JOIN reviews AS re
+            ON r.restaurant_id = re.restaurant_id
+        GROUP BY r.restaurant_id`
 
     // Run query in pg
     let results = await client.query(ratingText, values);
@@ -79,13 +90,17 @@ module.exports = app => {
         try {
             const { restaurant_id } = req.params;
             const restaurant = await client.query(
-                `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
-                AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
+                `SELECT r.restaurant_id, r.name, r.price, array_agg(DISTINCT c.category) AS categories,
+                AVG(re.rating) AS rating, COUNT(DISTINCT re.rating) AS total_ratings
                     FROM restaurants AS r
-                    JOIN reviews AS rev
-                    ON r.restaurant_id = rev.restaurant_id
-                WHERE r.restaurant_id = $1
-                GROUP BY r.restaurant_id`, [restaurant_id])
+                    JOIN restaurant_categories AS rc
+                        ON r.restaurant_id = rc.restaurant_id
+                    JOIN categories AS c
+                        ON rc.category_id = c.category_id
+                    LEFT JOIN reviews AS re
+                        ON r.restaurant_id = re.restaurant_id
+                    WHERE r.restaurant_id = $1
+                    GROUP BY r.restaurant_id`, [restaurant_id])
 
             if (!restaurant.rows.length) return res.status(404).send('No restaurant found');
 

@@ -22,7 +22,7 @@ class Restaurant extends Component {
         await this.props.fetchRestaurant(restaurant_id);
 
         // Render rating with stars
-        let stars = renderStars(this.props.restaurant.rating);
+        let stars = renderStars(restaurant_id);
         this.setState({ stars, isLoading: false })
 
         // Initialize media lightbox
@@ -48,7 +48,9 @@ class Restaurant extends Component {
                                 restaurant &&
                                 <div className="mb-1">
                                     <p className="heading">{restaurant.name}</p>
-                                    <p className="cat-heading">{restaurant.category}</p>
+                                    <p className="cat-heading">{restaurant.categories.map((category, i) =>
+                                        <span key={i}>{category}, </span>
+                                    )}</p>
                                     <p>{stars} ({restaurant.total_ratings})</p>
                                     <p>Price range: {'$'.repeat(parseInt(restaurant.price))}</p>
                                 </div>

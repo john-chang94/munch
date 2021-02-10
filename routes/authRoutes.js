@@ -7,7 +7,7 @@ const authorizeToken = require('../middlewares/authorizeToken');
 module.exports = app => {
     app.post('/auth/register', registerUserValidator, async (req, res) => {
         try {
-            let { first_name, last_name, email, password } = req.body;
+            let { is_admin, first_name, last_name, email, password } = req.body;
 
             // Check if user exists
             const user = await client.query('SELECT * FROM users WHERE email = $1', [email])
@@ -24,9 +24,9 @@ module.exports = app => {
 
                         // Add new user into db
                         const newUser = await client.query(
-                            `INSERT INTO users (first_name, last_name, email, password)
-                            VALUES ($1, $2, $3, $4) RETURNING *`,
-                            [first_name, last_name, email, password]
+                            `INSERT INTO users (is_admin, first_name, last_name, email, password)
+                            VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                            [is_admin, first_name, last_name, email, password]
                         )
 
                         res.status(201).json({ success: true })

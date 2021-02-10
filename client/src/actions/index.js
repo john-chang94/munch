@@ -137,7 +137,7 @@ export const fetchFeatured = () => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants`);
-            dispatch({ type: 'FETCH_FEATURED', payload: res.data.data.slice(0, 5) })
+            dispatch({ type: 'FETCH_FEATURED', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
