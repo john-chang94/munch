@@ -9,8 +9,12 @@ class Reviews extends Component {
         this.props.fetchReviewsForRestaurant(this.props.restaurant_id);
     }
 
+    componentWillUnmount() {
+        this.props.clearReviews();
+    }
+
     render() {
-        const { reviewError, reviews } = this.props;
+        const { reviews } = this.props;
         return (
             <div>
                 <h5>Reviews</h5>
@@ -26,7 +30,7 @@ class Reviews extends Component {
                                 </div>
                             </div>
                         ))
-                        : <div className="center">{reviewError}</div>
+                        : <div className="center">No reviews yet</div>
                 }
             </div>
         );
@@ -35,8 +39,7 @@ class Reviews extends Component {
 
 const mapStateToProps = state => {
     return {
-        reviews: state.review.reviews,
-        reviewError: state.review.reviewError
+        reviews: state.review.reviews
     }
 }
 

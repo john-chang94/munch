@@ -8,9 +8,15 @@ if (token) {
 }
 
 export const clear = () => {
-    return dispatch => {
-        dispatch({ type: 'CLEAR_ERROR' })
-    }
+    return dispatch => dispatch({ type: 'CLEAR_ERROR' })
+}
+
+export const clearReviews = () => {
+    return dispatch => dispatch({ type: 'CLEAR_REVIEWS' })
+}
+
+export const clearReviewImages = () => {
+    return dispatch => dispatch({ type: 'CLEAR_REVIEW_IMAGES' })
 }
 
 /////////////////////////////
@@ -161,7 +167,7 @@ export const fetchImagesForRestaurant = restaurant_id => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/review_images/restaurants/${restaurant_id}`);
             dispatch({ type: 'FETCH_IMAGES_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
-            dispatch({ type: 'DASH_ERROR', payload: err.response.data })
+            dispatch({ type: 'NULL', payload: err.response.data })
         }
     }
 }
@@ -220,7 +226,7 @@ export const fetchReviewsForRestaurant = restaurant_id => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/restaurants/${restaurant_id}`);
             dispatch({ type: 'FETCH_REVIEWS_FOR_RESTAURANT', payload: res.data })
         } catch (err) {
-            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
+            dispatch({ type: 'NULL', payload: err.response.data })
         }
     }
 }
@@ -231,7 +237,7 @@ export const fetchReviewsByUser = user_id => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${user_id}`)
             dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data })
         } catch (err) {
-            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
+            dispatch({ type: 'NULL', payload: err.response.data })
         }
     }
 }

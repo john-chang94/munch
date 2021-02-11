@@ -12,7 +12,7 @@ class AddReview extends Component {
         stars: [],
         rating: '',
         details: '',
-        file: '',
+        files: '',
         url: '',
         modalIsOpen: false
     }
@@ -65,12 +65,12 @@ class AddReview extends Component {
     }
 
     handleImage = e => {
-        this.setState({ file: e.target.files[0] })
+        this.setState({ files: e.target.files })
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        const { rating, details, file } = this.state;
+        const { rating, details, files } = this.state;
         const { user_id } = this.props.user;
         const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
         const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
@@ -78,13 +78,14 @@ class AddReview extends Component {
         // Add review to db
         await this.props.addReview(body);
 
+        // Stop submit if any errors from review upload
         if (this.props.reviewError) {
             M.toast({ html: this.props.reviewError, classes: "red darken-1" })
             return this.props.clear(); // Clear reviewError in redux store
         }
 
-        // Run if no image upload
-        if (!file) {
+        // Run success message and refresh if there are no images to upload
+        if (!files) {
             M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
             this.setState({ details: '' })
             this.renderEmptyStars();
@@ -92,32 +93,42 @@ class AddReview extends Component {
             this.props.fetchReviewsForRestaurant(restaurant_id);
         }
 
-        // Add image to firebase
-        if (file) {
-            // Reference images folder in firebase storage
-            const uploadTask = storage.ref(`/images/${file.name}`).put(file);
+        // Run if there are images to upload
+        if (files) {
+            this.uploadImages(files, restaurant_id, user_id);
+        }
+    }
+
+    uploadImages = async (files, restaurant_id, user_id) => {
+        for (let i = 0; i < files.length; i++) {
+            // Upload image to firebase storage
+            const uploadTask = storage.ref(`/images/reviews/${files[i].name}`).put(files[i]);
             uploadTask.on('state_changed', console.log, console.error, () => {
                 storage
-                    .ref('images') // Images folder in firebase storage
-                    .child(file.name) // Child is the level inside images directory
+                    .ref('images/reviews') // Reference review images folder location
+                    .child(files[i].name) // Child is the level inside /reviews directory
                     .getDownloadURL() // Fetch image URL from firebase
                     .then(async (url) => {
                         const imageBody = {
                             restaurant_id,
                             user_id,
                             review_id: this.props.review.review_id,
-                            url
+                            image_url: url
                         }
-                        // Add image url to db with required foreign keys
+                        // Add image url to pg with required foreign keys
                         await this.props.addReviewImage(imageBody);
 
-                        // Show success message and clear form
-                        M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
-                        this.setState({ details: '' })
-                        this.renderEmptyStars();
+                        // Update page once loop is done
+                        if (i === files.length - 1) {
+                            // Update reviews and images
+                            this.props.fetchReviewsForRestaurant(restaurant_id);
+                            this.props.fetchImagesForRestaurant(restaurant_id);
 
-                        // Refresh review list
-                        this.props.fetchReviewsForRestaurant(restaurant_id);
+                            // Show success message and clear form
+                            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
+                            this.setState({ details: '' })
+                            this.renderEmptyStars();
+                        }
                     });
             });
         }
@@ -149,8 +160,8 @@ class AddReview extends Component {
                                     <label htmlFor="details">Details</label>
                                 </div>
                                 <div>
-                                    <p>Add a photo (optional)</p>
-                                    <input type="file" onChange={this.handleImage} />
+                                    <p>Add photos (optional)</p>
+                                    <input type="file" onChange={this.handleImage} multiple />
                                 </div>
                                 <div className="mt-1">
                                     <button className="btn">Submit</button>

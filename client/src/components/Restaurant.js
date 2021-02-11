@@ -22,7 +22,7 @@ class Restaurant extends Component {
         await this.props.fetchRestaurant(restaurant_id);
 
         // Render rating with stars
-        let stars = renderStars(restaurant_id);
+        let stars = renderStars(this.props.restaurant.rating);
         this.setState({ stars, isLoading: false })
 
         // Initialize media lightbox
@@ -31,10 +31,11 @@ class Restaurant extends Component {
 
     componentWillUnmount() {
         this.props.clear();
+        this.props.clearReviewImages();
     }
 
     render() {
-        const { restaurant, images, dashError } = this.props;
+        const { restaurant, images } = this.props;
         const { stars, isLoading } = this.state;
         return (
             <div className="container">
@@ -57,14 +58,13 @@ class Restaurant extends Component {
                             }
 
                             {   // Display message if there are no images for the restaurant
-                                dashError
-                                    ? <h5 className="center">{dashError}</h5>
-                                    : <div>
+                                images
+                                    ? <div>
                                         <div className="flex wrap-around justify-se">
                                             {
                                                 images && images.slice(0, 4).map((image, i) => (
                                                     <div className="crop mt-1 mb-sm z-depth-2" key={i}>
-                                                        <img className="materialboxed" src={image.url} alt="" />
+                                                        <img className="materialboxed" src={image.image_url} alt="" />
                                                     </div>
                                                 ))
                                             }
@@ -73,9 +73,10 @@ class Restaurant extends Component {
                                         <div className="center mt-2">
                                             <Link className="z-depth-1 black-text bg-x-light-gray bg-hover view-all" to={`/restaurants/${this.props.match.params.restaurant_id}/photos`}>
                                                 View All Photos
-                                            </Link>
+                                        </Link>
                                         </div>
                                     </div>
+                                    : <h5 className="center">No images yet</h5>
                             }
 
                             <hr className="mt-4 mb-3" />
@@ -95,8 +96,7 @@ class Restaurant extends Component {
 const mapStateToProps = state => {
     return {
         restaurant: state.dash.restaurant,
-        images: state.review.images,
-        dashError: state.dash.dashError
+        images: state.review.images
     }
 }
 

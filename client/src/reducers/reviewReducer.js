@@ -10,6 +10,16 @@ const reviewReducer = (state = {}, action) => {
                 ...state,
                 reviewError: null
             }
+        case 'CLEAR_REVIEWS':
+            return {
+                ...state,
+                reviews: null
+            }
+        case 'CLEAR_REVIEW_IMAGES':
+            return {
+                ...state,
+                images: null
+            }
         case 'ADD_REVIEW':
             return {
                 ...state,

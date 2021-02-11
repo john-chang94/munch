@@ -179,11 +179,11 @@ module.exports = app => {
     // Add an image url
     app.post('/api/review_images', async (req, res) => {
         try {
-            const { restaurant_id, user_id, review_id, url } = req.body;
+            const { restaurant_id, user_id, review_id, image_url } = req.body;
             const image = await client.query(
-                `INSERT INTO review_images (restaurant_id, user_id, review_id, url)
+                `INSERT INTO review_images (restaurant_id, user_id, review_id, image_url)
                 VALUES ($1, $2, $3, $4)`,
-                [restaurant_id, user_id, review_id, url]
+                [restaurant_id, user_id, review_id, image_url]
             )
 
             res.status(201).json({ success: true })

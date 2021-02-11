@@ -97,11 +97,11 @@ module.exports = app => {
 
     app.post('/api/users/user_images', async (req, res) => {
         try {
-            const { user_id, url } = req.body;
+            const { user_id, image_url } = req.body;
             const image = await client.query(
-                `INSERT INTO user_images (user_id, url)
+                `INSERT INTO user_images (user_id, image_url)
                 VALUES ($1, $2)`,
-                [user_id, url]
+                [user_id, image_url]
             )
 
             res.status(201).json({ success: true });
