@@ -64,7 +64,7 @@ class EditUserImageModal extends Component {
             >
                 <div className="center">
                     <div>
-                        <img src={userImage.url} style={{ maxHeight: '350px', maxWidth: '75%' }} alt="" />
+                        <img src={userImage.image_url} style={{ maxHeight: '350px', maxWidth: '75%' }} alt="" />
                         {
                             !userImage.user_id == 0 &&
                             <p className="red-text darken-1 pointer" onClick={this.handleImageDelete}>Delete profile picture</p>

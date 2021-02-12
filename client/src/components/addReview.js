@@ -14,7 +14,8 @@ class AddReview extends Component {
         details: '',
         files: '',
         url: '',
-        modalIsOpen: false
+        modalIsOpen: false,
+        submitLoading: false
     }
 
     componentDidMount() {
@@ -70,8 +71,9 @@ class AddReview extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
+        this.setState({ submitLoading: true })
         const { rating, details, files } = this.state;
-        const { user_id } = this.props.user;
+        const user_id = this.props.user.user_id;
         const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
         const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
 
@@ -81,13 +83,17 @@ class AddReview extends Component {
         // Stop submit if any errors from review upload
         if (this.props.reviewError) {
             M.toast({ html: this.props.reviewError, classes: "red darken-1" })
+            this.setState({ submitLoading: false })
             return this.props.clear(); // Clear reviewError in redux store
         }
 
         // Run success message and refresh if there are no images to upload
         if (!files) {
             M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
-            this.setState({ details: '' })
+            this.setState({
+                details: '',
+                submitLoading: false
+            })
             this.renderEmptyStars();
             // Refresh review list
             this.props.fetchReviewsForRestaurant(restaurant_id);
@@ -120,14 +126,19 @@ class AddReview extends Component {
 
                         // Update page once loop is done
                         if (i === files.length - 1) {
-                            // Update reviews and images
-                            this.props.fetchReviewsForRestaurant(restaurant_id);
-                            this.props.fetchImagesForRestaurant(restaurant_id);
+                            setTimeout(() => {
+                                // Update reviews and images
+                                this.props.fetchReviewsForRestaurant(restaurant_id);
+                                this.props.fetchImagesForRestaurant(restaurant_id);
 
-                            // Show success message and clear form
-                            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
-                            this.setState({ details: '' })
-                            this.renderEmptyStars();
+                                // Show success message and clear form
+                                M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
+                                this.setState({
+                                    details: '',
+                                    submitLoading: false
+                                })
+                                this.renderEmptyStars();
+                            }, 1200);
                         }
                     });
             });
@@ -143,28 +154,42 @@ class AddReview extends Component {
     }
 
     render() {
-        const { details, stars, modalIsOpen } = this.state;
-        const { user } = this.props;
+        const { details, stars, modalIsOpen, submitLoading } = this.state;
+        const { user, userHasReview } = this.props;
         return (
             <div>
                 {
                     user
                         ? <div className="bg-x-light-gray pt-2 pb-3 pl-2 pr-2">
-                            <p>Leave a review</p>
-                            <div>
-                                <p>{stars}</p>
-                            </div>
-                            <form onSubmit={this.handleSubmit}>
+                            {
+                                userHasReview
+                                    ? <div>
+                                        <p>Edit your review</p>
+                                    </div>
+                                    : <div>
+                                        <p>Leave a review</p>
+                                        <p>{stars}</p>
+                                    </div>
+                            }
+
+                            <form onSubmit={this.handleSubmit} >
                                 <div className="input-field">
-                                    <textarea className="materialize-textarea" id="details" value={details} onChange={this.handleChange}></textarea>
+                                    <textarea
+                                        className="materialize-textarea"
+                                        id="details"
+                                        value={details}
+                                        onChange={this.handleChange}
+                                        disabled={userHasReview}
+                                    >
+                                    </textarea>
                                     <label htmlFor="details">Details</label>
                                 </div>
                                 <div>
                                     <p>Add photos (optional)</p>
-                                    <input type="file" onChange={this.handleImage} multiple />
+                                    <input type="file" onChange={this.handleImage} multiple disabled={userHasReview}/>
                                 </div>
                                 <div className="mt-1">
-                                    <button className="btn">Submit</button>
+                                    <button className="btn" disabled={submitLoading || userHasReview}>{submitLoading ? 'Submitting...' : 'Submit'}</button>
                                 </div>
                             </form>
                         </div>

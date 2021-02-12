@@ -198,7 +198,7 @@ class Profile extends Component {
                                 <div>
                                     <div className="col l3 m3 s12 mt-3">
                                         <div className="center">
-                                            <img src={userImage.url} className="w-75" alt="" />
+                                            <img src={userImage.image_url} className="w-75" alt="" />
                                             <div className="mt-sm">
                                                 <p className="teal-text darken-4 pointer" onClick={this.openModal}>Edit profile picture</p>
                                             </div>

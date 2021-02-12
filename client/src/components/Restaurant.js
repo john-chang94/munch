@@ -12,14 +12,25 @@ import Preloader from './Preloader';
 class Restaurant extends Component {
     state = {
         stars: [],
-        isLoading: true
+        isLoading: true,
+        userHasReview: false
     }
 
     async componentDidMount() {
         const restaurant_id = this.props.match.params.restaurant_id;
 
-        await this.props.fetchImagesForRestaurant(restaurant_id);
         await this.props.fetchRestaurant(restaurant_id);
+        await this.props.fetchImagesForRestaurant(restaurant_id);
+        await this.props.fetchReviewsForRestaurant(restaurant_id);
+
+        // Check if user posted a review for current restaurant
+        if (this.props.user && this.props.reviews) {
+            const userHasReview = await this.props.reviews.filter(review => {
+                return this.props.user.user_id === review.user_id
+            })
+            if (userHasReview.length) this.setState({ userHasReview: true })
+            if (!userHasReview.length) this.setState({ userHasReview: false })
+        }
 
         // Render rating with stars
         let stars = renderStars(this.props.restaurant.rating);
@@ -36,7 +47,7 @@ class Restaurant extends Component {
 
     render() {
         const { restaurant, images } = this.props;
-        const { stars, isLoading } = this.state;
+        const { stars, isLoading, userHasReview } = this.state;
         return (
             <div className="container">
                 {
@@ -57,7 +68,7 @@ class Restaurant extends Component {
                                 </div>
                             }
 
-                            {   // Display message if there are no images for the restaurant
+                            {   
                                 images
                                     ? <div>
                                         <div className="flex wrap-around justify-se">
@@ -81,7 +92,7 @@ class Restaurant extends Component {
 
                             <hr className="mt-4 mb-3" />
 
-                            <AddReview />
+                            <AddReview userHasReview={userHasReview} />
 
                             <hr className="mt-3 mb-3" />
 
@@ -96,7 +107,9 @@ class Restaurant extends Component {
 const mapStateToProps = state => {
     return {
         restaurant: state.dash.restaurant,
-        images: state.review.images
+        images: state.review.images,
+        reviews: state.review.reviews,
+        user: state.auth.user
     }
 }
 

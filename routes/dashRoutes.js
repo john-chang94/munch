@@ -71,7 +71,7 @@ const queryCheck = async (reqQuery) => {
         )
         SELECT
             restaurants.restaurant_id, restaurants.name, restaurants.price, restaurants.categories,
-            ratings.rating, ratings.total_ratings
+            ratings.rating, COALESCE (ratings.total_ratings, 0) AS total_ratings
         FROM restaurants FULL OUTER JOIN ratings
         ON restaurants.restaurant_id = ratings.restaurant_id`
 
@@ -106,7 +106,7 @@ module.exports = app => {
                     FROM restaurants AS r 
                         JOIN restaurant_categories AS rc
                             ON r.restaurant_id = rc.restaurant_id
-                        LEFT JOIN categories AS c
+                        JOIN categories AS c
                             ON rc.category_id = c.category_id
                         WHERE r.restaurant_id = $1
                         GROUP BY r.restaurant_id
@@ -121,7 +121,7 @@ module.exports = app => {
                 )
                 SELECT
                     restaurants.restaurant_id, restaurants.name, restaurants.price, restaurants.categories,
-                    ratings.rating, ratings.total_ratings
+                    ratings.rating, COALESCE (ratings.total_ratings, 0) AS total_ratings
                 FROM restaurants FULL JOIN ratings
                 ON restaurants.restaurant_id = ratings.restaurant_id`, [restaurant_id])
 
