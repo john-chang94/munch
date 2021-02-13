@@ -12,8 +12,7 @@ import Preloader from './Preloader';
 class Restaurant extends Component {
     state = {
         stars: [],
-        isLoading: true,
-        userHasReview: false
+        isLoading: true
     }
 
     async componentDidMount() {
@@ -25,11 +24,7 @@ class Restaurant extends Component {
 
         // Check if user posted a review for current restaurant
         if (this.props.user && this.props.reviews) {
-            const userHasReview = await this.props.reviews.filter(review => {
-                return this.props.user.user_id === review.user_id
-            })
-            if (userHasReview.length) this.setState({ userHasReview: true })
-            if (!userHasReview.length) this.setState({ userHasReview: false })
+            this.props.checkUserHasReview(this.props.reviews, this.props.user);
         }
 
         // Render rating with stars
@@ -42,12 +37,11 @@ class Restaurant extends Component {
 
     componentWillUnmount() {
         this.props.clear();
-        this.props.clearReviewImages();
     }
 
     render() {
         const { restaurant, images } = this.props;
-        const { stars, isLoading, userHasReview } = this.state;
+        const { stars, isLoading } = this.state;
         return (
             <div className="container">
                 {
@@ -63,12 +57,12 @@ class Restaurant extends Component {
                                     <p className="cat-heading">{restaurant.categories.map((category, i) =>
                                         <span key={i}>{category}, </span>
                                     )}</p>
-                                    <p>{stars} ({restaurant.total_ratings})</p>
+                                    <p>{stars} ({restaurant.total_ratings} reviews)</p>
                                     <p>Price range: {'$'.repeat(parseInt(restaurant.price))}</p>
                                 </div>
                             }
 
-                            {   
+                            {
                                 images
                                     ? <div>
                                         <div className="flex wrap-around justify-se">
@@ -92,7 +86,7 @@ class Restaurant extends Component {
 
                             <hr className="mt-4 mb-3" />
 
-                            <AddReview userHasReview={userHasReview} />
+                            <AddReview />
 
                             <hr className="mt-3 mb-3" />
 
@@ -104,12 +98,12 @@ class Restaurant extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ dash, review, auth }) => {
     return {
-        restaurant: state.dash.restaurant,
-        images: state.review.images,
-        reviews: state.review.reviews,
-        user: state.auth.user
+        restaurant: dash.restaurant,
+        images: review.images,
+        reviews: review.reviews,
+        user: auth.user
     }
 }
 

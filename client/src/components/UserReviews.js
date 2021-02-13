@@ -11,18 +11,18 @@ class UserReviews extends Component {
     }
 
     async componentDidMount() {
-        this.props.fetchReviewsByUser(this.props.match.params.user_id);
+        await this.props.fetchReviewsByUser(this.props.match.params.user_id);
         this.setState({ isLoading: false });
     }
 
     render() {
         const { isLoading } = this.state;
-        const { reviews, reviewError } = this.props;
+        const { reviews } = this.props;
         return (
             <div className="container">
                 {
                     isLoading
-                        ? <div>
+                        ? <div className="center mt-5">
                             <Preloader />
                         </div>
                         : <div>
@@ -39,7 +39,7 @@ class UserReviews extends Component {
                                             </div>
                                         </div>
                                     ))
-                                    : <div className="center">{reviewError}</div>
+                                    : <div className="center">No reviews yet</div>
                             }
                         </div>
                 }
@@ -50,8 +50,7 @@ class UserReviews extends Component {
 
 const mapStateToProps = ({ review }) => {
     return {
-        reviews: review.reviews,
-        reviewsError: review.reviewError
+        reviews: review.reviews
     }
 }
 

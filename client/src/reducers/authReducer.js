@@ -23,9 +23,7 @@ const authReducer = (state = {}, action) => {
             }
         case 'SIGN_OUT':
             return {
-                ...state,
-                token: null,
-                user: null
+                state: null
             }
         case 'VERIFY_USER':
             return {

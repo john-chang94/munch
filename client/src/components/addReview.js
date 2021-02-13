@@ -209,7 +209,8 @@ const mapStateToProps = state => {
     return {
         user: state.auth.user,
         review: state.review.review,
-        reviewError: state.review.reviewError
+        reviewError: state.review.reviewError,
+        userHasReview: state.review.userHasReview
     }
 }
 

@@ -9,10 +9,6 @@ class Reviews extends Component {
         this.props.fetchReviewsForRestaurant(this.props.restaurant_id);
     }
 
-    componentWillUnmount() {
-        this.props.clearReviews();
-    }
-
     render() {
         const { reviews } = this.props;
         return (

@@ -11,14 +11,6 @@ export const clear = () => {
     return dispatch => dispatch({ type: 'CLEAR_ERROR' })
 }
 
-export const clearReviews = () => {
-    return dispatch => dispatch({ type: 'CLEAR_REVIEWS' })
-}
-
-export const clearReviewImages = () => {
-    return dispatch => dispatch({ type: 'CLEAR_REVIEW_IMAGES' })
-}
-
 /////////////////////////////
 /////// AUTH ACTIONS ////////
 /////////////////////////////
@@ -50,7 +42,7 @@ export const signIn = body => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signin`, body);
             sessionStorage.setItem('token', res.data.token);
-            
+
             dispatch({ type: 'SIGN_IN', payload: res.data })
         } catch (err) {
             dispatch({ type: 'AUTH_ERROR', payload: err.response.data })
@@ -102,7 +94,7 @@ export const updateUserPassword = (user_id, body) => {
             dispatch({ type: 'USER_ERROR', payload: err.response.data })
         }
     }
-} 
+}
 
 export const addUserImage = body => {
     return async (dispatch) => {
@@ -237,7 +229,17 @@ export const fetchReviewsByUser = user_id => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${user_id}`)
             dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data })
         } catch (err) {
-            dispatch({ type: 'NULL', payload: err.response.data })
+            console.log(err)
         }
+    }
+}
+
+export const checkUserHasReview = (reviews, user) => {
+    return async (dispatch) => {
+        const userHasReview = await reviews.filter(review => {
+            return user.user_id === review.user_id
+        })
+        if (userHasReview.length) dispatch({ type: 'SET_USER_HAS_REVIEW', payload: true })
+        else dispatch({ type: 'SET_USER_HAS_REVIEW', payload: false })
     }
 }

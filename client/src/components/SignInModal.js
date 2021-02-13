@@ -24,7 +24,10 @@ class SignInModal extends Component {
             this.props.clear(); // Clear authError in redux store
         }
 
-        if (this.props.success) this.props.closeModal();
+        if (this.props.success) {
+            await this.props.checkUserHasReview(this.props.reviews, this.props.user);
+            this.props.closeModal();
+        }
     }
 
     render() {
@@ -50,10 +53,10 @@ class SignInModal extends Component {
                 ariaHideApp={false}
             >
                 <div>
-                    <h4>Sign In</h4>
-                    <form onSubmit={this.handleSubmit}>
+                    <h5>Sign In</h5>
+                    <form onSubmit={this.handleSubmit} className="mt-1">
                         <div className="input-field">
-                            <input type="email" id="email" value={email} onChange={this.handleChange} />
+                            <input type="email" id="email" value={email} onChange={this.handleChange} autoFocus />
                             <label htmlFor="email">Email</label>
                         </div>
                         <div className="input-field">
@@ -74,10 +77,12 @@ class SignInModal extends Component {
     
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, review }) => {
     return {
         authError: auth.authError,
-        success: auth.success
+        success: auth.success,
+        reviews: review.reviews,
+        user: auth.user
     }
 }
 

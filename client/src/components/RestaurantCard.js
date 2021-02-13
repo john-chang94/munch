@@ -6,7 +6,7 @@ const RestaurantCard = ({ name, categories, rating, total_ratings, price }) => {
             <div className="card-content">
                 <p>{name}</p>
                 <p className="text-i">{categories.map((category, i) => <span key={i}>{category}, </span>)}</p>
-                <p>{renderStars(rating)} ({total_ratings})</p>
+                <p>{renderStars(rating)} ({total_ratings} reviews)</p>
                 <p>{'$'.repeat(parseInt(price))}</p>
             </div>
         </div>

@@ -97,11 +97,11 @@ module.exports = app => {
 
     app.post('/api/users/user_images', async (req, res) => {
         try {
-            const { user_id, image_url } = req.body;
+            const { user_id, image_url, def } = req.body;
             const image = await client.query(
-                `INSERT INTO user_images (user_id, image_url)
-                VALUES ($1, $2)`,
-                [user_id, image_url]
+                `INSERT INTO user_images (user_id, image_url, def)
+                VALUES ($1, $2, $3)`,
+                [user_id, image_url, def]
             )
 
             res.status(201).json({ success: true });
@@ -128,7 +128,7 @@ module.exports = app => {
 
             // Return default image if there is no user profile picture
             if (!image.rows.length) {
-                const def = await client.query('SELECT * FROM user_images WHERE user_id = 0')
+                const def = await client.query('SELECT * FROM user_images WHERE def = $1', [true])
 
                 return res.status(200).json({
                     success: true,

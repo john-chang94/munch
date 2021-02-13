@@ -21,7 +21,7 @@ class EditUserImageModal extends Component {
                     .child(file.name) // Child is the level inside images directory
                     .getDownloadURL() // Fetch image URL from firebase
                     .then(async (url) => {
-                        const imageBody = { user_id, url };
+                        const imageBody = { user_id, image_url: url, def: false };
                         // Add image url to db
                         await this.props.addUserImage(imageBody);
                         // Fetch updated image to display from props

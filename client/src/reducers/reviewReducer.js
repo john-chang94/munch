@@ -40,6 +40,11 @@ const reviewReducer = (state = {}, action) => {
                 ...state,
                 reviews: action.payload.data
             }
+        case 'SET_USER_HAS_REVIEW':
+            return {
+                ...state,
+                userHasReview: action.payload
+            }
         default:
             return state;
     }

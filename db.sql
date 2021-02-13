@@ -65,8 +65,9 @@ CREATE TABLE images_thumb (
 
 CREATE TABLE user_images (
     user_images_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    image_url VARCHAR(500) NOT NULL
+    user_id INT,
+    image_url VARCHAR(500) NOT NULL,
+    def BOOLEAN
 );
 
 CREATE TABLE suggestions (
