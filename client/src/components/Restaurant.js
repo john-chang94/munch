@@ -40,7 +40,7 @@ class Restaurant extends Component {
     }
 
     render() {
-        const { restaurant, images } = this.props;
+        const { restaurant, images, reviews } = this.props;
         const { stars, isLoading } = this.state;
         return (
             <div className="container">
@@ -86,7 +86,7 @@ class Restaurant extends Component {
 
                             <hr className="mt-4 mb-3" />
 
-                            <AddReview />
+                            <AddReview reviews={reviews} />
 
                             <hr className="mt-3 mb-3" />
 

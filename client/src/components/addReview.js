@@ -96,7 +96,10 @@ class AddReview extends Component {
             })
             this.renderEmptyStars();
             // Refresh review list
-            this.props.fetchReviewsForRestaurant(restaurant_id);
+            await this.props.fetchReviewsForRestaurant(restaurant_id);
+            // Check updated reviews list to disable review form after submission
+            this.props.checkUserHasReview(this.props.reviews, this.props.user);
+            M.updateTextFields();
         }
 
         // Run if there are images to upload
@@ -126,18 +129,21 @@ class AddReview extends Component {
 
                         // Update page once loop is done
                         if (i === files.length - 1) {
-                            setTimeout(() => {
+                            setTimeout(async () => {
                                 // Update reviews and images
-                                this.props.fetchReviewsForRestaurant(restaurant_id);
+                                await this.props.fetchReviewsForRestaurant(restaurant_id);
                                 this.props.fetchImagesForRestaurant(restaurant_id);
 
                                 // Show success message and clear form
                                 M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
-                                this.setState({
+                                await this.setState({
                                     details: '',
                                     submitLoading: false
                                 })
                                 this.renderEmptyStars();
+                                // Check updated reviews list to disable review form after submission
+                                this.props.checkUserHasReview(this.props.reviews, this.props.user);
+                                M.updateTextFields();
                             }, 1200);
                         }
                     });
@@ -179,16 +185,16 @@ class AddReview extends Component {
                                         id="details"
                                         value={details}
                                         onChange={this.handleChange}
-                                        disabled={userHasReview}
+                                        disabled={submitLoading || userHasReview}
                                     >
                                     </textarea>
                                     <label htmlFor="details">Details</label>
                                 </div>
                                 <div>
                                     <p>Add photos (optional)</p>
-                                    <input type="file" onChange={this.handleImage} multiple disabled={userHasReview}/>
+                                    <input type="file" onChange={this.handleImage} multiple disabled={submitLoading || userHasReview}/>
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-sm">
                                     <button className="btn" disabled={submitLoading || userHasReview}>{submitLoading ? 'Submitting...' : 'Submit'}</button>
                                 </div>
                             </form>
