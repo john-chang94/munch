@@ -1,6 +1,7 @@
 const client = require('../config/db');
 const { addReviewValidator, addReviewValidatorM } = require('../middlewares/validator');
 const Review = require('../mdbModels/Review');
+const authorizeToken = require('../middlewares/authorizeToken');
 
 module.exports = app => {
     app.get('/api/reviews', async (req, res) => {
@@ -91,16 +92,29 @@ module.exports = app => {
     })
 
     // Get all reviews for a restaurant with user info
+    // and any images in an array for each review
     app.get('/api/reviews/restaurants/:restaurant_id', async (req, res) => {
         try {
             const { restaurant_id } = req.params;
             const reviews = await client.query(
-                `SELECT r.rating, r.details, r.date, u.user_id, u.first_name, u.last_name
+                `WITH reviews AS (
+                    SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
                     FROM reviews AS r
                         JOIN users AS u
                         ON r.user_id = u.user_id
                     WHERE restaurant_id = $1
-                    ORDER BY r.date DESC`,
+                ),
+                images AS (
+                    SELECT review_id, array_agg(image_url) AS images
+                    FROM review_images
+                        GROUP BY review_id
+                )
+                SELECT
+                    reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
+                    reviews.date, reviews.updated_at, images.images
+                FROM reviews LEFT JOIN images
+                ON reviews.review_id = images.review_id
+                ORDER BY reviews.date DESC`,
                 [restaurant_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews yet');
@@ -111,8 +125,16 @@ module.exports = app => {
                 data: reviews.rows
             })
         } catch (err) {
-            res.status(500).send('Server error');
+            res.status(500).send(err.message);
         }
+    })
+
+    app.get('/test', async (req, res) => {
+        const result = await client.query(`SELECT review_id, array_agg(image_url) AS images
+        FROM review_images
+            GROUP BY review_id`)
+
+            res.send(result.rows)
     })
 
     // Get all reviews from a user

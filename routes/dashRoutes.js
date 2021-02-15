@@ -72,7 +72,7 @@ const queryCheck = async (reqQuery) => {
         SELECT
             restaurants.restaurant_id, restaurants.name, restaurants.price, restaurants.categories,
             ratings.rating, COALESCE (ratings.total_ratings, 0) AS total_ratings
-        FROM restaurants FULL OUTER JOIN ratings
+        FROM restaurants FULL JOIN ratings
         ON restaurants.restaurant_id = ratings.restaurant_id`
 
     // Run query in pg
