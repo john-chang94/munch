@@ -102,7 +102,7 @@ module.exports = app => {
                     FROM reviews AS r
                         JOIN users AS u
                         ON r.user_id = u.user_id
-                    WHERE restaurant_id = $1
+                    WHERE r.restaurant_id = $1
                 ),
                 images AS (
                     SELECT review_id, array_agg(image_url) AS images
@@ -142,12 +142,24 @@ module.exports = app => {
         try {
             const { user_id } = req.params;
             const reviews = await client.query(
-                `SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date, re.name
+                `WITH reviews AS (
+                    SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
                     FROM reviews AS r
-                        JOIN restaurants AS re
-                        ON r.restaurant_id = re.restaurant_id
+                        JOIN users AS u
+                        ON r.user_id = u.user_id
                     WHERE r.user_id = $1
-                    ORDER BY r.date DESC`,
+                ),
+                images AS (
+                    SELECT review_id, array_agg(image_url) AS images
+                    FROM review_images
+                        GROUP BY review_id
+                )
+                SELECT
+                    reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
+                    reviews.date, reviews.updated_at, images.images
+                FROM reviews LEFT JOIN images
+                ON reviews.review_id = images.review_id
+                ORDER BY reviews.date DESC`,
                 [user_id]
             )
             if (!reviews.rows.length) return res.status(404).send('No reviews yet');

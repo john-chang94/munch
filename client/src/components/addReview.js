@@ -192,7 +192,7 @@ class AddReview extends Component {
                                 </div>
                                 <div>
                                     <p>Add photos (optional)</p>
-                                    <input type="file" onChange={this.handleImage} multiple disabled={submitLoading || userHasReview}/>
+                                    <input type="file" onChange={this.handleImage} disabled={submitLoading || userHasReview} multiple />
                                 </div>
                                 <div className="mt-sm">
                                     <button className="btn" disabled={submitLoading || userHasReview}>{submitLoading ? 'Submitting...' : 'Submit'}</button>

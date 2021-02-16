@@ -4,6 +4,7 @@ import * as actions from '../actions';
 import Preloader from './Preloader';
 import { renderStars } from './starsHelper';
 import moment from 'moment';
+import M from 'materialize-css';
 
 class UserReviews extends Component {
     state = {
@@ -13,6 +14,7 @@ class UserReviews extends Component {
     async componentDidMount() {
         await this.props.fetchReviewsByUser(this.props.match.params.user_id);
         this.setState({ isLoading: false });
+        M.Materialbox.init(document.querySelectorAll('.materialboxed'));
     }
 
     render() {
@@ -34,6 +36,16 @@ class UserReviews extends Component {
                                             <p><strong>{review.name}</strong></p>
                                             <p>{renderStars(review.rating)}</p>
                                             <p>{review.details}</p>
+                                            <div className="flex mt-sm">
+                                                {
+                                                    review.images &&
+                                                    review.images.map((image, i) => (
+                                                        <div className="review-crop mr-sm" key={i}>
+                                                            <img src={image} alt="" className="materialboxed" />
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
                                             <div className="mt-1">
                                                 <p className="text-i">{moment(review.date).format('LL')}</p>
                                             </div>

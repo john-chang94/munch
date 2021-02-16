@@ -40,7 +40,7 @@ class Restaurant extends Component {
     }
 
     render() {
-        const { restaurant, images, reviews } = this.props;
+        const { restaurant, images, reviews, user } = this.props;
         const { stars, isLoading } = this.state;
         return (
             <div className="container">
@@ -90,7 +90,10 @@ class Restaurant extends Component {
 
                             <hr className="mt-3 mb-3" />
 
-                            <Reviews restaurant_id={this.props.match.params.restaurant_id} />
+                            <Reviews
+                                restaurant_id={this.props.match.params.restaurant_id}
+                                user={user}
+                            />
                         </div>
                 }
             </div>

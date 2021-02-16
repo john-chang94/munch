@@ -12,7 +12,7 @@ class Reviews extends Component {
     }
 
     render() {
-        const { reviews } = this.props;
+        const { reviews, user } = this.props;
         return (
             <div>
                 <h5>Reviews</h5>
@@ -22,11 +22,11 @@ class Reviews extends Component {
                             <div className="bg-x-light-gray mt-2 pl-2 pr-2 pt-2 pb-2" key={i}>
                                 <p>{renderStars(review.rating)}</p>
                                 <p>{review.details}</p>
-                                <div className="flex">
+                                <div className="flex mt-sm">
                                     {
                                         review.images &&
                                         review.images.map((image, i) => (
-                                            <div className="review-crop mr-sm">
+                                            <div className="review-crop mr-sm" key={i}>
                                                 <img src={image} alt="" className="materialboxed" />
                                             </div>
                                         ))
