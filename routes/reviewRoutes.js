@@ -110,7 +110,7 @@ module.exports = app => {
                         GROUP BY review_id
                 )
                 SELECT
-                    reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
+                    reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
                     reviews.date, reviews.updated_at, images.images
                 FROM reviews LEFT JOIN images
                 ON reviews.review_id = images.review_id

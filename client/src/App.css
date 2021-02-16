@@ -329,6 +329,17 @@ html, body, #root, #root>.outer-wrapper {
   max-height: 500px;
 }
 
+.review-crop {
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+}
+
+.review-crop img {
+  max-width: 125px;
+  max-height: 125px;
+}
+
 .all-img {
   overflow: hidden;
   width: 200px;
