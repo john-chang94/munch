@@ -210,7 +210,7 @@ const Search = (props) => {
                                             <Link to={`/restaurants/${restaurant.restaurant_id}`} className="black-text">
                                                 <RestaurantCard
                                                     name={restaurant.name}
-                                                    category={restaurant.category}
+                                                    categories={restaurant.categories}
                                                     rating={restaurant.rating}
                                                     total_ratings={restaurant.total_ratings}
                                                     price={restaurant.price}

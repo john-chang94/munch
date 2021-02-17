@@ -6,20 +6,23 @@ const queryCheck = async (reqQuery) => {
     let isQuery = false;
     let values = [];
     let num = 1;
-    // Join restaurants and reviews to get the ratings
+
+    // Join restaurants and categories, first half of query string
     let queryStr = [
-        `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
-        AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
-            FROM restaurants AS r
-            JOIN reviews AS rev
-            ON r.restaurant_id = rev.restaurant_id
-        WHERE`
+        `WITH restaurants AS (
+        SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
+            FROM restaurants AS r 
+            JOIN restaurant_categories AS rc
+                ON r.restaurant_id = rc.restaurant_id
+            JOIN categories AS c
+                ON rc.category_id = c.category_id
+            WHERE`
     ]
     const validQueries = ['location', 'category', 'price'];
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
-        queryStr.push(`(lower(name) LIKE $${num++} OR lower(category) LIKE $${num++})`);
+        queryStr.push(`(lower(r.name) LIKE $${num++} OR lower(c.category) LIKE $${num++})`);
         queryStr.push('AND');
         // Search for values that have any characters following the user input with %
         values.push(`${reqQuery['find'].toLowerCase()}%`);
@@ -40,19 +43,25 @@ const queryCheck = async (reqQuery) => {
     }
     // Remove extra 'AND'
     queryStr.pop();
-    // Add the final GROUP BY clause
-    queryStr.push('GROUP BY r.restaurant_id');
+    // Add the second part of the query string
+    queryStr.push(`GROUP BY r.restaurant_id
+    ),
+    ratings AS (
+    SELECT r.restaurant_id, AVG(re.rating) AS rating, COUNT(re.rating) AS total_ratings
+    FROM restaurants AS r
+        JOIN reviews AS re
+            ON r.restaurant_id = re.restaurant_id
+        GROUP BY r.restaurant_id
+    )
+    SELECT
+        restaurants.restaurant_id, restaurants.name, restaurants.price, restaurants.categories,
+        ratings.rating, COALESCE (ratings.total_ratings, 0) AS total_ratings
+    FROM restaurants FULL JOIN ratings
+    ON restaurants.restaurant_id = ratings.restaurant_id`);
     // Join the queryStr array to get one whole query string
     let ratingText = queryStr.join(' ');
 
     // Default query string if there are no query params
-    // if (!isQuery) ratingText = `SELECT r.restaurant_id, r.name, r.location, r.category, r.price,
-    // AVG(rev.rating) AS rating, COUNT(rev.rating) AS total_ratings
-    //     FROM restaurants AS r
-    //     JOIN reviews AS rev
-    //     ON r.restaurant_id = rev.restaurant_id
-    // GROUP BY r.restaurant_id`
-
     if (!isQuery) ratingText = `WITH restaurants AS (
         SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
             FROM restaurants AS r 
@@ -93,7 +102,7 @@ module.exports = app => {
                 data: restaurants.rows
             })
         } catch (err) {
-            res.status(500).send('Server error');
+            res.status(500).send(err.message);
         }
     })
 
