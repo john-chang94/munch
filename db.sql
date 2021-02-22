@@ -254,7 +254,7 @@ VALUES ("Denny's", 'name'),
 ('Coffee', 'category'),
 ('Tea house', 'category'),
 ('Italian', 'category'),
-('Asian', 'category'),
+('Asian Fusion', 'category'),
 ('Barbecue', 'category'),
 ('Cafe', 'category');
 

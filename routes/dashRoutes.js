@@ -7,24 +7,35 @@ const queryCheck = async (reqQuery) => {
     let values = [];
     let num = 1;
 
-    // Join restaurants and categories, first half of query string
+    // Aggregate categories with restaurants first
     let queryStr = [
         `WITH restaurants AS (
-        SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
-            FROM restaurants AS r 
-            JOIN restaurant_categories AS rc
-                ON r.restaurant_id = rc.restaurant_id
-            JOIN categories AS c
-                ON rc.category_id = c.category_id
-            WHERE`
+            SELECT * FROM
+            (
+            SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
+                FROM restaurants AS r 
+                JOIN restaurant_categories AS rc
+                    ON r.restaurant_id = rc.restaurant_id
+                JOIN categories AS c
+                    ON rc.category_id = c.category_id
+                GROUP BY r.restaurant_id
+            ) AS nested
+        WHERE
+        `
     ]
     const validQueries = ['location', 'category', 'price'];
 
     // Main search text input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
-        queryStr.push(`(lower(r.name) LIKE $${num++} OR lower(c.category) LIKE $${num++})`);
+        queryStr.push(
+            // Then, select the entire row if the search input matches the name OR
+            // if the search input matches any of the categories per restaurant
+            `lower(nested.name) LIKE $${num++} OR
+            exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE $${num++})`
+        );
         queryStr.push('AND');
-        // Search for values that have any characters following the user input with %
+        // Add the search value into the values array twice for name and category queries
+        // Search for values that have any characters following the search input with %
         values.push(`${reqQuery['find'].toLowerCase()}%`);
         values.push(`${reqQuery['find'].toLowerCase()}%`);
         isQuery = true;
@@ -44,7 +55,9 @@ const queryCheck = async (reqQuery) => {
     // Remove extra 'AND'
     queryStr.pop();
     // Add the second part of the query string
-    queryStr.push(`GROUP BY r.restaurant_id
+    // Then, aggregate ratings with their restaurants
+    // and finally, select restaurants with complete aggregate data
+    queryStr.push(`
     ),
     ratings AS (
     SELECT r.restaurant_id, AVG(re.rating) AS rating, COUNT(re.rating) AS total_ratings
@@ -258,3 +271,17 @@ module.exports = app => {
 // console.log(Object.keys(req.query))
 // console.log(req.query.hasOwnProperty('location'))
 // console.log(req.query['location'])
+
+// SELECT nested.restaurant_id, nested.name, nested.price, nested.categories
+// FROM 
+//     (
+//      SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
+//          FROM restaurants AS r
+//          JOIN restaurant_categories AS rc
+//              ON r.restaurant_id = rc.restaurant_id
+//          JOIN categories AS c
+//              ON rc.category_id = c.category_id
+//          GROUP BY r.restaurant_id
+//     ) AS nested
+// WHERE lower(nested.name) LIKE 'ch%' OR
+// exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE 'ch%')
