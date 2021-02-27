@@ -116,7 +116,7 @@ class Profile extends Component {
         return (
             <div>
                 <div className="mt-sm">
-                    <p className="mb-sm teal-text darken-4"><strong>General information</strong></p>
+                    <p className="mb-sm teal-text"><strong>General information</strong></p>
                     <label htmlFor="">First Name</label>
                     <p>{user.first_name}</p>
                 </div>
@@ -132,7 +132,7 @@ class Profile extends Component {
                     <button className="btn" onClick={this.enableEditGeneral}>Edit</button>
                 </div>
                 <div className="mt-1">
-                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text darken-4 pointer">View My Reviews</Link>
+                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text pointer-u">View My Reviews</Link>
                 </div>
             </div>
         )
@@ -164,7 +164,7 @@ class Profile extends Component {
         const { password, new_password, confirm_new_password } = this.state;
         return (
             <div className="mt-2">
-                <p className="teal-text darken-4"><strong>Reset password</strong></p>
+                <p className="teal-text"><strong>Reset password</strong></p>
                 <div className="input-field">
                     <input type="password" id="password" value={password} onChange={this.handleChange} />
                     <label htmlFor="password">Current Password</label>
@@ -200,7 +200,7 @@ class Profile extends Component {
                                         <div className="center">
                                             <img src={userImage.image_url} className="w-75" alt="" />
                                             <div className="mt-sm">
-                                                <p className="teal-text darken-4 pointer" onClick={this.openModal}>Edit profile picture</p>
+                                                <p className="teal-text pointer-u" onClick={this.openModal}>Edit profile picture</p>
                                             </div>
                                         </div>
                                     </div>

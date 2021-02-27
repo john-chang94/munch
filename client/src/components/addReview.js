@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { storage } from '../config/fb';
@@ -170,7 +170,9 @@ class AddReview extends Component {
                             {
                                 userHasReview
                                     ? <div>
-                                        <p>Edit your review</p>
+                                        <Link to={`/profile/${user.user_id}/reviews`} className="teal-text pointer-u">
+                                            You already posted a review. You can check out all of your reviews here.
+                                        </Link>
                                     </div>
                                     : <div>
                                         <p>Leave a review</p>

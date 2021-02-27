@@ -226,6 +226,10 @@ html, body, #root, #root>.outer-wrapper {
 
 .pointer:hover {
   cursor: pointer;
+}
+
+.pointer-u:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 
