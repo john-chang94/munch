@@ -5,6 +5,7 @@ import Preloader from './Preloader';
 import { renderStars } from './starsHelper';
 import moment from 'moment';
 import M from 'materialize-css';
+import { Link } from 'react-router-dom';
 
 class UserReviews extends Component {
     state = {
@@ -28,6 +29,11 @@ class UserReviews extends Component {
                             <Preloader />
                         </div>
                         : <div>
+                            <div className="mt-1 pointer-u">
+                                <Link to={`/profile/${this.props.match.params.user_id}`} className="teal-text">
+                                    <i className="fas fa-arrow-left"></i> My Account
+                                </Link>
+                            </div>
                             <h5>My Reviews</h5>
                             {
                                 reviews

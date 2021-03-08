@@ -92,7 +92,6 @@ class Restaurant extends Component {
 
                             <Reviews
                                 restaurant_id={this.props.match.params.restaurant_id}
-                                user={user}
                             />
                         </div>
                 }

@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import moment from 'moment';
 import M from 'materialize-css';
-import { renderStars } from './starsHelper'
-import { Link } from 'react-router-dom';
+import { renderStars } from './starsHelper';
 
 class Reviews extends Component {
     async componentDidMount() {
@@ -13,7 +12,7 @@ class Reviews extends Component {
     }
 
     render() {
-        const { reviews, user } = this.props;
+        const { reviews } = this.props;
         return (
             <div>
                 <h5>Reviews</h5>
@@ -36,14 +35,6 @@ class Reviews extends Component {
                                 <div className="mt-1">
                                     <p className="text-i">{moment(review.date).format('LL')}</p>
                                     <p>Reviewer: {review.first_name} {review.last_name}</p>
-                                </div>
-                                <div>
-                                    {
-                                        review.user_id === user.user_id &&
-                                        <Link to={`/profile/${user.user_id}/reviews/${review.review_id}/edit`} className="teal-text text-lighten-1">
-                                            <strong>Edit review</strong>
-                                        </Link>
-                                    }
                                 </div>
                             </div>
                         ))

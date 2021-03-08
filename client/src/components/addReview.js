@@ -171,7 +171,7 @@ class AddReview extends Component {
                                 userHasReview
                                     ? <div>
                                         <Link to={`/profile/${user.user_id}/reviews`} className="teal-text pointer-u">
-                                            You already posted a review. You can check out all of your reviews here.
+                                            You already posted a review. Manage your reviews here.
                                         </Link>
                                     </div>
                                     : <div>
