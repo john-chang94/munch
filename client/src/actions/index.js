@@ -11,6 +11,10 @@ export const clear = () => {
     return dispatch => dispatch({ type: 'CLEAR_ERROR' })
 }
 
+export const clearReviews = () => {
+    return dispatch => dispatch({ type: 'CLEAR_REVIEWS' })
+}
+
 /////////////////////////////
 /////// AUTH ACTIONS ////////
 /////////////////////////////
@@ -157,7 +161,7 @@ export const fetchImagesForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/review_images/restaurants/${restaurant_id}`);
-            dispatch({ type: 'FETCH_IMAGES_FOR_RESTAURANT', payload: res.data })
+            dispatch({ type: 'FETCH_IMAGES_FOR_RESTAURANT', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'NULL', payload: err.response.data })
         }
@@ -168,7 +172,7 @@ export const search = queries => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants${queries}`);
-            dispatch({ type: 'SEARCH', payload: res.data })
+            dispatch({ type: 'SEARCH', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'DASH_ERROR', payload: err.response.data })
         }
@@ -194,7 +198,7 @@ export const addReview = body => {
     return async (dispatch) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/reviews`, body);
-            dispatch({ type: 'ADD_REVIEW', payload: res.data })
+            dispatch({ type: 'ADD_REVIEW', payload: res.data.review })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }
@@ -216,7 +220,7 @@ export const fetchReviewsForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/restaurants/${restaurant_id}`);
-            dispatch({ type: 'FETCH_REVIEWS_FOR_RESTAURANT', payload: res.data })
+            dispatch({ type: 'FETCH_REVIEWS_FOR_RESTAURANT', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'NULL', payload: err.response.data })
         }
@@ -227,9 +231,10 @@ export const fetchReviewsByUser = user_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${user_id}`)
-            dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data })
+            console.log(res.data)
+            dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data.data })
         } catch (err) {
-            console.log(err)
+            dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: null })
         }
     }
 }

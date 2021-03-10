@@ -168,7 +168,14 @@ module.exports = app => {
         try {
             const { user_id } = req.params;
             const reviews = await client.query(
-                `WITH reviews AS (
+                `WITH restaurant AS (
+                    SELECT r.name, re.review_id
+                    FROM restaurants AS r
+                        JOIN reviews AS re
+                        ON r.restaurant_id = re.restaurant_id
+                    WHERE re.user_id = $1
+                ),
+                reviews AS (
                     SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
                     FROM reviews AS r
                         JOIN users AS u
@@ -181,10 +188,13 @@ module.exports = app => {
                         GROUP BY review_id
                 )
                 SELECT
-                    reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
+                    restaurant.name, reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
                     reviews.date, reviews.updated_at, images.images
-                FROM reviews LEFT JOIN images
-                ON reviews.review_id = images.review_id
+                FROM restaurant
+                    JOIN reviews
+                    ON restaurant.review_id = reviews.review_id
+                    LEFT JOIN images
+                    ON reviews.review_id = images.review_id
                 ORDER BY reviews.date DESC`,
                 [user_id]
             )

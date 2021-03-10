@@ -23,7 +23,7 @@ const dashReducer = (state = {}, action) => {
         case 'SEARCH':
             return {
                 ...state,
-                results: action.payload.data
+                results: action.payload
             }
         case 'FETCH_SUGGESTIONS':
             return {

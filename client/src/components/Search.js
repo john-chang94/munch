@@ -11,7 +11,7 @@ const Search = (props) => {
     const [userSearch, setUserSearch] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [cursor, setCursor] = useState(-1);
+    const [cursor, setCursor] = useState(-1); // No active sugg. while typing
     const [price, setPrice] = useState('');
     const [propsPrice, setPropsPrice] = useState();
 

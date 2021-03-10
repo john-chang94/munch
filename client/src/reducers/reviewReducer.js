@@ -23,22 +23,22 @@ const reviewReducer = (state = {}, action) => {
         case 'ADD_REVIEW':
             return {
                 ...state,
-                review: action.payload.review
+                review: action.payload
             }
         case 'FETCH_REVIEWS_FOR_RESTAURANT':
             return {
                 ...state,
-                reviews: action.payload.data
+                reviews: action.payload
             }
         case 'FETCH_IMAGES_FOR_RESTAURANT':
             return {
                 ...state,
-                images: action.payload.data
+                images: action.payload
             }
         case 'FETCH_REVIEWS_BY_USER':
             return {
                 ...state,
-                reviews: action.payload.data
+                reviews: action.payload
             }
         case 'SET_USER_HAS_REVIEW':
             return {

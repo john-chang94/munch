@@ -30,8 +30,8 @@ const queryCheck = async (reqQuery) => {
         queryStr.push(
             // Then, select the entire row if the search input matches the name OR
             // if the search input matches any of the categories per restaurant
-            `lower(nested.name) LIKE $${num++} OR
-            exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE $${num++})`
+            `(lower(nested.name) LIKE $${num++} OR
+            exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE $${num++}))`
         );
         queryStr.push('AND');
         // Add the search value into the values array twice for name and category queries
