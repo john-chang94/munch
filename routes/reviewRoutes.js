@@ -1,6 +1,5 @@
 const client = require('../config/db');
 const { addReviewValidator, addReviewValidatorM } = require('../middlewares/validator');
-const Review = require('../mdbModels/Review');
 const authorizeToken = require('../middlewares/authorizeToken');
 
 module.exports = app => {
@@ -32,43 +31,6 @@ module.exports = app => {
                 success: true,
                 review: review.rows[0]
             })
-        } catch (err) {
-            res.status(500).send('Server error');
-        }
-    })
-
-    app.post('/api/reviews/m', addReviewValidatorM, async (req, res) => {
-        try {
-            const review = new Review({ ...req.body });
-            const result = review.save();
-
-            res.status(201).json(review);
-        } catch (err) {
-            res.status(500).send('Server error')
-        }
-    })
-
-    app.put('/api/reviews/m/:review_id', async (req, res) => {
-        try {
-            const result = await Review.findByIdAndUpdate(req.params.review_id,
-                { $push: { images: req.body } },
-                { new: true, useFindAndModify: false }
-            )
-
-            res.status(200).json({ success: true })
-        } catch (err) {
-            res.status(500).send('Server error');
-        }
-    })
-
-    app.put('/api/reviews/m/rem/:review_id', async (req, res) => {
-        try {
-            const result = await Review.findByIdAndUpdate(req.params.review_id,
-                { $pull: { images: { _id: req.body.imageId } } },
-                { useFindAndModify: false }
-            )
-
-            res.status(200).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }

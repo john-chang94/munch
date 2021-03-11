@@ -132,7 +132,7 @@ class Profile extends Component {
                     <button className="btn" onClick={this.enableEditGeneral}>Edit</button>
                 </div>
                 <div className="mt-1">
-                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text pointer-u">View My Reviews</Link>
+                    <Link to={`/profile/${user.user_id}/reviews`} className="teal-text pointer-u">Manage My Reviews</Link>
                 </div>
             </div>
         )
