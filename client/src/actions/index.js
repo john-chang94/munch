@@ -216,6 +216,18 @@ export const addReviewImage = body => {
     }
 }
 
+export const fetchReview = review_id => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/${review_id}`);
+            console.log(res.data)
+            dispatch({ type: 'FETCH_REVIEW', payload: res.data.data })
+        } catch (err) {
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
+        }
+    }
+}
+
 export const fetchReviewsForRestaurant = restaurant_id => {
     return async (dispatch) => {
         try {

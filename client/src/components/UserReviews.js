@@ -20,7 +20,7 @@ class UserReviews extends Component {
 
     render() {
         const { isLoading } = this.state;
-        const { reviews } = this.props;
+        const { reviews, match } = this.props;
         return (
             <div className="container">
                 {
@@ -30,7 +30,7 @@ class UserReviews extends Component {
                         </div>
                         : <div>
                             <div className="mt-1 pointer-u">
-                                <Link to={`/profile/${this.props.match.params.user_id}`} className="teal-text">
+                                <Link to={`/profile/${match.params.user_id}`} className="teal-text">
                                     <i className="fas fa-arrow-left"></i> My Account
                                 </Link>
                             </div>
@@ -52,8 +52,13 @@ class UserReviews extends Component {
                                                     ))
                                                 }
                                             </div>
-                                            <div className="mt-1">
+                                            <div className="mt-1 mb-sm">
                                                 <p className="text-i">{moment(review.date).format('LL')}</p>
+                                            </div>
+                                            <div>
+                                                <Link to={`/profile/${match.params.user_id}/reviews/${review.review_id}/edit`}>
+                                                    <button className="btn-small">Edit</button>
+                                                </Link>
                                             </div>
                                         </div>
                                     ))

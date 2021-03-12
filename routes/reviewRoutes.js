@@ -1,5 +1,5 @@
 const client = require('../config/db');
-const { addReviewValidator, addReviewValidatorM } = require('../middlewares/validator');
+const { addReviewValidator } = require('../middlewares/validator');
 const authorizeToken = require('../middlewares/authorizeToken');
 
 module.exports = app => {
@@ -40,8 +40,26 @@ module.exports = app => {
     app.get('/api/reviews/:review_id', async (req, res) => {
         try {
             const { review_id } = req.params;
-            const review = await client.query('SELECT * FROM reviews WHERE review_id = $1', [review_id]);
-            if (!review.rows.length) return res.status(404).send('No review yet');
+            const review = await client.query(
+                `WITH reviews AS (
+                    SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
+                    FROM reviews AS r
+                        JOIN users AS u
+                        ON r.user_id = u.user_id
+                    WHERE r.review_id = $1
+                ),
+                images AS (
+                    SELECT review_id, array_agg(image_url) AS images
+                    FROM review_images
+                    WHERE review_id = $1
+                    GROUP BY review_id
+                )
+                SELECT
+                    reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
+                    reviews.date, reviews.updated_at, images.images
+                FROM reviews JOIN images
+                    ON reviews.review_id = images.review_id`,
+                [review_id]);
 
             res.status(200).json({
                 success: true,
@@ -69,13 +87,13 @@ module.exports = app => {
                 images AS (
                     SELECT review_id, array_agg(image_url) AS images
                     FROM review_images
-                        GROUP BY review_id
+                    GROUP BY review_id
                 )
                 SELECT
                     reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
                     reviews.date, reviews.updated_at, images.images
                 FROM reviews LEFT JOIN images
-                ON reviews.review_id = images.review_id
+                    ON reviews.review_id = images.review_id
                 ORDER BY reviews.date DESC`,
                 [restaurant_id]
             )
@@ -122,7 +140,7 @@ module.exports = app => {
         ON restaurants.restaurant_id = ratings.restaurant_id
         `)
 
-            res.send(result.rows)
+        res.send(result.rows)
     })
 
     // Get all reviews from a user
@@ -147,16 +165,16 @@ module.exports = app => {
                 images AS (
                     SELECT review_id, array_agg(image_url) AS images
                     FROM review_images
-                        GROUP BY review_id
+                    GROUP BY review_id
                 )
                 SELECT
                     restaurant.name, reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
                     reviews.date, reviews.updated_at, images.images
                 FROM restaurant
                     JOIN reviews
-                    ON restaurant.review_id = reviews.review_id
+                        ON restaurant.review_id = reviews.review_id
                     LEFT JOIN images
-                    ON reviews.review_id = images.review_id
+                        ON reviews.review_id = images.review_id
                 ORDER BY reviews.date DESC`,
                 [user_id]
             )

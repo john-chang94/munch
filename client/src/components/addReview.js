@@ -69,45 +69,6 @@ class AddReview extends Component {
         this.setState({ files: e.target.files })
     }
 
-    handleSubmit = async (e) => {
-        e.preventDefault();
-        this.setState({ submitLoading: true })
-        const { rating, details, files } = this.state;
-        const user_id = this.props.user.user_id;
-        const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
-        const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
-
-        // Add review to db
-        await this.props.addReview(body);
-
-        // Stop submit if any errors from review upload
-        if (this.props.reviewError) {
-            M.toast({ html: this.props.reviewError, classes: "red darken-1" })
-            this.setState({ submitLoading: false })
-            return this.props.clear(); // Clear reviewError in redux store
-        }
-
-        // Run success message and refresh if there are no images to upload
-        if (!files) {
-            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
-            this.setState({
-                details: '',
-                submitLoading: false
-            })
-            this.renderEmptyStars();
-            // Refresh review list
-            await this.props.fetchReviewsForRestaurant(restaurant_id);
-            // Check updated reviews list to disable review form after submission
-            this.props.checkUserHasReview(this.props.reviews, this.props.user);
-            M.updateTextFields();
-        }
-
-        // Run if there are images to upload
-        if (files) {
-            this.uploadImages(files, restaurant_id, user_id);
-        }
-    }
-
     uploadImages = async (files, restaurant_id, user_id) => {
         for (let i = 0; i < files.length; i++) {
             // Upload image to firebase storage
@@ -148,6 +109,45 @@ class AddReview extends Component {
                         }
                     });
             });
+        }
+    }
+
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        this.setState({ submitLoading: true })
+        const { rating, details, files } = this.state;
+        const user_id = this.props.user.user_id;
+        const restaurant_id = parseInt(this.props.match.params.restaurant_id); // Must be INT in db
+        const body = { restaurant_id, user_id, rating, details, date: moment(Date.now()).format('yyyy-MM-DD') };
+
+        // Add review to db
+        await this.props.addReview(body);
+
+        // Stop submit if any errors from review upload
+        if (this.props.reviewError) {
+            M.toast({ html: this.props.reviewError, classes: "red darken-1" })
+            this.setState({ submitLoading: false })
+            return this.props.clear(); // Clear reviewError in redux store
+        }
+
+        // Run success message and refresh if there are no images to upload
+        if (!files) {
+            M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" })
+            this.setState({
+                details: '',
+                submitLoading: false
+            })
+            this.renderEmptyStars();
+            // Refresh review list
+            await this.props.fetchReviewsForRestaurant(restaurant_id);
+            // Check updated reviews list to disable review form after submission
+            this.props.checkUserHasReview(this.props.reviews, this.props.user);
+            M.updateTextFields();
+        }
+
+        // Run if there are images to upload
+        if (files) {
+            this.uploadImages(files, restaurant_id, user_id);
         }
     }
 

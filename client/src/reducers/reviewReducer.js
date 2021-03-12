@@ -25,6 +25,11 @@ const reviewReducer = (state = {}, action) => {
                 ...state,
                 review: action.payload
             }
+        case 'FETCH_REVIEW':
+            return {
+                ...state,
+                review: action.payload
+            }
         case 'FETCH_REVIEWS_FOR_RESTAURANT':
             return {
                 ...state,

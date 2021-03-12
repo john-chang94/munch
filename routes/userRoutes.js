@@ -1,6 +1,7 @@
 const client = require('../config/db');
 const bcrypt = require('bcrypt');
 const { updateUserValidator } = require('../middlewares/validator');
+const { authorizeToken } = require('../middlewares/authorizeToken');
 
 module.exports = app => {
     app.get('/api/users', async (req, res) => {

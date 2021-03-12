@@ -89,23 +89,3 @@ exports.addReviewValidator = (req, res, next) => {
 
     next();
 }
-
-exports.addReviewValidatorM = (req, res, next) => {
-    let errors = {};
-    let { restaurant_id, user_id, rating, details, date} = req.body;
-    restaurant_id = !isEmpty(restaurant_id) ? restaurant_id.toString() : '';
-    user_id = !isEmpty(user_id) ? user_id.toString() : '';
-    rating = !isEmpty(rating) ? rating.toString() : '';
-    details = !isEmpty(details) ? details : '';
-    date = !isEmpty(date) ? date : '';
-
-    if (validator.isEmpty(restaurant_id)) errors = 'Restaurant id required';
-    if (validator.isEmpty(user_id)) errors = 'User id required';
-    if (validator.isEmpty(rating)) errors = 'Rating required';
-    if (validator.isEmpty(details)) errors = 'Details required';
-    if (validator.isEmpty(date)) errors = 'Date required';
-
-    if (!isEmpty(errors)) return res.status(400).json(errors);
-
-    next();
-}
