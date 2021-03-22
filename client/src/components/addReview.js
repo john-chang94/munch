@@ -166,7 +166,7 @@ class AddReview extends Component {
             <div>
                 {
                     user
-                        ? <div className="bg-x-light-gray pt-2 pb-3 pl-2 pr-2">
+                        ? <div className="bg-x-light-gray p-all-2">
                             {
                                 userHasReview
                                     ? <div>

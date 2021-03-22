@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { renderStars } from './starsHelper';
 import M from 'materialize-css';
 
 class EditReview extends React.Component {
@@ -10,7 +9,8 @@ class EditReview extends React.Component {
         rating: '',
         details: '',
         files: '',
-        submitLoading: false
+        submitLoading: false,
+        isHovered: false
     }
 
     async componentDidMount() {
@@ -18,7 +18,28 @@ class EditReview extends React.Component {
         await this.setState({
             details: this.props.review.details
         })
+        await this.renderStars(this.props.review.rating);
         M.updateTextFields();
+    }
+
+    // Different from renderStars helper because stars
+    // have onChange effect to edit the rating if needed
+    renderStars = (rating) => {
+        let stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (i <= rating) {
+                // Add a whole star
+                // Key is required because stars gets rendered as an array in components
+                stars.push(<i className="fas fa-star yellow-text text-darken-2 pointer" key={i} onClick={() => this.handleRating(i)}></i>)
+                // Add a half star if rating is a decimal and is equal to current loop index
+            } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
+                stars.push(<i className="fas fa-star-half-alt yellow-text text-darken-2 pointer" key={i} onClick={() => this.handleRating(i)}></i>)
+            } else {
+                // Add an empty star
+                stars.push(<i className="far fa-star yellow-text text-darken-2 pointer" key={i} onClick={() => this.handleRating(i)}></i>)
+            }
+        }
+        this.setState({ stars })
     }
 
     handleRating = starIndex => {
@@ -55,10 +76,14 @@ class EditReview extends React.Component {
     }
 
     render() {
-        const { details, submitLoading } = this.state;
+        const { details, stars, isHovered, submitLoading } = this.state;
+        const { review } = this.props;
         return (
             <div className="container">
                 <form className="mt-2">
+                    <div>
+                        <p>{stars}</p>
+                    </div>
                     <div className="input-field">
                         <textarea
                             className="materialize-textarea"
@@ -67,10 +92,24 @@ class EditReview extends React.Component {
                             onChange={this.handleChange}
                             disabled={submitLoading}
                             autoFocus
-                            rows='5'
                         >
                         </textarea>
                         <label htmlFor="details">Details</label>
+                    </div>
+                    <div className="flex mb-sm row">
+                        {
+                            review
+                            && review.images.map((image, i) => (
+                                <div key={i}>
+                                    <div className="mr-sm all-img">
+                                        <img src={image} alt="" />
+                                    </div>
+                                    <div className="mt-sm">
+                                        <button className="btn-small red darken-1">Delete</button>
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </div>
                     <div>
                         <p>Add photos (optional)</p>

@@ -187,6 +187,26 @@ html, body, #root, #root>.outer-wrapper {
   padding-left: 35px;
 }
 
+.p-all-1 {
+  padding : 5px;
+}
+
+.p-all-2 {
+  padding: 10px;
+}
+
+.p-all-3 {
+  padding: 15px;
+}
+
+.p-all-4 {
+  padding: 25px;
+}
+
+.p-all-5 {
+  padding: 35px;
+}
+
 .full {
   height: 100%;
   width: 100%;

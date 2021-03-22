@@ -19,7 +19,7 @@ class Reviews extends Component {
                 {
                     reviews
                         ? reviews.map((review, i) => (
-                            <div className="bg-x-light-gray mt-2 pl-2 pr-2 pt-2 pb-2" key={i}>
+                            <div className="bg-x-light-gray mt-2 p-all-2" key={i}>
                                 <p>{renderStars(review.rating)}</p>
                                 <p>{review.details}</p>
                                 <div className="flex mt-sm">

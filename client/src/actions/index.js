@@ -243,7 +243,6 @@ export const fetchReviewsByUser = user_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/users/${user_id}`)
-            console.log(res.data)
             dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'FETCH_REVIEWS_BY_USER', payload: null })
