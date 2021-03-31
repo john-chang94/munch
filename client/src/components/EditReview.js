@@ -15,6 +15,8 @@ class EditReview extends React.Component {
 
     async componentDidMount() {
         await this.props.fetchReview(this.props.match.params.review_id);
+        console.log(this.props.match.params.review_id)
+        console.log(this.props.review)
         await this.setState({
             details: this.props.review.details
         })
@@ -84,7 +86,7 @@ class EditReview extends React.Component {
                     <div>
                         <p>{stars}</p>
                     </div>
-                    <div className="input-field">
+                    <div className="input-field mt-2">
                         <textarea
                             className="materialize-textarea"
                             id="details"
@@ -98,7 +100,8 @@ class EditReview extends React.Component {
                     </div>
                     <div className="flex mb-sm row">
                         {
-                            review
+                            // Load if the review has images
+                            (review && review.images)
                             && review.images.map((image, i) => (
                                 <div key={i}>
                                     <div className="mr-sm all-img">

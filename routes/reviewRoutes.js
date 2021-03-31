@@ -40,6 +40,7 @@ module.exports = app => {
     app.get('/api/reviews/:review_id', async (req, res) => {
         try {
             const { review_id } = req.params;
+            // LEFT JOIN because the review might not have any images
             const review = await client.query(
                 `WITH reviews AS (
                     SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
@@ -57,7 +58,7 @@ module.exports = app => {
                 SELECT
                     reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
                     reviews.date, reviews.updated_at, images.images
-                FROM reviews JOIN images
+                FROM reviews LEFT JOIN images
                     ON reviews.review_id = images.review_id`,
                 [review_id]);
 
