@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import M from 'materialize-css';
+import { storage } from '../config/fb';
+import moment from 'moment';
 
 class EditReview extends React.Component {
     state = {
@@ -15,8 +17,6 @@ class EditReview extends React.Component {
 
     async componentDidMount() {
         await this.props.fetchReview(this.props.match.params.review_id);
-        console.log(this.props.match.params.review_id)
-        console.log(this.props.review)
         await this.setState({
             details: this.props.review.details
         })
@@ -28,7 +28,7 @@ class EditReview extends React.Component {
     // have onChange effect to edit the rating if needed
     renderStars = (rating) => {
         let stars = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 1; i < 6; i++) {
             if (i <= rating) {
                 // Add a whole star
                 // Key is required because stars gets rendered as an array in components
@@ -77,6 +77,80 @@ class EditReview extends React.Component {
         this.setState({ files: e.target.files })
     }
 
+    uploadImages = async (files, review_id, restaurant_id, user_id) => {
+        for (let i = 0; i < files.length; i++) {
+            // Upload image to firebase storage
+            const uploadTask = storage.ref(`/images/reviews/${files[i].name}`).put(files[i]);
+            uploadTask.on('state_changed', console.log, console.error, () => {
+                storage
+                    .ref('images/reviews') // Reference review images folder location
+                    .child(files[i].name) // Child is the level inside /reviews directory
+                    .getDownloadURL() // Fetch image URL from firebase
+                    .then(async (url) => {
+                        const imageBody = { restaurant_id, user_id, review_id, image_url: url }
+                        // Add image url to pg with required foreign keys
+                        await this.props.addReviewImage(imageBody);
+
+                        // Update page once loop is done
+                        if (i === files.length - 1) {
+                            setTimeout(async () => {
+                                // Update reviews and images
+                                await this.props.fetchReview(review_id);
+
+                                // Show success message and clear form
+                                M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
+                                await this.setState({
+                                    details: this.props.review.details,
+                                    submitLoading: false
+                                })
+
+                                M.updateTextFields();
+                            }, 1200);
+                        }
+                    });
+            });
+        }
+    }
+
+    // PUT REQUEST CANNOT FIND THE REVIEW ID
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        this.setState({ submitLoading: true })
+        const { rating, details, files } = this.state;
+        const user_id = this.props.match.params.user_id;
+        const review_id = this.props.match.params.review_id;
+        const restaurant_id = this.props.review.restaurant_id;
+        const body = { review_id, restaurant_id, user_id, rating, details, updated_at: moment(Date.now()).format('yyyy-MM-DD') };
+
+        // Add review to db
+        await this.props.updateReview(review_id, body);
+
+        // Stop submit if any errors from review upload
+        if (this.props.reviewError) {
+            M.toast({ html: this.props.reviewError, classes: "red darken-1" })
+            this.setState({ submitLoading: false })
+            return this.props.clear(); // Clear reviewError in redux store
+        }
+
+        // Run success message and refresh if there are no images to upload
+        if (!files) {
+            M.toast({ html: 'Review update success!', classes: "light-blue darken-2" })
+            this.setState({
+                details: this.props.review.details,
+                submitLoading: false
+            })
+
+            // Refresh review
+            await this.props.fetchReview(review_id);
+            M.updateTextFields();
+        }
+
+        // Run if there are images to upload
+        if (files) {
+            this.uploadImages(files, review_id, user_id);
+        }
+    }
+
     render() {
         const { details, stars, isHovered, submitLoading } = this.state;
         const { review } = this.props;
@@ -119,7 +193,9 @@ class EditReview extends React.Component {
                         <input type="file" onChange={this.handleImage} disabled={submitLoading} multiple />
                     </div>
                     <div className="mt-sm">
-                        <button className="btn" disabled={submitLoading}>{submitLoading ? 'Updating...' : 'Submit'}</button>
+                        <button className="btn" disabled={submitLoading} onClick={this.handleSubmit}>
+                            {submitLoading ? 'Updating...' : 'Submit'}
+                        </button>
                     </div>
                 </form>
             </div>

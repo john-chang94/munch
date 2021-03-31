@@ -259,3 +259,15 @@ export const checkUserHasReview = (reviews, user) => {
         else dispatch({ type: 'SET_USER_HAS_REVIEW', payload: false })
     }
 }
+
+export const updateReview = (review_id, body) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.put(`/api/reviews/${review_id}`, body)
+            console.log(res.data)
+            dispatch({ type: 'FETCH_REVIEW', payload: res.data.data })
+        } catch (err) {
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
+        }
+    }
+}

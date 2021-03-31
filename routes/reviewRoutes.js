@@ -43,7 +43,8 @@ module.exports = app => {
             // LEFT JOIN because the review might not have any images
             const review = await client.query(
                 `WITH reviews AS (
-                    SELECT r.review_id, r.rating, r.details, r.date, r.updated_at, u.user_id, u.first_name, u.last_name
+                    SELECT r.review_id, r.restaurant_id, r.rating, r.details, r.date,
+                        r.updated_at, u.user_id, u.first_name, u.last_name
                     FROM reviews AS r
                         JOIN users AS u
                         ON r.user_id = u.user_id
@@ -56,8 +57,8 @@ module.exports = app => {
                     GROUP BY review_id
                 )
                 SELECT
-                    reviews.review_id, reviews.user_id, reviews.first_name, reviews.last_name, reviews.rating, reviews.details,
-                    reviews.date, reviews.updated_at, images.images
+                    reviews.review_id, reviews.restaurant_id, reviews.user_id, reviews.first_name, reviews.last_name,
+                    reviews.rating, reviews.details, reviews.date, reviews.updated_at, images.images
                 FROM reviews LEFT JOIN images
                     ON reviews.review_id = images.review_id`,
                 [review_id]);
@@ -202,7 +203,7 @@ module.exports = app => {
                     user_id = $2,
                     rating = $3,
                     details = $4,
-                    date = $5
+                    updated_at = $5
                 WHERE review_id = $6 RETURNING *`,
                 [restaurant_id, user_id, rating, details, date, review_id]
             )
