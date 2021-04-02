@@ -263,8 +263,7 @@ export const checkUserHasReview = (reviews, user) => {
 export const updateReview = (review_id, body) => {
     return async (dispatch) => {
         try {
-            const res = await axios.put(`/api/reviews/${review_id}`, body)
-            console.log(res.data)
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/reviews/${review_id}`, body)
             dispatch({ type: 'FETCH_REVIEW', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })

@@ -196,7 +196,7 @@ module.exports = app => {
     app.put('/api/reviews/:review_id', addReviewValidator, async (req, res) => {
         try {
             const { review_id } = req.params;
-            const { restaurant_id, user_id, rating, details, date } = req.body;
+            const { restaurant_id, user_id, rating, details, updated_at } = req.body;
             const review = await client.query(
                 `UPDATE reviews
                     SET restaurant_id = $1,
@@ -205,7 +205,7 @@ module.exports = app => {
                     details = $4,
                     updated_at = $5
                 WHERE review_id = $6 RETURNING *`,
-                [restaurant_id, user_id, rating, details, date, review_id]
+                [restaurant_id, user_id, rating, details, updated_at, review_id]
             )
 
             res.status(200).json({

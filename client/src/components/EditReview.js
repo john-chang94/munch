@@ -18,7 +18,8 @@ class EditReview extends React.Component {
     async componentDidMount() {
         await this.props.fetchReview(this.props.match.params.review_id);
         await this.setState({
-            details: this.props.review.details
+            details: this.props.review.details,
+            rating: this.props.review.rating
         })
         await this.renderStars(this.props.review.rating);
         M.updateTextFields();
@@ -77,6 +78,19 @@ class EditReview extends React.Component {
         this.setState({ files: e.target.files })
     }
 
+    deleteImage = image => {
+        const confirmDelete = window.confirm('Delete image?');
+        if (confirmDelete) {
+            const deleteTask = storage.refFromURL(image).delete()
+                .then(() => {
+                    // this.props.deleteReviewImage()
+                    M.toast({ html: 'Image deleted successfully', classes: 'light-blue darken-2' })
+                }).catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+
     uploadImages = async (files, review_id, restaurant_id, user_id) => {
         for (let i = 0; i < files.length; i++) {
             // Upload image to firebase storage
@@ -101,6 +115,7 @@ class EditReview extends React.Component {
                                 M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
                                 await this.setState({
                                     details: this.props.review.details,
+                                    rating: this.props.review.rating,
                                     submitLoading: false
                                 })
 
@@ -112,7 +127,6 @@ class EditReview extends React.Component {
         }
     }
 
-    // PUT REQUEST CANNOT FIND THE REVIEW ID
     handleSubmit = async (e) => {
         e.preventDefault();
         this.setState({ submitLoading: true })
@@ -122,7 +136,7 @@ class EditReview extends React.Component {
         const restaurant_id = this.props.review.restaurant_id;
         const body = { review_id, restaurant_id, user_id, rating, details, updated_at: moment(Date.now()).format('yyyy-MM-DD') };
 
-        // Add review to db
+        // Update review in db
         await this.props.updateReview(review_id, body);
 
         // Stop submit if any errors from review upload
@@ -132,7 +146,7 @@ class EditReview extends React.Component {
             return this.props.clear(); // Clear reviewError in redux store
         }
 
-        // Run success message and refresh if there are no images to upload
+        // Run if there are no images to upload
         if (!files) {
             M.toast({ html: 'Review update success!', classes: "light-blue darken-2" })
             this.setState({
@@ -156,7 +170,7 @@ class EditReview extends React.Component {
         const { review } = this.props;
         return (
             <div className="container">
-                <form className="mt-2">
+                <div className="mt-2">
                     <div>
                         <p>{stars}</p>
                     </div>
@@ -182,7 +196,7 @@ class EditReview extends React.Component {
                                         <img src={image} alt="" />
                                     </div>
                                     <div className="mt-sm">
-                                        <button className="btn-small red darken-1">Delete</button>
+                                        <button className="btn-small red darken-1" onClick={this.deleteImage.bind(this, image)}>Delete</button>
                                     </div>
                                 </div>
                             ))
@@ -197,7 +211,7 @@ class EditReview extends React.Component {
                             {submitLoading ? 'Updating...' : 'Submit'}
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         );
     }
