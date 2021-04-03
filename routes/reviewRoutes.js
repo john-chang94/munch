@@ -51,7 +51,7 @@ module.exports = app => {
                     WHERE r.review_id = $1
                 ),
                 images AS (
-                    SELECT review_id, array_agg(image_url) AS images
+                    SELECT review_id, array_agg(array[review_images_id::VARCHAR, image_url]) AS images
                     FROM review_images
                     WHERE review_id = $1
                     GROUP BY review_id
@@ -239,6 +239,21 @@ module.exports = app => {
             )
 
             res.status(201).json({ success: true })
+        } catch (err) {
+            res.status(500).send('Server error');
+        }
+    })
+
+    app.delete('/api/review_images/:review_images_id', async (req, res) => {
+        try {
+            const { review_images_id } = req.params;
+            const deleteImage = await client.query(
+                `DELETE FROM review_images
+                WHERE review_images_id = $1`,
+                [review_images_id]
+            )
+
+            res.status(200).json({ success: true })
         } catch (err) {
             res.status(500).send('Server error');
         }

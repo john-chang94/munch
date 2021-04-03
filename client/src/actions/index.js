@@ -220,7 +220,6 @@ export const fetchReview = review_id => {
     return async (dispatch) => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/reviews/${review_id}`);
-            console.log(res.data)
             dispatch({ type: 'FETCH_REVIEW', payload: res.data.data })
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
@@ -265,6 +264,16 @@ export const updateReview = (review_id, body) => {
         try {
             const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/reviews/${review_id}`, body)
             dispatch({ type: 'FETCH_REVIEW', payload: res.data.data })
+        } catch (err) {
+            dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
+        }
+    }
+}
+
+export const deleteReviewImage = review_images_id => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/review_images/${review_images_id}`)
         } catch (err) {
             dispatch({ type: 'REVIEW_ERROR', payload: err.response.data })
         }

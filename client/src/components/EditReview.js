@@ -11,8 +11,7 @@ class EditReview extends React.Component {
         rating: '',
         details: '',
         files: '',
-        submitLoading: false,
-        isHovered: false
+        submitLoading: false
     }
 
     async componentDidMount() {
@@ -81,9 +80,12 @@ class EditReview extends React.Component {
     deleteImage = image => {
         const confirmDelete = window.confirm('Delete image?');
         if (confirmDelete) {
-            const deleteTask = storage.refFromURL(image).delete()
-                .then(() => {
-                    // this.props.deleteReviewImage()
+            // Ref image in fb based on its URL
+            const deleteTask = storage.refFromURL(image[1]).delete()
+                .then(async () => {
+                    // image[0] contains the review_images_id
+                    await this.props.deleteReviewImage(image[0]);
+                    await this.props.fetchReview(this.props.review.review_id);
                     M.toast({ html: 'Image deleted successfully', classes: 'light-blue darken-2' })
                 }).catch(err => {
                     console.log(err);
@@ -91,6 +93,7 @@ class EditReview extends React.Component {
         }
     }
 
+    // REVIEW ID IS CHANGING WHEN CALLED HERE FOR SOME UNKNOWN STUPID REASON
     uploadImages = async (files, review_id, restaurant_id, user_id) => {
         for (let i = 0; i < files.length; i++) {
             // Upload image to firebase storage
@@ -102,17 +105,17 @@ class EditReview extends React.Component {
                     .getDownloadURL() // Fetch image URL from firebase
                     .then(async (url) => {
                         const imageBody = { restaurant_id, user_id, review_id, image_url: url }
-                        // Add image url to pg with required foreign keys
+                        // Add image url to db with required foreign keys
                         await this.props.addReviewImage(imageBody);
 
                         // Update page once loop is done
                         if (i === files.length - 1) {
                             setTimeout(async () => {
-                                // Update reviews and images
+                                // Update view
                                 await this.props.fetchReview(review_id);
 
-                                // Show success message and clear form
-                                M.toast({ html: 'Review submit success!', classes: "light-blue darken-2" });
+                                // Show success message and update component state
+                                M.toast({ html: 'Review update success!', classes: "light-blue darken-2" });
                                 await this.setState({
                                     details: this.props.review.details,
                                     rating: this.props.review.rating,
@@ -131,15 +134,15 @@ class EditReview extends React.Component {
         e.preventDefault();
         this.setState({ submitLoading: true })
         const { rating, details, files } = this.state;
-        const user_id = this.props.match.params.user_id;
-        const review_id = this.props.match.params.review_id;
+        const user_id = this.props.review.user_id;
+        const review_id = this.props.review.review_id;
         const restaurant_id = this.props.review.restaurant_id;
         const body = { review_id, restaurant_id, user_id, rating, details, updated_at: moment(Date.now()).format('yyyy-MM-DD') };
 
         // Update review in db
         await this.props.updateReview(review_id, body);
 
-        // Stop submit if any errors from review upload
+        // Stop submit if any errors from review update
         if (this.props.reviewError) {
             M.toast({ html: this.props.reviewError, classes: "red darken-1" })
             this.setState({ submitLoading: false })
@@ -161,12 +164,12 @@ class EditReview extends React.Component {
 
         // Run if there are images to upload
         if (files) {
-            this.uploadImages(files, review_id, user_id);
+            this.uploadImages(files, review_id, restaurant_id, user_id);
         }
     }
 
     render() {
-        const { details, stars, isHovered, submitLoading } = this.state;
+        const { details, stars, submitLoading } = this.state;
         const { review } = this.props;
         return (
             <div className="container">
@@ -193,7 +196,7 @@ class EditReview extends React.Component {
                             && review.images.map((image, i) => (
                                 <div key={i}>
                                     <div className="mr-sm all-img">
-                                        <img src={image} alt="" />
+                                        <img src={image[1]} alt="" />
                                     </div>
                                     <div className="mt-sm">
                                         <button className="btn-small red darken-1" onClick={this.deleteImage.bind(this, image)}>Delete</button>
