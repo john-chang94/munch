@@ -93,7 +93,6 @@ class EditReview extends React.Component {
         }
     }
 
-    // REVIEW ID IS CHANGING WHEN CALLED HERE FOR SOME UNKNOWN STUPID REASON
     uploadImages = async (files, review_id, restaurant_id, user_id) => {
         for (let i = 0; i < files.length; i++) {
             // Upload image to firebase storage

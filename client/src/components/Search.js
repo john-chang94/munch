@@ -11,7 +11,7 @@ const Search = (props) => {
     const [userSearch, setUserSearch] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [cursor, setCursor] = useState(-1); // No active sugg. while typing
+    const [cursor, setCursor] = useState(-1); // No selected background color while typing
     const [price, setPrice] = useState('');
     const [propsPrice, setPropsPrice] = useState();
 
@@ -51,11 +51,17 @@ const Search = (props) => {
         }
     }
 
-    const setSearchValue = (isHovered, suggestion) => {
+    const setSearchValue = (isHovered, suggestion, index) => {
         // Set value of suggestion in search box when isHovered is true
-        if (isHovered) setSearch(suggestion.param);
+        if (isHovered) {
+            setSearch(suggestion.param);
+            setCursor(index);
+        }
         // Set original value in search box that the user was typing when isHovered is false
-        else setSearch(userSearch);
+        else {
+            setSearch(userSearch);
+            setCursor(-1);
+        }
     }
 
     const handleSubmit = e => {
@@ -171,10 +177,10 @@ const Search = (props) => {
                                 suggestions.map((suggestion, i) => (
                                     <li key={i}
                                         id={i}
-                                        className={cursor === i ? 'sugg-active' : null}
+                                        style={cursor === i ? { backgroundColor: 'rgb(233, 233, 233)' } : {} }
                                         onClick={handleClick.bind(this, suggestion)}
-                                        onMouseEnter={setSearchValue.bind(this, true, suggestion)}
-                                        onMouseLeave={setSearchValue.bind(this, false, suggestion)}
+                                        onMouseEnter={setSearchValue.bind(this, true, suggestion, i)}
+                                        onMouseLeave={setSearchValue.bind(this, false, suggestion, i)}
                                     >{suggestion.param}</li>
                                 ))
                             }

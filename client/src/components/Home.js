@@ -118,7 +118,7 @@ class Home extends Component {
                                 suggestions.map((suggestion, i) => (
                                     <li key={i}
                                         id={i}
-                                        className={cursor === i ? 'sugg-active' : null}
+                                        style={cursor === i ? { backgroundColor: 'rgb(233, 233, 233)' } : {} }
                                         onClick={this.handleClick.bind(this, suggestion)}
                                         onMouseEnter={this.setSearchValue.bind(this, true, suggestion, i)}
                                         onMouseLeave={this.setSearchValue.bind(this, false, suggestion, i)}

@@ -16,7 +16,7 @@ class RestaurantImages extends Component {
                 {
                     images && images.map((image, i) => (
                         <div key={i} className="mt-2 all-img z-depth-2">
-                            <img className="materialboxed" src={image.url} />
+                            <img className="materialboxed" src={image.image_url} />
                         </div>
                     ))
                 }
