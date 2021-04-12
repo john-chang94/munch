@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { Link } from 'react-router-dom';
 import M from 'materialize-css';
 import { storage } from '../config/fb';
 import moment from 'moment';
@@ -169,10 +170,15 @@ class EditReview extends React.Component {
 
     render() {
         const { details, stars, submitLoading } = this.state;
-        const { review } = this.props;
+        const { review, match } = this.props;
         return (
             <div className="container">
-                <div className="mt-2">
+                <div className="mt-1 pointer-u">
+                    <Link to={`/profile/${match.params.user_id}/reviews`} className="teal-text">
+                        <i className="fas fa-arrow-left"></i> My Reviews
+                    </Link>
+                </div>
+                <div className="mt-1">
                     <div>
                         <p>{stars}</p>
                     </div>
@@ -208,7 +214,7 @@ class EditReview extends React.Component {
                         <p>Add photos (optional)</p>
                         <input type="file" onChange={this.handleImage} disabled={submitLoading} multiple />
                     </div>
-                    <div className="mt-sm">
+                    <div className="mt-1">
                         <button className="btn" disabled={submitLoading} onClick={this.handleSubmit}>
                             {submitLoading ? 'Updating...' : 'Submit'}
                         </button>

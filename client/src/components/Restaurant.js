@@ -55,7 +55,12 @@ class Restaurant extends Component {
                                 <div className="mb-1">
                                     <p className="heading">{restaurant.name}</p>
                                     <p className="cat-heading">{restaurant.categories.map((category, i) =>
-                                        <span key={i}>{category}, </span>
+                                        <span key={i}>
+                                            {
+                                                // No comma after the last category
+                                                i === restaurant.categories.length - 1 ? category : `${category}, `
+                                            }
+                                        </span>
                                     )}</p>
                                     <p>{stars} ({restaurant.total_ratings} reviews)</p>
                                     <p>Price range: {'$'.repeat(parseInt(restaurant.price))}</p>
