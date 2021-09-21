@@ -9,7 +9,7 @@ const RestaurantCard = ({ name, categories, rating, total_ratings, price }) => {
                     <span key={i}>
                         {
                             // No comma after the last category
-                            i === restaurant.categories.length - 1 ? category : `${category}, `
+                            i === categories.length - 1 ? category : `${category}, `
                         }
                     </span>
                 )}</p>
