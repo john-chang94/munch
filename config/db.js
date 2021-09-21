@@ -1,7 +1,7 @@
 var pg = require('pg');
 require('dotenv').config();
 
-var conString = `postgres://${process.env.ELEPHANT_USER}:${process.env.ELEPHANT_PASSWORD}@${process.env.ELEPHANT_HOST}:${process.env.ELEPHANT_PORT}/${process.env.ELEPHANT_DATABASE}`;
+var conString = `${process.env.ELEPHANT_CONNECTION_STRING}`;
 var client = new pg.Client(conString);
 client.connect(function (err) {
     if (err) {
