@@ -23,37 +23,38 @@ const queryCheck = async (reqQuery) => {
         WHERE
         `
     ]
-    const validQueries = ['location', 'category', 'price'];
-
-    // Main search text input can be name or category
+    
+    // Main search input can be name or category
     if (reqQuery.hasOwnProperty('find')) {
         queryStr.push(
             // Then, select the entire row if the search input matches the name OR
-            // if the search input matches any of the categories per restaurant
+            // if it matches any of the categories per restaurant
             `(lower(nested.name) LIKE $${num++} OR
             exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE $${num++}))`
-        );
-        queryStr.push('AND');
-        // Add the search value into the values array twice for name and category queries
-        // Search for values that have any characters following the search input with %
-        values.push(`${reqQuery['find'].toLowerCase()}%`);
-        values.push(`${reqQuery['find'].toLowerCase()}%`);
-        isQuery = true;
-    }
-
+            );
+            
+            // Add the search value into the values array twice for name and category queries
+            // Search for values that have any characters following the search input with %
+            values.push(`${reqQuery['find'].toLowerCase()}%`);
+            values.push(`${reqQuery['find'].toLowerCase()}%`);
+            isQuery = true;
+        }
+        
+    const validQueries = ['location', 'category', 'price'];
+        
     // Additional queries will be appended here
     for (let i = 0; i < validQueries.length; i++) {
+        // If reqQuery matches an item in validQueries, continue
         if (reqQuery.hasOwnProperty(validQueries[i])) {
             // Append SQL command with query param in lowercase
-            queryStr.push(`lower(${validQueries[i]}) = $${num++}`);
             queryStr.push('AND');
+            queryStr.push(`lower(${validQueries[i]}) = $${num++}`);
             // Add the value of the query param in the values array in lowercase
             values.push(reqQuery[validQueries[i]].toLowerCase());
             isQuery = true;
         }
     }
-    // Remove extra 'AND'
-    queryStr.pop();
+
     // Add the second part of the query string
     // Then, aggregate ratings with their restaurants
     // and finally, select restaurants with complete aggregate data
