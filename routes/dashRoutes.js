@@ -286,3 +286,32 @@ module.exports = app => {
 //     ) AS nested
 // WHERE lower(nested.name) LIKE 'ch%' OR
 // exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE 'ch%')
+
+// WITH restaurants AS (
+//     SELECT * FROM
+//     (
+//     SELECT r.restaurant_id, r.name, r.price, array_agg(c.category) AS categories
+//         FROM restaurants AS r 
+//         JOIN restaurant_categories AS rc
+//             ON r.restaurant_id = rc.restaurant_id
+//         JOIN categories AS c
+//             ON rc.category_id = c.category_id
+//         GROUP BY r.restaurant_id
+//     ) AS nested
+// WHERE
+// (lower(nested.name) LIKE 'am%' OR
+//     exists (SELECT * FROM unnest(nested.categories) AS category WHERE lower(category) LIKE 'am%')) AND lower(price) LIKE '%'
+// ),
+// ratings AS (
+// SELECT r.restaurant_id, AVG(re.rating) AS rating, COUNT(re.rating) AS total_ratings
+// FROM restaurants AS r
+// JOIN reviews AS re
+//     ON r.restaurant_id = re.restaurant_id
+// GROUP BY r.restaurant_id
+// )
+// SELECT
+// restaurants.restaurant_id, restaurants.name, restaurants.price, restaurants.categories,
+// ratings.rating, COALESCE (ratings.total_ratings, 0) AS total_ratings
+// FROM restaurants FULL JOIN ratings
+// ON restaurants.restaurant_id = ratings.restaurant_id
+// ORDER BY restaurant_id

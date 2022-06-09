@@ -42,6 +42,7 @@ class Restaurant extends Component {
     render() {
         const { restaurant, images, reviews, user } = this.props;
         const { stars, isLoading } = this.state;
+        console.log(restaurant)
         return (
             <div className="container">
                 {
